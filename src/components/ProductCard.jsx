@@ -1,6 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 import useOnScreen from "../hooks/useOnScreen";
 import { useCart } from "../context/CartContext";
 
@@ -48,7 +47,6 @@ const ProductCard = ({ product, index }) => {
           onClick={() => addToCart(product)}
           aria-label="В корзину"
           className="p-5 w-full text-sm md:text-xl xl:text-2xl rounded-sm bg-stone-800 text-white hover:text-stone-900 hover:bg-[#f4d864] transition"
-          // className="py-2 w-full text-sm md:text-xl xl:text-2xl rounded-sm bg-[#f0e5c7] text-black/50 hover:bg-[#f4d864] transition"
         >
           В корзину
         </button>

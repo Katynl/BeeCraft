@@ -47,7 +47,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-stone-50/80 backdrop-blur-sm py-4 px-6 md:px-12 z-50 shadow-sm">
+    <header className="fixed top-0 w-full bg-stone-50/80 backdrop-blur-sm py-4 px-6 md:px-12 z-50 shadow-sm font-plexsans">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-8">
           <button

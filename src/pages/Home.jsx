@@ -44,7 +44,7 @@ const Home = () => {
       {/* Hero-секция (без изменений) */}
       <section>
         <div className="grid grid-cols-2 grid-rows-1 mt-8">
-          <div className="mt-28 mb-28 w-full border-t border-b col-start-1 col-end-3 row-start-1"></div>
+          <div className="mt-28 mb-44 md:mb-32 w-full border-t border-b col-start-1 col-end-3 row-start-1"></div>
           <div className="md:mx-12 border-r border-l h-screen pt-32 px-8 col-start-1 col-end-3 row-start-1">
             <div className="flex w-full justify-between items-center">
               <h1 className="font-black leading-none tracking-wide font-plexsans text-[#f4d864] text-2xl md:text-5xl lg:text-7xl xl:9xl">
@@ -68,7 +68,7 @@ const Home = () => {
             </div>
 
             <div className="xl:flex justify-between py-4 gap-4">
-              <p className="text-justify w-full xl:w-1/3">
+              <p className="text-justify w-full xl:w-1/3 font-plexsans">
                 Ваш онлайн‑магазин флористики и декора – всегда под рукой. Мы
                 собираем для вас лучшие материалы со всего света. Творите без
                 границ.
@@ -76,7 +76,7 @@ const Home = () => {
               <div className="w-1/3"></div>
 
               <button
-                className="mt-6 xl:mt-0 p-5 w-full xl:w-1/3 bg-stone-800  text-[#f4d864] hover:bg-[#f4d864] hover:text-stone-800 active:scale-95 transition duration-300 text-lg tracking-wide"
+                className="mt-6 xl:mt-0 p-5 w-full xl:w-1/3 bg-stone-800 font-plexsans text-[#f4d864] hover:bg-[#f4d864] hover:text-stone-800 active:scale-95 transition duration-300 text-lg tracking-wide"
                 onClick={() => navigate("/catalog")}
                 aria-label="Перейти в каталог"
               >
@@ -104,10 +104,10 @@ const Home = () => {
                 <div className="w-16 h-16 bg-[#f4d864]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#f4d864] transition">
                   <SparklesIcon className="h-8 w-8 text-stone-700 group-hover:text-white" />
                 </div>
-                <h3 className="text-xl font-medium text-stone-800 mb-2">
+                <h3 className="text-xl font-plexsans text-stone-800 mb-2">
                   Качество материалов
                 </h3>
-                <p className="text-stone-500 text-sm">
+                <p className="text-stone-500 font-plexsans text-sm">
                   Только проверенные поставщики и свежие цветы с собственных
                   плантаций.
                 </p>
@@ -120,10 +120,10 @@ const Home = () => {
                 <div className="w-16 h-16 bg-[#f4d864]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#f4d864] transition">
                   <BuildingStorefrontIcon className="h-8 w-8 text-stone-700 group-hover:text-white" />
                 </div>
-                <h3 className="text-xl font-medium text-stone-800 mb-2">
+                <h3 className="text-xl font-plexsans text-stone-800 mb-2">
                   Удобный самовывоз
                 </h3>
-                <p className="text-stone-500 text-sm">
+                <p className="text-stone-500 font-plexsans text-sm">
                   Два пункта выдачи в центре города, работаем без выходных.
                 </p>
               </div>
@@ -135,10 +135,10 @@ const Home = () => {
                 <div className="w-16 h-16 bg-[#f4d864]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#f4d864] transition">
                   <ChatBubbleLeftIcon className="h-8 w-8 text-stone-700 group-hover:text-white" />
                 </div>
-                <h3 className="text-xl font-medium text-stone-800 mb-2">
+                <h3 className="text-xl font-plexsans text-stone-800 mb-2">
                   Поддержка 24/7
                 </h3>
-                <p className="text-stone-500 text-sm">
+                <p className="text-stone-500 font-plexsans text-sm">
                   Наши флористы всегда готовы помочь с выбором и ответить на
                   вопросы.
                 </p>

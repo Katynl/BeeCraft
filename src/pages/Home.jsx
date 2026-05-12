@@ -45,7 +45,7 @@ const Home = () => {
       <section>
         <div className="grid grid-cols-2 grid-rows-1 mt-8">
           <div className="mt-28 mb-28 w-full border-t border-b col-start-1 col-end-3 row-start-1"></div>
-          <div className="md:mx-12 border-r border-l h-screen pt-12 md:pt-36 px-8 col-start-1 col-end-3 row-start-1">
+          <div className="md:mx-12 border-r border-l h-screen py-0 sm:py-12 md:pt-36 px-8 col-start-1 col-end-3 row-start-1">
             <div className="flex w-full justify-between">
               <h1 className="font-black leading-none tracking-wide font-plexsans text-[#f4d864] text-4xl md:text-5xl lg:text-6xl xl:text-8xl">
                 BLOOM..IING

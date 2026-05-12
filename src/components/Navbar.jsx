@@ -71,7 +71,7 @@ const Navbar = () => {
           >
             <ShoppingCartIcon className="h-6 w-6" />
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#f4d864] text-stone-800 text-xs font-medium rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+              <span className="absolute -top-2 -right-2 bg-[#f4d864] text-stone-800 text-xs font-medium rounded-sm w-5 h-5 flex items-center justify-center animate-pulse">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
@@ -80,7 +80,7 @@ const Navbar = () => {
           {isProfilePage ? (
             <button
               onClick={handleLogout}
-              className="text-sm px-4 py-2 rounded-full bg-stone-100 hover:bg-rose-100 hover:text-rose-600 transition"
+              className="text-sm px-4 py-2 rounded-sm bg-stone-100 hover:bg-rose-100 hover:text-rose-600 transition"
             >
               Выйти
             </button>
@@ -116,7 +116,9 @@ const Navbar = () => {
       >
         <nav className="flex flex-col space-y-3 pb-4 pt-4 border-t border-stone-200">
           <MobileNavLink onClick={() => goTo("/")}>Главная</MobileNavLink>
-          <MobileNavLink onClick={() => goTo("/catalog")}>Каталог</MobileNavLink>
+          <MobileNavLink onClick={() => goTo("/catalog")}>
+            Каталог
+          </MobileNavLink>
           <MobileNavLink onClick={scrollToFooter}>Контакты</MobileNavLink>
         </nav>
       </div>

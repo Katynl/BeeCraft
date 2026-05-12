@@ -140,7 +140,7 @@ const Register = () => {
           </button>
         </form>
 
-        <div className="mt-8 text-center space-y-2 w-full flex justify-between">
+        <div className="mt-8 text-center space-y-2 w-full flex justify-between items-center">
           <p className="text-stone-500 text-sm font-plexsans">Уже есть аккаунт?</p>
           <button
             onClick={() => navigate("/login")}

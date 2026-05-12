@@ -63,7 +63,7 @@ const Catalog = () => {
     let filtered = [...list];
     if (selectedCategories.length > 0) {
       filtered = filtered.filter((p) =>
-        selectedCategories.includes(p.category?.id)
+        selectedCategories.includes(p.category?.id),
       );
     }
     const min = parseFloat(minPrice);
@@ -193,7 +193,7 @@ const Catalog = () => {
         </div>
 
         {/* Панель управления (сортировка/фильтр) */}
-        <div className="flex justify-end gap-3 mb-8">
+        <div className="flex justify-between gap-3 mb-8">
           {/* Сортировка */}
           <div className="relative">
             <button
@@ -310,7 +310,7 @@ const Catalog = () => {
                             setTempSelectedCategories((prev) =>
                               prev.includes(cat.id)
                                 ? prev.filter((id) => id !== cat.id)
-                                : [...prev, cat.id]
+                                : [...prev, cat.id],
                             );
                           }}
                           className="rounded-sm text-[#f4d864] focus:ring-0 focus:ring-offset-0"

@@ -47,7 +47,9 @@ const Login = () => {
             Добро пожаловать
           </h1>
           <div className="w-16 h-0.5 bg-[#f4d864] mx-auto mt-2 rounded-sm"></div>
-          <p className="text-stone-500 mt-3 text-sm font-plexsans">Войдите в свой аккаунт</p>
+          <p className="text-stone-500 mt-3 text-sm font-plexsans">
+            Войдите в свой аккаунт
+          </p>
         </div>
 
         {error && (
@@ -98,7 +100,7 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-8 text-center space-y-2 w-full flex justify-between">
+        <div className="mt-8 text-center space-y-2 w-full flex justify-between items-center">
           <p className="text-stone-500 text-sm font-plexsans">Нет аккаунта?</p>
           <button
             onClick={() => navigate("/register")}

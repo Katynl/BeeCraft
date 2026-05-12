@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   SparklesIcon,
-  TruckIcon,
   ChatBubbleLeftIcon,
   BuildingStorefrontIcon,
 } from "@heroicons/react/24/outline";

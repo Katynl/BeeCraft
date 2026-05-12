@@ -46,10 +46,10 @@ const Home = () => {
           <div className="mt-28 mb-28 w-full border-t border-b col-start-1 col-end-3 row-start-1"></div>
           <div className="md:mx-12 border-r border-l h-screen pt-36 px-8 col-start-1 col-end-3 row-start-1">
             <div className="flex w-full justify-between">
-              <h1 className="font-black leading-none tracking-wide font-soledago text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl">
+              <h1 className="font-black leading-none tracking-wide font-plexsans text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl">
                 BLOOM..IING
               </h1>
-              <h2 className="text-stone-800">CRAFT</h2>
+              <h2 className="text-stone-800 font-bold leading-none tracking-wide font-plexsans text-4xl md:text-7xl lg:text-8xl xl:text-9xl">CRAFT</h2>
             </div>
 
             <div className="w-full h-96 bg-gray-100 gap-4">
@@ -88,7 +88,7 @@ const Home = () => {
       <section className="py-20 md:py-32 bg-stone-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2>Почему мы?</h2>
+            <h2 className="font-bold leading-none tracking-wide font-plexsans text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl">Почему мы?</h2>
             <div className="w-12 h-0.5 bg-[#f4d864] mx-auto mt-3"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

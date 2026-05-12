@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./input.css";
+import "../input.css";
 import { useNavigate } from "react-router-dom";
 import {
   SparklesIcon,
@@ -45,7 +45,7 @@ const Home = () => {
       <section>
         <div className="grid grid-cols-2 grid-rows-1 mt-8">
           <div className="mt-28 mb-28 w-full border-t border-b col-start-1 col-end-3 row-start-1"></div>
-          <div className="md:mx-12 border-r border-l h-screen pt-36 px-8 col-start-1 col-end-3 row-start-1">
+          <div className="md:mx-12 border-r border-l h-screen pt-12 md:pt-36 px-8 col-start-1 col-end-3 row-start-1">
             <div className="flex w-full justify-between">
               <h1 className="font-black leading-none tracking-wide font-plexsans text-[#f4d864] text-4xl md:text-5xl lg:text-6xl xl:text-8xl">
                 BLOOM..IING
@@ -192,50 +192,6 @@ const Home = () => {
           )}
         </div>
       </section>
-      {/* Вкладки и карточки – «растянутая» версия */}
-      {/* <section className="py-28 md:py-36 lg:py-44 bg-stone-50">
-        <div className="max-w-7xl lg:max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center items-center space-x-3 sm:space-x-6 md:space-x-10 border-b border-stone-200 pb-0 mb-16">
-            {[
-              { id: "new", label: "Новинки" },
-              { id: "popular", label: "Популярное" },
-              { id: "gifts", label: "Подарки" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`relative px-7 py-4 text-xl md:text-3xl lg:text-4xl font-medium transition-colors duration-300 ${
-                  activeTab === tab.id
-                    ? "text-stone-800"
-                    : "text-stone-400 hover:text-stone-600"
-                }`}
-              >
-                {tab.label}
-                {activeTab === tab.id && (
-                  <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#f4d864] rounded-full animate-fade-in" />
-                )}
-              </button>
-            ))}
-          </div>
-
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 lg:gap-14 justify-items-center mt-14">
-              {filtered.map((product, idx) => (
-                <div
-                  key={product.id}
-                  className="transform transition-all duration-500 hover:-translate-y-2 w-full max-w-md"
-                >
-                  <ProductsCard product={product} index={idx} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-28 text-stone-400 italic text-2xl bg-white/50 rounded-3xl">
-              Товаров в этой категории пока нет...
-            </div>
-          )}
-        </div>
-      </section> */}
 
       <div className="pt-12">
         <FeedbackForm />

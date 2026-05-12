@@ -8,7 +8,6 @@ import {
 } from "@heroicons/react/24/outline";
 import useProducts from "../hooks/useProducts";
 import ProductsCard from "../components/ProductCard";
-import CategoryCarousel from "../components/CategoryCarousel";
 import FeedbackForm from "../components/FeedbackForm";
 import video from "../public/img/compressed_0_bee_daisy_1920x1080.webm";
 import fialka from "../public/img/fialka.webp";

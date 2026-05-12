@@ -100,7 +100,7 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-8 text-center space-y-2 w-full flex justify-between items-center">
+        <div className="mt-8 text-center space-y-2 w-full flex justify-between items-ens">
           <p className="text-stone-500 text-sm font-plexsans">Нет аккаунта?</p>
           <button
             onClick={() => navigate("/register")}

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../api";
-import { EnvelopeIcon, LockClosedIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import {
+  EnvelopeIcon,
+  LockClosedIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/24/outline";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,15 +41,17 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-stone-100 flex items-center justify-center px-4 py-20">
-      <div className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 md:p-10 border border-stone-100 transform transition-all duration-500 animate-fade-in-up">
+      <div className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-sm shadow-xl p-8 md:p-10 border border-stone-100 transform transition-all duration-500 animate-fade-in-up">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight text-stone-800">Добро пожаловать</h1>
-          <div className="w-16 h-0.5 bg-[#f4d864] mx-auto mt-2 rounded-full"></div>
+          <h1 className="text-4xl md:text-5xl font-light tracking-tight text-stone-800">
+            Добро пожаловать
+          </h1>
+          <div className="w-16 h-0.5 bg-[#f4d864] mx-auto mt-2 rounded-sm"></div>
           <p className="text-stone-500 mt-3 text-sm">Войдите в свой аккаунт</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-sm text-center animate-shake">
+          <div className="mb-6 p-3 rounded-sm bg-rose-50 border border-rose-200 text-rose-600 text-sm text-center animate-shake">
             {error}
           </div>
         )}
@@ -60,7 +66,7 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-stone-200 focus:border-[#f4d864] focus:ring-2 focus:ring-[#f4d864]/20 transition outline-none text-stone-700"
+              className="w-full pl-10 pr-4 py-3 rounded-sm border border-stone-200 focus:border-[#f4d864] focus:ring-2 focus:ring-[#f4d864]/20 transition outline-none text-stone-700"
             />
           </div>
           <div className="relative">
@@ -72,7 +78,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full pl-10 pr-12 py-3 rounded-xl border border-stone-200 focus:border-[#f4d864] focus:ring-2 focus:ring-[#f4d864]/20 transition outline-none text-stone-700"
+              className="w-full pl-10 pr-12 py-3 rounded-sm border border-stone-200 focus:border-[#f4d864] focus:ring-2 focus:ring-[#f4d864]/20 transition outline-none text-stone-700"
             />
             <button
               type="button"
@@ -85,7 +91,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="group w-full bg-stone-800 text-white py-3 rounded-xl hover:bg-[#f4d864] hover:text-stone-800 transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg disabled:opacity-70"
+            className="group w-full bg-stone-800 text-white py-3 rounded-sm hover:bg-[#f4d864] hover:text-stone-800 transition-all duration-300 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg disabled:opacity-70"
           >
             {loading ? "Вход..." : "Войти"}
             <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />

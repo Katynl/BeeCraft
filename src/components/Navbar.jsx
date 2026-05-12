@@ -52,7 +52,7 @@ const Navbar = () => {
         <div className="flex items-center gap-8">
           <button
             onClick={() => goTo("/")}
-            className="text-2xl font-light tracking-wide text-stone-800 hover:text-[#f4d864] transition-colors duration-300"
+            className="text-base md:text-2xl font-light tracking-wide text-stone-800 hover:text-[#f4d864] transition-colors duration-300"
           >
             Bloom<span className="text-[#f4d864]">..ing</span> Craft
           </button>

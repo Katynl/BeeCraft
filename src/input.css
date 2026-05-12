@@ -2,3 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+  @apply font-black leading-none tracking-wide font-soledago text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl;
+}
+
+h2 {
+  @apply font-bold leading-none tracking-wide font-plexsans text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl;
+}
+
+h3 {
+  @apply font-bold leading-none tracking-wide font-plexsans text-stone-800 text-lg md:text-xl lg:text-2xl xl:text-3xl;
+}
+
+p {
+  @apply leading-none tracking-widest font-plexsans text-stone-700;
+}
+
+button {
+  @apply leading-none tracking-widest font-plexsans text-base;
+}
+
+a {
+  @apply font-plexsans tracking-widest text-sm md:text-base;
+}
+
+.animate-slide-in {
+  animation: slideInRight 3s ease-in-out forwards;
+}
+
+.animate-in-top {
+  animation: slideInTop 1s ease-in-out forwards;
+}
+
+.animate-in-bottom {
+  animation: slideInBottom 1s ease-in-out forwards;
+}
+
+.animate-in {
+  animation: slideIn 1.5s ease-in-out forwards;
+}

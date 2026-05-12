@@ -1,0 +1,109 @@
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "Comfortaa_Regular", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+* {
+  /* outline: 1px solid red !important; */
+  cursor: pointer;
+}
+
+@font-face {
+  font-family: "Soledago";
+  src: url("./public/font/Soledago.ttf") format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PlexSans";
+  src: url("./public/font/IBMPlexSans-VariableFont_wdth,wght.ttf")
+    format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes slideInTop {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+h1 {
+  @apply font-black leading-none tracking-wide font-soledago text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl;
+}
+
+h2 {
+  @apply font-bold leading-none tracking-wide font-plexsans text-[#f4d864] text-4xl md:text-7xl lg:text-8xl xl:text-9xl;
+}
+
+h3 {
+  @apply font-bold leading-none tracking-wide font-plexsans text-stone-800 text-lg md:text-xl lg:text-2xl xl:text-3xl;
+}
+
+p {
+  @apply leading-none tracking-widest font-plexsans text-stone-700;
+}
+
+button {
+  @apply leading-none tracking-widest font-plexsans text-base;
+}
+
+a {
+  @apply font-plexsans tracking-widest text-sm md:text-base;
+}
+
+.animate-slide-in {
+  animation: slideInRight 3s ease-in-out forwards;
+}
+
+.animate-in-top {
+  animation: slideInTop 1s ease-in-out forwards;
+}
+
+.animate-in-bottom {
+  animation: slideInBottom 1s ease-in-out forwards;
+}
+
+.animate-in {
+  animation: slideIn 1.5s ease-in-out forwards;
+}

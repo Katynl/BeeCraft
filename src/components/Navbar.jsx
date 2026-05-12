@@ -47,7 +47,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-stone-50/80 backdrop-blur-sm py-4 px-6 md:px-12 z-50 shadow-sm font-plexsans">
+    <header className="fixed top-0 w-full bg-stone-50/80 backdrop-blur-sm py-4 px-6 md:px-12 z-50 shadow-sm">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-8">
           <button
@@ -56,7 +56,7 @@ const Navbar = () => {
           >
             Bloom<span className="text-[#f4d864]">..ing</span> Craft
           </button>
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden font-plexsans md:flex space-x-6">
             <NavLink onClick={() => goTo("/")}>Главная</NavLink>
             <NavLink onClick={() => goTo("/catalog")}>Каталог</NavLink>
             <NavLink onClick={scrollToFooter}>Контакты</NavLink>
@@ -80,7 +80,7 @@ const Navbar = () => {
           {isProfilePage ? (
             <button
               onClick={handleLogout}
-              className="text-sm px-4 py-2 rounded-sm bg-stone-100 hover:bg-rose-100 hover:text-rose-600 transition"
+              className="text-sm px-4 py-2 rounded-sm font-plexsans bg-stone-100 hover:bg-rose-100 hover:text-rose-600 transition"
             >
               Выйти
             </button>
@@ -114,7 +114,7 @@ const Navbar = () => {
           isMenuOpen ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
         }`}
       >
-        <nav className="flex flex-col space-y-3 pb-4 pt-4 border-t border-stone-200">
+        <nav className="flex flex-col space-y-3 pb-4 pt-4 font-plexsans border-t border-stone-200">
           <MobileNavLink onClick={() => goTo("/")}>Главная</MobileNavLink>
           <MobileNavLink onClick={() => goTo("/catalog")}>
             Каталог

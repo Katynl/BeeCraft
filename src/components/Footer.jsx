@@ -40,14 +40,14 @@ const Footer = () => {
 
           {/* Колонка 2: Навигация (вертикально) */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-4">
+            <h3 className="text-sm font-plexsans uppercase tracking-wider text-stone-400 mb-4">
               Навигация
             </h3>
             <ul className="space-y-2 ">
               <li>
                 <button
                   onClick={() => goTo("/")}
-                  className="hover:text-[#f4d864] transition duration-200"
+                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
                 >
                   Главная
                 </button>
@@ -55,7 +55,7 @@ const Footer = () => {
               <li>
                 <button
                   onClick={() => goTo("/catalog")}
-                  className="hover:text-[#f4d864] transition duration-200"
+                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
                 >
                   Каталог
                 </button>
@@ -63,7 +63,7 @@ const Footer = () => {
               <li>
                 <button
                   onClick={() => goTo("/profile")}
-                  className="hover:text-[#f4d864] transition duration-200"
+                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
                 >
                   Личный кабинет
                 </button>
@@ -71,7 +71,7 @@ const Footer = () => {
               <li>
                 <button
                   onClick={() => goTo("/cart")}
-                  className="hover:text-[#f4d864] transition duration-200"
+                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
                 >
                   Корзина
                 </button>
@@ -81,15 +81,15 @@ const Footer = () => {
 
           {/* Колонка 3: Контакты (с иконками в строку) */}
           <div className="flex flex-col items-center">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-4 font-plexsans">
               Контакты
             </h3>
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <PhoneIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <a
                   href="tel:+79502885858"
-                  className="hover:text-[#f4d864] transition"
+                  className="hover:text-[#f4d864] transition font-plexsans"
                 >
                   +7 (950) 288-58-58
                 </a>
@@ -98,13 +98,13 @@ const Footer = () => {
                 <EnvelopeIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <a
                   href="mailto:bloomcraft@gnail.com"
-                  className="hover:text-[#f4d864] transition"
+                  className="hover:text-[#f4d864] transition font-plexsans"
                 >
                   bloomcraft@gnail.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
+                <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0 font-plexsans" />
                 <span className="text-sm">г. Владивосток, ул. Пушкина, 10</span>
               </div>
             </div>

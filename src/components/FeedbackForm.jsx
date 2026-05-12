@@ -64,16 +64,16 @@ const FeedbackForm = () => {
       {/* Контент */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
         <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-plexsans tracking-tight text-white">
             Остались вопросы?
           </h2>
-          <p className="text-stone-300 text-md mt-3">
+          <p className="text-stone-300 text-md mt-3 font-plexsans">
             Напишите нам, и мы ответим в ближайшее время
           </p>
           <div className="w-12 h-0.5 bg-[#f4d864] mx-auto mt-4 mb-8"></div>
         </div>
 
-        <div className="max-w-md mx-auto bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-xl border border-white/10">
+        <div className="max-w-md mx-auto bg-white/5 backdrop-blur-sm rounded-sm p-6 md:p-8 shadow-xl border border-white/10">
           <form onSubmit={handleSubmit} className="space-y-5">
             <input
               type="text"
@@ -82,7 +82,7 @@ const FeedbackForm = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full bg-stone-800/50 border border-stone-600 rounded-xl px-4 py-3 text-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#f4d864] focus:border-transparent transition"
+              className="w-full bg-stone-800/50 border font-plexsans border-stone-600 rounded-sm px-4 py-3 text-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#f4d864] focus:border-transparent transition"
             />
             <input
               type="email"
@@ -91,7 +91,7 @@ const FeedbackForm = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full bg-stone-800/50 border border-stone-600 rounded-xl px-4 py-3 text-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#f4d864] focus:border-transparent transition"
+              className="w-full bg-stone-800/50 border font-plexsans border-stone-600 rounded-sm px-4 py-3 text-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#f4d864] focus:border-transparent transition"
             />
             <textarea
               name="message"
@@ -100,12 +100,12 @@ const FeedbackForm = () => {
               value={formData.message}
               onChange={handleChange}
               required
-              className="w-full bg-stone-800/50 border border-stone-600 rounded-xl px-4 py-3 text-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#f4d864] focus:border-transparent transition"
+              className="w-full bg-stone-800/50 border font-plexsans border-stone-600 rounded-sm px-4 py-3 text-white placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#f4d864] focus:border-transparent transition"
             ></textarea>
 
             {status.text && (
               <div
-                className={`text-center p-3 rounded-xl text-sm ${
+                className={`text-center p-3 rounded-sm text-sm ${
                   status.type === "success"
                     ? "bg-emerald-500/20 text-emerald-200 border border-emerald-500/30"
                     : "bg-rose-500/20 text-rose-200 border border-rose-500/30"
@@ -118,7 +118,7 @@ const FeedbackForm = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl bg-[#f4d864] text-stone-900 font-medium hover:bg-white transition duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg disabled:opacity-50 disabled:hover:translate-y-0"
+              className="w-full py-3 px-4 rounded-sm font-plexsans bg-[#f4d864] text-stone-900 font-medium hover:bg-white transition duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg disabled:opacity-50 disabled:hover:translate-y-0"
             >
               {loading ? "Отправка..." : "Отправить →"}
             </button>

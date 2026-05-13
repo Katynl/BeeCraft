@@ -93,7 +93,7 @@ const Catalog = () => {
         className="relative aspect-[3/4] overflow-hidden bg-stone-100 cursor-pointer"
       >
         <img
-          src={product.image}
+          src={product.image_url}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"

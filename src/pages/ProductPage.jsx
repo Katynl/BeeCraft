@@ -81,7 +81,7 @@ const ProductPage = () => {
           <div className="lg:w-1/2">
             <div className="sticky top-24 overflow-hidden rounded-2xl bg-stone-50 group">
               <img
-                src={product.image}
+                src={product.image_url}
                 alt={product.name}
                 className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 loading="lazy"

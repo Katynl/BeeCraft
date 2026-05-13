@@ -24,7 +24,7 @@ const ProductCard = ({ product, index }) => {
         }`}
       >
         <img
-          src={product.image}
+          src={product.image_url}
           alt=""
           onClick={() => navigate(`/catalog/${product.slug}`)}
           className="w-full h-full object-cover rounded-sm"

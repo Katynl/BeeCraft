@@ -91,7 +91,7 @@ const Home = () => {
       {/* БАННЕР */}
       <section>
         <div className="grid grid-cols-2 grid-rows-1 md:mt-16">
-          <div className="mt-24 w-full border-t border-stone-200 col-start-1 col-end-3 row-start-1 h-[720px] md:h-[640px]" />
+          <div className="mt-24 w-full border-t border-stone-200 col-start-1 col-end-3 row-start-1 h-[500px] md:h-[640px]" />
           <div className="relative md:mx-12 border-l border-stone-200 col-start-1 col-end-3 row-start-1 px-8 pt-32">
             <div className="absolute top-28 right-10 w-64 h-64 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
             <div className="relative z-10">

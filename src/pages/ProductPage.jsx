@@ -283,7 +283,7 @@ const ProductPage = () => {
                     <button
                       type="button"
                       onClick={handleAddToCart}
-                      className="group flex h-14 flex-1 items-center justify-center gap-3 bg-stone-800 px-7 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99]"
+                      className="group py-4 px-7 flex h-14 flex-1 items-center justify-center gap-3 bg-stone-800 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99]"
                     >
                       <ShoppingCartIcon className="h-5 w-5" />В корзину
                     </button>

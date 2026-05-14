@@ -223,7 +223,7 @@ const Profile = () => {
               <p className="mt-8 italic max-w-2xl text-base leading-relaxed text-stone-500 md:text-lg">
                 Добро пожаловать, {profile.username}. Здесь можно посмотреть
                 заказы, обновить контактные данные и вернуться к любимым
-                материалам Bloom..ing Craft.
+                материалам Bee Craft.
               </p>
             </div>
 

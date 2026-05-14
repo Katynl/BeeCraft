@@ -10,7 +10,8 @@ import {
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const savedRedirect = localStorage.getItem("redirectAfterLogin");
+  const from = location.state?.from?.pathname || savedRedirect || "/";
 
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
@@ -30,6 +31,7 @@ const Login = () => {
       const { access, refresh } = response.data;
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
+      localStorage.removeItem("redirectAfterLogin");
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);

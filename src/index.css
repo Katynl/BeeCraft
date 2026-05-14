@@ -14,21 +14,13 @@ code {
 }
 
 * {
-  /* outline: 1px solid red !important; */
-  cursor: pointer;
-}
-
-@font-face {
-  font-family: "Soledago";
-  src: url("./public/font/Soledago.ttf") format("woff2");
-  font-style: normal;
-  font-display: swap;
+  box-sizing: border-box;
 }
 
 @font-face {
   font-family: "PlexSans";
   src: url("./public/font/IBMPlexSans-VariableFont_wdth,wght.ttf")
-    format("woff2");
+    format("truetype");
   font-style: normal;
   font-display: swap;
 }
@@ -67,4 +59,3 @@ html {
     opacity: 1;
   }
 }
-

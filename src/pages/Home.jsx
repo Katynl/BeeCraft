@@ -134,7 +134,15 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="relative">
-                  <div className="absolute -bottom-5 -right-5 w-full h-full border border-[#d4aa2a]/40" />
+                  <div className="absolute -bottom-5 -right-5 hidden h-full w-full border border-[#d4aa2a]/40 md:block" />
+
+                  <img
+                    src={fialka}
+                    alt="Bloom Craft"
+                    loading="eager"
+                    decoding="async"
+                    className="relative z-10 h-[280px] w-full rounded-sm object-cover shadow-xl md:hidden"
+                  />
 
                   <video
                     src={video}
@@ -142,8 +150,9 @@ const Home = () => {
                     loop
                     muted
                     playsInline
+                    preload="metadata"
                     poster={fialka}
-                    className="relative z-10 h-[400px] w-full object-cover rounded-sm shadow-2xl"
+                    className="relative z-10 hidden h-[400px] w-full rounded-sm object-cover shadow-2xl md:block"
                   />
                 </div>
               </div>

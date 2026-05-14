@@ -105,7 +105,8 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0 font-plexsans" />
-                <span className="text-sm">г. Владивосток, ул. Пушкина, 10</span>
+                <span className="text-sm">г. Владивосток, ул. Cветланская, 15</span>
+                <span className="text-sm">г. Владивосток, ул. Уткинская, 38</span>
               </div>
             </div>
           </div>
@@ -171,7 +172,7 @@ const Footer = () => {
 
         {/* Копирайт */}
         <div className="border-t border-stone-800 mt-12 pt-8 text-center text-sm text-stone-500">
-          <p>© {new Date().getFullYear()} Bloom..ing. Все права защищены.</p>
+          <p>© {new Date().getFullYear()} BEE CRAFT Все права защищены.</p>
         </div>
       </div>
     </footer>

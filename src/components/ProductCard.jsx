@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import useOnScreen from "../hooks/useOnScreen";
 import { useCart } from "../context/CartContext";
 
@@ -16,7 +17,7 @@ const ProductCard = ({ product, index }) => {
     index % 2 === 0 ? "animate-in-bottom" : "animate-in-top";
 
   return (
-    <div className="rounded-lg flex flex-col hover:shadow-xl">
+    <div className="rounded-lg flex flex-col">
       <div
         ref={cardRef}
         className={`rounded-sm w-full aspect-[3/4] ${
@@ -24,7 +25,7 @@ const ProductCard = ({ product, index }) => {
         }`}
       >
         <img
-          src={product.image_url}
+          src={product.image}
           alt=""
           onClick={() => navigate(`/catalog/${product.slug}`)}
           className="w-full h-full object-cover rounded-sm"
@@ -34,21 +35,28 @@ const ProductCard = ({ product, index }) => {
         />
       </div>
       <div className="flex flex-col justify-between">
-        <div className="flex justify-between py-2 gap-2 px-2">
-          <p className="text-sm md:text-lg lg:text-xl text-left">
-            {product.name}
-          </p>
-          <p className="text-sm md:text-lg lg:text-xl text-left">
-            {product.price} р.
-          </p>
+        <div>
+          <div className="my-3 flex items-start justify-between gap-4">
+            <h3 className="text-base font-light leading-snug text-stone-800 md:text-xl">
+              {product.name}
+            </h3>
+
+            <span className="shrink-0 font-light text-sm md:text-xl text-stone-800">
+              {product.price} ₽
+            </span>
+          </div>
         </div>
 
         <button
-          onClick={() => addToCart(product)}
-          aria-label="В корзину"
-          className="p-5 w-full text-sm md:text-xl xl:text-2xl rounded-sm bg-stone-800 text-white hover:text-stone-900 hover:bg-[#f4d864] transition"
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart(product);
+          }}
+          className="flex w-full items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99]"
         >
-          В корзину
+          <ShoppingCartIcon className="h-4 w-4" />
+          <span>В корзину</span>
         </button>
       </div>
     </div>

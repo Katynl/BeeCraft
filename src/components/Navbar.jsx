@@ -40,38 +40,34 @@ const Navbar = () => {
     closeMenu();
   };
 
-  const scrollToFooter = () => {
-    const footer = document.getElementById("footer");
-    if (footer) footer.scrollIntoView({ behavior: "smooth" });
-    closeMenu();
-  };
-
   return (
     <header className="fixed top-0 w-full bg-stone-50/80 backdrop-blur-sm py-4 px-6 md:px-12 z-50 shadow-sm">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-8">
           <button
             onClick={() => goTo("/")}
-            className="text-base md:text-2xl font-light tracking-wide text-stone-800 hover:text-[#f4d864] transition-colors duration-300"
+            className="text-base md:text-2xl font-medium tracking-wide text-stone-800 hover:text-[#d4aa2a] transition-colors duration-300"
           >
-            Bloom<span className="text-[#f4d864]">..ing</span> Craft
+            <span className="text-[#d4aa2a]">BEE</span> CRAFT
           </button>
-          <nav className="hidden font-plexsans md:flex space-x-6">
+          <nav className="hidden font-medium font-plexsans md:flex space-x-6">
             <NavLink onClick={() => goTo("/")}>Главная</NavLink>
+            <NavLink onClick={() => goTo("/about")}>О нас</NavLink>
             <NavLink onClick={() => goTo("/catalog")}>Каталог</NavLink>
-            <NavLink onClick={scrollToFooter}>Контакты</NavLink>
+            <NavLink onClick={() => goTo("/news")}>Новости</NavLink>
+            <NavLink onClick={() => goTo("/contacts")}>Контакты</NavLink>
           </nav>
         </div>
 
         <div className="flex items-center space-x-4">
           <button
             onClick={() => goTo("/cart")}
-            className="relative p-1 hover:text-[#f4d864] transition-colors"
+            className="relative p-1 hover:text-[#d4aa2a] transition-colors"
             aria-label="Корзина"
           >
             <ShoppingCartIcon className="h-6 w-6" />
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#f4d864] text-stone-800 text-xs font-medium rounded-sm w-5 h-5 flex items-center justify-center animate-pulse">
+              <span className="absolute -top-2 -right-2 bg-[#d4aa2a] text-stone-800 text-xs font-medium rounded-sm w-5 h-5 flex items-center justify-center animate-pulse">
                 {totalItems > 9 ? "9+" : totalItems}
               </span>
             )}
@@ -87,7 +83,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => goTo("/profile")}
-              className="p-1 hover:text-[#f4d864] transition-colors"
+              className="p-1 hover:text-[#d4aa2a] transition-colors"
               aria-label="Профиль"
             >
               <UserIcon className="h-6 w-6" />
@@ -95,7 +91,7 @@ const Navbar = () => {
           )}
 
           <button
-            className="md:hidden p-1 hover:text-[#f4d864] transition-colors"
+            className="md:hidden p-1 hover:text-[#d4aa2a] transition-colors"
             onClick={toggleMenu}
             aria-label="Меню"
           >
@@ -114,12 +110,16 @@ const Navbar = () => {
           isMenuOpen ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
         }`}
       >
-        <nav className="flex flex-col space-y-3 pb-4 pt-4 font-plexsans border-t border-stone-200">
+        <nav className="flex flex-col font-medium space-y-3 pb-4 pt-4 font-plexsans border-t border-stone-200">
           <MobileNavLink onClick={() => goTo("/")}>Главная</MobileNavLink>
+          <MobileNavLink onClick={() => goTo("/about")}>О нас</MobileNavLink>
           <MobileNavLink onClick={() => goTo("/catalog")}>
             Каталог
           </MobileNavLink>
-          <MobileNavLink onClick={scrollToFooter}>Контакты</MobileNavLink>
+          <MobileNavLink onClick={() => goTo("/news")}>Новости</MobileNavLink>
+          <MobileNavLink onClick={() => goTo("/contacts")}>
+            Контакты
+          </MobileNavLink>
         </nav>
       </div>
     </header>
@@ -129,7 +129,7 @@ const Navbar = () => {
 const NavLink = ({ onClick, children }) => (
   <button
     onClick={onClick}
-    className="relative text-stone-600 hover:text-stone-800 transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#f4d864] after:transition-all after:duration-300 hover:after:w-full"
+    className="relative text-stone-600 hover:text-stone-800 transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-[#d4aa2a] after:transition-all after:duration-300 hover:after:w-full"
   >
     {children}
   </button>

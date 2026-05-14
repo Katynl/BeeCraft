@@ -253,37 +253,40 @@ const ProductPage = () => {
                   <div className="mb-4 text-xs uppercase tracking-[0.25em] text-stone-400">
                     Количество
                   </div>
-                  <div className="flex flex-col gap-4 sm:flex-row">
-                    <div className="flex h-14 items-center border border-stone-200 bg-stone-50">
+                  <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
+                    <div className="flex h-14 w-fit items-center overflow-hidden border border-stone-200 bg-stone-50 sm:self-auto">
                       <button
                         type="button"
                         onClick={decreaseQuantity}
-                        className="flex h-full w-14 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800"
+                        className="flex h-full w-11 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800 sm:w-14"
                         aria-label="Уменьшить количество"
                       >
                         <MinusIcon className="h-4 w-4" />
                       </button>
+
                       <input
                         type="number"
                         value={quantity}
                         onChange={handleQuantityChange}
                         min="1"
-                        className="h-full w-16 border-x border-stone-200 bg-white text-center text-stone-800 outline-none"
+                        className="h-full w-14 border-x border-stone-200 bg-white text-center text-stone-800 outline-none sm:w-16"
                         aria-label="Количество товара"
                       />
+
                       <button
                         type="button"
                         onClick={increaseQuantity}
-                        className="flex h-full w-14 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800"
+                        className="flex h-full w-11 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800 sm:w-14"
                         aria-label="Увеличить количество"
                       >
                         <PlusIcon className="h-4 w-4" />
                       </button>
                     </div>
+
                     <button
                       type="button"
                       onClick={handleAddToCart}
-                      className="group py-4 px-7 flex h-14 flex-1 items-center justify-center gap-3 bg-stone-800 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99]"
+                      className="group flex h-14 w-full items-center justify-center gap-3 bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] sm:flex-1"
                     >
                       <ShoppingCartIcon className="h-5 w-5" />В корзину
                     </button>

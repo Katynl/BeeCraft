@@ -222,7 +222,7 @@ const Catalog = () => {
         aria-label={`Открыть товар ${product.name}`}
       >
         <img
-          src={product.image}
+          src={product.image_url}
           alt={product.name}
           className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
           loading="lazy"

@@ -29,10 +29,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
           {/* Колонка 1: Логотип */}
           <div className="space-y-3">
-            <h2 className="text-2xl font-light tracking-wide text-[#f4d864]">
-              Bloom..ing Craft
+            <h2 className="text-2xl font-medium tracking-wide text-[#f4d864]">
+              BEE CRAFT
             </h2>
-            <p className="text-sm text-stone-400 leading-relaxed">
+            <p className="text-sm italic text-stone-400 leading-relaxed">
               Вдохновляющие материалы для флористики и декора. Сделано с любовью
               к природе.
             </p>
@@ -94,13 +94,13 @@ const Footer = () => {
                   +7 (950) 288-58-58
                 </a>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <EnvelopeIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <a
                   href="mailto:bloomcraft@gnail.com"
                   className="hover:text-[#f4d864] transition font-plexsans"
                 >
-                  bloomcraft@gnail.com
+                  bloomcraft@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2">

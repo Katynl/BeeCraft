@@ -193,7 +193,7 @@ const ProductPage = () => {
 
               <div className="relative z-10 overflow-hidden border border-stone-200 bg-white shadow-[0_24px_80px_rgba(41,37,36,0.10)]">
                 <img
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   className="h-[460px] w-full object-cover object-center sm:h-[620px] lg:h-[720px]"
                   loading="eager"

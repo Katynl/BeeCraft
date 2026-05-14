@@ -75,7 +75,7 @@ const News = () => {
               </div>
               <div className="mt-10 grid lg:grid-cols-2 gap-8 items-end">
                 <div>
-                  <p className="mt-8 text-stone-500 text-lg leading-relaxed max-w-lg text-left">
+                  <p className="mt-8 italic text-stone-500 text-lg leading-relaxed max-w-lg text-left">
                     Новые коллекции, вдохновение, флористические события и
                     атмосфера прямиком из нашей мастерской.
                   </p>

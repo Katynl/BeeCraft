@@ -55,8 +55,7 @@ const Home = () => {
       date: "15 мая 2026",
       image:
         "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688415/ChatGPT_Image_14_%D0%BC%D0%B0%D1%8F_2026_%D0%B3._00_11_53_nqrrff.png",
-      description:
-        "Новое пространство Bloom..ing Craft открылось в центре города.",
+      description: "Новое пространство Bee Craft открылось в центре города.",
     },
 
     {
@@ -103,16 +102,16 @@ const Home = () => {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <h1 className="text-[#d4aa2a] leading-none font-black text-xl md:text-5xl lg:text-9xl">
+                <h1 className="text-[#d4aa2a] leading-none font-black text-2xl md:text-5xl lg:text-9xl">
                   BEE
                 </h1>
-                <h2 className="text-stone-800 font-black text-xl md:text-5xl lg:text-9xl">
+                <h2 className="text-stone-800 font-black text-2xl md:text-5xl lg:text-9xl">
                   CRAFT
                 </h2>
               </div>
               <div className="mt-10 grid lg:grid-cols-2 gap-8 items-center">
                 <div>
-                  <p className="mt-8 max-w-lg text-justify  text-stone-500 leading-relaxed text-base sm:text-lg">
+                  <p className="mt-8 italic max-w-lg text-justify  text-stone-500 leading-relaxed text-base sm:text-lg">
                     Пространство флористики, текстур и вдохновения. Материалы
                     для букетов, декора и творчества в эстетике тёплого
                     editorial-стиля.
@@ -133,16 +132,8 @@ const Home = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="relative">
+                <div className="hidden md:block relative">
                   <div className="absolute -bottom-5 -right-5 hidden h-full w-full border border-[#d4aa2a]/40 md:block" />
-
-                  <img
-                    src={fialka}
-                    alt="Bloom Craft"
-                    loading="eager"
-                    decoding="async"
-                    className="relative z-10 h-[280px] w-full rounded-sm object-cover shadow-xl md:hidden"
-                  />
 
                   <video
                     src={video}

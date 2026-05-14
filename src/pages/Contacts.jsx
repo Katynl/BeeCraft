@@ -4,39 +4,19 @@ import {
   PhoneIcon,
   MapPinIcon,
   ClockIcon,
-  ChatBubbleLeftRightIcon,
-  SparklesIcon,
 } from "@heroicons/react/24/outline";
 
 const CONTACTS = {
   phone: "+7 (950) 288-58-58",
   phoneHref: "tel:+79502885858",
-  email: "bloomcraft@gnail.com", // проверь: возможно должно быть gmail.com
-  emailHref: "mailto:bloomcraft@gnail.com",
+  email: "bloomcraft@gmail.com",
+  emailHref: "mailto:bloomcraft@gmail.com",
   address: "Владивосток, Светланская 15",
   address2: "Владивосток, Уткинская 38",
   workdays: "Пн–Пт: 10:00 — 20:00",
   saturday: "Сб: 11:00 — 18:00",
   sunday: "Вс — выходной",
 };
-
-const socialLinks = [
-  {
-    name: "ВКонтакте",
-    href: "https://vk.com/yourgroup",
-    label: "VK",
-  },
-  {
-    name: "Telegram",
-    href: "https://t.me/yourgroup",
-    label: "TG",
-  },
-  {
-    name: "Instagram",
-    href: "https://instagram.com/yourgroup",
-    label: "IG",
-  },
-];
 
 const Honeycomb = ({ className = "" }) => {
   return (

@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
-import flower from "../public/img/nesniePions.webp";
 import fialka from "../public/img/fialka.webp";
 import gibiskuz from "../public/img/gibiskus.webp";
-import gipsophil from "../public/img/gipsofils.webp";
 import kalla from "../public/img/Kalla.webp";
 import pion from "../public/img/pion.webp";
 import roza from "../public/img/roza.webp";
-import lenta from "../public/img/lentaBlue.webp";
 
 const Honeycomb = ({ className = "" }) => {
   return (

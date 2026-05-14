@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import lentf from "../public/img/lentaBlue.webp";
 import fialka from "../public/img/fialka.webp";
 
 const newsData = [

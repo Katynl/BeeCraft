@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import fialka from "../public/img/fialka.webp";
 
 const newsData = [
   {
@@ -91,7 +90,7 @@ const News = () => {
                     loop
                     muted
                     playsInline
-                    poster={fialka}
+                    poster="https://res.cloudinary.com/drkgovcn7/image/upload/v1778697429/front-view-woman-making-flowers-arrangement_dckuj8.jpg"
                     className="relative z-10 h-[400px] w-full object-cover rounded-sm shadow-2xl"
                   />
                 </div>

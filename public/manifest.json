@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Bee Craft",
+  "name": "Bee Craft — магазин флористики и декора",
+  "description": "Цветы, ленты, корзины и декор для тех, кто любит делать красиво руками.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#d4aa2a",
+  "background_color": "#fafaf9"
 }

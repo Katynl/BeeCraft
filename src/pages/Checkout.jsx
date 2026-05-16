@@ -83,7 +83,6 @@ const Checkout = () => {
       comment: formData.comment.trim() || "",
       payment_method: formData.payment_method,
       pickup_location: formData.pickup_location,
-      total: totalPrice,
       items: cartItems.map((item) => ({
         product_id: item.id,
         quantity: item.quantity,
@@ -102,12 +101,11 @@ const Checkout = () => {
         }
       }
 
-      await api.post("/orders/", orderData);
+      const response = await api.post("/orders/", orderData);
 
       clearCart();
 
-      alert("Заказ успешно создан! Спасибо за покупку.");
-      navigate("/");
+      navigate(`/profile/orders/${response.data.id}`);
     } catch (err) {
       console.error(err);
       alert(
@@ -381,7 +379,7 @@ const Checkout = () => {
                   return (
                     <div key={item.id} className="flex gap-4 p-5">
                       <img
-                        src={item.image}
+                        src={item.image_url || item.image}
                         alt={item.name}
                         loading="lazy"
                         decoding="async"

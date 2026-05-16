@@ -40,14 +40,14 @@ const Footer = () => {
 
           {/* Колонка 2: Навигация (вертикально) */}
           <div>
-            <h3 className="text-sm font-plexsans uppercase tracking-wider text-stone-400 mb-4">
+            <h3 className="text-sm uppercase tracking-wider text-stone-400 mb-4">
               Навигация
             </h3>
             <ul className="space-y-2 ">
               <li>
                 <button
                   onClick={() => goTo("/")}
-                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
+                  className="hover:text-[#f4d864] transition duration-200"
                 >
                   Главная
                 </button>
@@ -55,23 +55,40 @@ const Footer = () => {
               <li>
                 <button
                   onClick={() => goTo("/catalog")}
-                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
+                  className="hover:text-[#f4d864] transition duration-200"
                 >
                   Каталог
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => goTo("/profile")}
-                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
+                  onClick={() => goTo("/about")}
+                  className="hover:text-[#f4d864] transition duration-200"
                 >
-                  Личный кабинет
+                  О нас
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => goTo("/news")}
+                  className="hover:text-[#f4d864] transition duration-200"
+                >
+                  Новости
+                </button>
+              </li>
+
+              <li>
+                <button
+                  onClick={() => goTo("/contacts")}
+                  className="hover:text-[#f4d864] transition duration-200"
+                >
+                  Контакты
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => goTo("/cart")}
-                  className="hover:text-[#f4d864] transition duration-200 font-plexsans"
+                  className="hover:text-[#f4d864] transition duration-200"
                 >
                   Корзина
                 </button>
@@ -81,7 +98,7 @@ const Footer = () => {
 
           {/* Колонка 3: Контакты (с иконками в строку) */}
           <div className="flex flex-col items-center">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-4 font-plexsans">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-4">
               Контакты
             </h3>
             <div className="space-y-3">
@@ -89,7 +106,7 @@ const Footer = () => {
                 <PhoneIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <a
                   href="tel:+79502885858"
-                  className="hover:text-[#f4d864] transition font-plexsans"
+                  className="hover:text-[#f4d864] transition"
                 >
                   +7 (950) 288-58-58
                 </a>
@@ -97,14 +114,14 @@ const Footer = () => {
               <div className="flex items-center justify-center gap-2">
                 <EnvelopeIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <a
-                  href="mailto:bloomcraft@gnail.com"
-                  className="hover:text-[#f4d864] transition font-plexsans"
+                  href="mailto:beecraft@gmail.com"
+                  className="hover:text-[#f4d864] transition"
                 >
-                  bloomcraft@gmail.com
+                  beecraft@gmail.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0 font-plexsans" />
+                <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <span className="text-sm">г. Владивосток, ул. Cветланская, 15</span>
                 <span className="text-sm">г. Владивосток, ул. Уткинская, 38</span>
               </div>

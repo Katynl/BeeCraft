@@ -9,8 +9,8 @@ import {
 const CONTACTS = {
   phone: "+7 (950) 288-58-58",
   phoneHref: "tel:+79502885858",
-  email: "bloomcraft@gmail.com",
-  emailHref: "mailto:bloomcraft@gmail.com",
+  email: "beecraft@gmail.com",
+  emailHref: "mailto:beecraft@gmail.com",
   address: "Владивосток, Светланская 15",
   address2: "Владивосток, Уткинская 38",
   workdays: "Пн–Пт: 10:00 — 20:00",
@@ -90,7 +90,7 @@ const Contacts = () => {
         <Honeycomb className="absolute right-[-40px] top-24 w-56 md:w-80 text-[#d4aa2a]/20 pointer-events-none" />
         <Honeycomb className="absolute left-4 bottom-8 w-32 md:w-44 text-stone-800/[0.04] pointer-events-none" />
 
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center gap-4 mb-8">
             <div className="w-12 h-px bg-[#d4aa2a]" />
             <span className="uppercase tracking-[0.3em] text-xs text-stone-500">
@@ -172,12 +172,12 @@ const Contacts = () => {
           <div className="bg-white border border-stone-200 p-4 sm:p-5 shadow-[0_20px_60px_rgba(41,37,36,0.06)]">
             <div className="relative overflow-hidden bg-stone-100 h-[360px] md:h-[460px]">
               <iframe
-                title="Карта — Bloom..ing Craft"
+                title="Карта — Bee Craft"
                 className="absolute inset-0 w-full h-full border-0 grayscale-[0.25] contrast-[0.95]"
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
-                src="https://maps.google.com/maps?q=%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%B2%D0%BE%D1%81%D1%82%D0%BE%D0%BA%2C%20%D1%83%D0%BB.%20%D0%9F%D1%83%D1%88%D0%BA%D0%B8%D0%BD%D0%B0%2C%2010&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2059.4043336578293!2d131.883516614013!3d43.11633900361224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5fb38df750757b13%3A0xb9b1fb16dbc5e7f!2z0YPQuy4g0KHQstC10YLQu9Cw0L3RgdC60LDRjywgMTUsINCS0LvQsNC00LjQstC-0YHRgtC-0LosINCf0YDQuNC80L7RgNGB0LrQuNC5INC60YDQsNC5LCDQoNC-0YHRgdC40Y8sIDY5MDA5MQ!5e0!3m2!1sru!2sch!4v1778937655565!5m2!1sru!2sch"
               />
             </div>
           </div>

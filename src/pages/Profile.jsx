@@ -23,7 +23,7 @@ const getStatusText = (status) => {
 
 const getStatusClasses = (status) => {
   const classes = {
-    new: "bg-[#b89422]/20 text-stone-800 border-[#b89422]/40",
+    new: "bg-[#d4aa2a]/20 text-stone-800 border-[#d4aa2a]/40",
     preparing: "bg-sky-50 text-sky-700 border-sky-200",
     ready: "bg-emerald-50 text-emerald-700 border-emerald-200",
     completed: "bg-stone-100 text-stone-500 border-stone-200",
@@ -181,7 +181,7 @@ const Profile = () => {
     return (
       <main className="min-h-screen bg-stone-50 flex items-center justify-center px-6">
         <div className="max-w-md border border-stone-200 bg-white p-8 text-center shadow-[0_18px_60px_rgba(41,37,36,0.06)]">
-          <div className="mx-auto mb-6 h-px w-16 bg-[#b89422]" />
+          <div className="mx-auto mb-6 h-px w-16 bg-[#d4aa2a]" />
 
           <h1 className="text-3xl font-light text-stone-800">Ошибка</h1>
 
@@ -189,7 +189,7 @@ const Profile = () => {
 
           <Link
             to="/"
-            className="mt-8 inline-flex bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#b89422] transition hover:bg-[#b89422] hover:text-stone-800"
+            className="mt-8 inline-flex bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
           >
             На главную
           </Link>
@@ -207,7 +207,7 @@ const Profile = () => {
     <main className="min-h-screen overflow-hidden bg-stone-50 text-stone-800">
       {/* HERO */}
       <section className="relative border-b border-stone-200 pt-28 md:pt-32">
-        <div className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#b89422]/20 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
 
         <div className="pointer-events-none absolute -left-8 top-36 hidden text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block">
           BEE
@@ -230,7 +230,7 @@ const Profile = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex w-fit items-center gap-3 border border-stone-300 bg-white px-6 py-4 text-sm text-stone-600 transition hover:border-[#b89422] hover:text-stone-800"
+              className="inline-flex w-fit items-center gap-3 border border-stone-300 bg-white px-6 py-4 text-sm text-stone-600 transition hover:border-[#d4aa2a] hover:text-stone-800"
             >
               <ArrowRightOnRectangleIcon className="h-5 w-5" />
               Выйти
@@ -280,7 +280,7 @@ const Profile = () => {
             <div className="border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.05)] sm:p-8">
               <div className="mb-8 flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#b89422]/20 text-stone-800 ring-1 ring-[#b89422]/30">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#d4aa2a]/20 text-stone-800 ring-1 ring-[#d4aa2a]/30">
                     <span className="text-2xl font-light uppercase tracking-tight">
                       {userInitial}
                     </span>
@@ -291,7 +291,7 @@ const Profile = () => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-400 transition hover:border-[#b89422] hover:text-stone-800"
+                    className="flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-400 transition hover:border-[#d4aa2a] hover:text-stone-800"
                     aria-label="Редактировать профиль"
                   >
                     <PencilIcon className="h-5 w-5" />
@@ -343,7 +343,7 @@ const Profile = () => {
                         }))
                       }
                       required
-                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#b89422] focus:bg-white"
+                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
                     />
                   </div>
 
@@ -362,7 +362,7 @@ const Profile = () => {
                         }))
                       }
                       required
-                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#b89422] focus:bg-white"
+                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
                     />
                   </div>
 
@@ -380,14 +380,14 @@ const Profile = () => {
                           phone: e.target.value,
                         }))
                       }
-                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#b89422] focus:bg-white"
+                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 pt-3">
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#b89422] transition hover:bg-[#b89422] hover:text-stone-800"
+                      className="flex items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
                     >
                       <CheckIcon className="h-4 w-4" />
                       Сохранить
@@ -407,7 +407,7 @@ const Profile = () => {
             </div>
 
             <div className="mt-5 border border-stone-200 bg-white p-6">
-              <div className="mb-4 h-px w-10 bg-[#b89422]" />
+              <div className="mb-4 h-px w-10 bg-[#d4aa2a]" />
 
               <h3 className="text-xl font-light text-stone-800">
                 Нужна помощь?
@@ -425,7 +425,7 @@ const Profile = () => {
             <div className="mb-8 flex flex-col gap-5 border-b border-stone-100 pb-6 md:flex-row md:items-end md:justify-between">
               <div>
                 <div className="mb-4 flex items-center gap-4">
-                  <div className="h-px w-10 bg-[#b89422]" />
+                  <div className="h-px w-10 bg-[#d4aa2a]" />
                   <span className="text-xs uppercase tracking-[0.25em] text-stone-400">
                     История
                   </span>
@@ -438,7 +438,7 @@ const Profile = () => {
 
               <Link
                 to="/catalog"
-                className="text-sm uppercase tracking-[0.18em] text-[#b89422] transition hover:text-stone-800"
+                className="text-sm uppercase tracking-[0.18em] text-[#d4aa2a] transition hover:text-stone-800"
               >
                 В каталог →
               </Link>
@@ -459,7 +459,7 @@ const Profile = () => {
 
                 <Link
                   to="/catalog"
-                  className="mt-8 bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#b89422] transition hover:bg-[#b89422] hover:text-stone-800"
+                  className="mt-8 bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
                 >
                   Перейти в каталог
                 </Link>
@@ -470,7 +470,7 @@ const Profile = () => {
                   <Link
                     key={order.id}
                     to={`/profile/orders/${order.id}`}
-                    className="group block border border-stone-200 bg-stone-50 p-5 transition hover:border-[#b89422]/60 hover:bg-white hover:shadow-[0_14px_50px_rgba(41,37,36,0.07)]"
+                    className="group block border border-stone-200 bg-stone-50 p-5 transition hover:border-[#d4aa2a]/60 hover:bg-white hover:shadow-[0_14px_50px_rgba(41,37,36,0.07)]"
                   >
                     <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                       <div>
@@ -511,7 +511,7 @@ const Profile = () => {
                           </p>
                         </div>
 
-                        <span className="text-[#b89422] transition group-hover:translate-x-1">
+                        <span className="text-[#d4aa2a] transition group-hover:translate-x-1">
                           →
                         </span>
                       </div>

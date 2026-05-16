@@ -45,17 +45,17 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-stone-100 flex items-center justify-center px-4 py-20">
       <div className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-sm shadow-xl p-8 md:p-10 border border-stone-100 transform transition-all duration-500 animate-fade-in-up">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight text-stone-800 font-plexsans">
+          <h1 className="text-4xl md:text-5xl font-light tracking-tight text-stone-800">
             Добро пожаловать
           </h1>
           <div className="w-16 h-0.5 bg-[#d4aa2a] mx-auto mt-2 rounded-sm"></div>
-          <p className="text-stone-500 mt-3 text-sm font-plexsans">
+          <p className="text-stone-500 mt-3 text-sm">
             Войдите в свой аккаунт
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-3 rounded-sm bg-rose-50 border font-plexsans border-rose-200 text-rose-600 text-sm text-center animate-shake">
+          <div className="mb-6 p-3 rounded-sm bg-rose-50 border border-rose-200 text-rose-600 text-sm text-center animate-shake">
             {error}
           </div>
         )}
@@ -70,7 +70,7 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full pl-10 pr-4 py-3 rounded-sm border font-plexsans border-stone-200 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20 transition outline-none text-stone-700"
+              className="w-full pl-10 pr-4 py-3 rounded-sm border border-stone-200 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20 transition outline-none text-stone-700"
             />
           </div>
           <div className="relative">
@@ -82,7 +82,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full pl-10 pr-12 py-3 rounded-sm border font-plexsans border-stone-200 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20 transition outline-none text-stone-700"
+              className="w-full pl-10 pr-12 py-3 rounded-sm border border-stone-200 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20 transition outline-none text-stone-700"
             />
             <button
               type="button"
@@ -103,10 +103,10 @@ const Login = () => {
         </form>
 
         <div className="mt-8 text-center space-y-2 w-full flex justify-between items-ens">
-          <p className="text-stone-500 text-sm font-plexsans">Нет аккаунта?</p>
+          <p className="text-stone-500 text-sm">Нет аккаунта?</p>
           <button
             onClick={() => navigate("/register")}
-            className="text-stone-800 underline decoration-[#d4aa2a] underline-offset-4 hover:text-[#d4aa2a] transition font-plexsans"
+            className="text-stone-800 underline decoration-[#d4aa2a] underline-offset-4 hover:text-[#d4aa2a] transition"
           >
             Зарегистрироваться
           </button>

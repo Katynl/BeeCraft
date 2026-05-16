@@ -12,11 +12,9 @@ export default {
 
     extend: {
       fontFamily: {
-        soledago: ["Soledago"],
-        adventpro: ["AdventPro"],
-        climate: ["Climate"],
-        vibes: ["GreatVibes"],
-        plexsans: ["PlexSans"],
+        sans: ["Manrope", "sans-serif"],
+        brand: ["Unbounded", "sans-serif"],
+        poetic: ["Playfair Display", "serif"],
       },
     },
   },

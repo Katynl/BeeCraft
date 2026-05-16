@@ -102,10 +102,10 @@ const Home = () => {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <h1 className="text-[#d4aa2a] leading-none font-black text-2xl md:text-5xl lg:text-9xl">
+                <h1 className="text-[#d4aa2a] leading-none font-black text-3xl md:text-6xl lg:text-9xl">
                   BEE
                 </h1>
-                <h2 className="text-stone-800 font-black text-2xl md:text-5xl lg:text-9xl">
+                <h2 className="text-stone-800 font-black text-3xl md:text-6xl lg:text-9xl">
                   CRAFT
                 </h2>
               </div>
@@ -154,7 +154,7 @@ const Home = () => {
 
       {/* ПОЧЕМУ МЫ */}
       <section className="py-24 my-24 md:py-32 bg-stone-800">
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4 mb-14">
             <div className="w-12 h-px bg-[#d4aa2a]" />
             <span className="uppercase tracking-[0.3em] text-xs text-stone-400">
@@ -215,7 +215,7 @@ const Home = () => {
 
       {/* НОВОСТИ */}
       <section className="py-24 bg-stone-50 border-y border-stone-200">
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-6 mb-14 flex-wrap">
             <div>
               <div className="flex items-center gap-4 mb-4">

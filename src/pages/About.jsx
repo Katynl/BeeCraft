@@ -152,7 +152,7 @@ const About = () => {
                         className="w-full h-full object-cover transition duration-700 group-hover:scale-[1.04]"
                       />
                     </div>
-                    <p className="text-stone-700 italic leading-relaxed text-left italic">
+                    <p className="text-stone-700 leading-relaxed text-left italic">
                       Мы — Bee Craft. Изначально мы были просто кучкой
                       любителей-флористов, которые обожали цветы, но жутко
                       бесились от того, что нормальные материалы приходится
@@ -553,7 +553,7 @@ const About = () => {
                   <br />
                   не спеша
                   <br />
-                  не дыша
+                  не жужжа
                 </h2>
               </div>
 

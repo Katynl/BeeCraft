@@ -20,6 +20,8 @@ import News from "./pages/News";
 import NewsDetails from "./pages/NewsDetails";
 import About from "./pages/About";
 
+import NotFound from "./pages/NotFound";
+
 const Home = lazy(() => import("./pages/Home"));
 const Catalog = lazy(() => import("./pages/Catalog"));
 
@@ -41,7 +43,14 @@ function App() {
                 <Route path="/news/:id" element={<NewsDetails />} />
                 <Route path="/catalog/:slug" element={<ProductPage />} />
                 <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route
@@ -61,6 +70,7 @@ function App() {
                   }
                 />
                 <Route path="contacts" element={<Contacts></Contacts>} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </main>

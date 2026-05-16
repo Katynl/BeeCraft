@@ -24,7 +24,7 @@ const newsData = {
     date: "15 мая 2026",
     image:
       "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688415/ChatGPT_Image_14_%D0%BC%D0%B0%D1%8F_2026_%D0%B3._00_11_53_nqrrff.png",
-    intro: "Мы открываем новое пространство Bloom..ing Craft в центре города.",
+    intro: "Мы открываем новое пространство Bee Craft в центре города.",
     text: `
 Bee Craft открывает второе пространство в центре города на Уткинской 38!
 
@@ -90,7 +90,7 @@ const NewsDetails = () => {
           BEE
         </div>
 
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-12 gap-10 items-end">
             <div className="lg:col-span-5">
               <div className="flex items-center gap-4 mb-6">

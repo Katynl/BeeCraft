@@ -330,7 +330,7 @@ const ProductPage = () => {
                 >
                   <div className="aspect-[3/4] overflow-hidden bg-stone-100">
                     <img
-                      src={similar.image}
+                      src={similar.image_url}
                       alt={similar.name}
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                       loading="lazy"

@@ -17,45 +17,6 @@ code {
   box-sizing: border-box;
 }
 
-@font-face {
-  font-family: "PlexSans";
-  src: url("./public/font/IBMPlexSans-VariableFont_wdth,wght.ttf")
-    format("truetype");
-  font-style: normal;
-  font-display: swap;
-}
-
 html {
   scroll-behavior: smooth;
-}
-
-@keyframes slideInTop {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInBottom {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }

@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 
-import fialka from "../public/img/fialka.webp";
-import gibiskuz from "../public/img/gibiskus.webp";
-import kalla from "../public/img/Kalla.webp";
-import pion from "../public/img/pion.webp";
-import roza from "../public/img/roza.webp";
-
 const Honeycomb = ({ className = "" }) => {
   return (
     <svg
@@ -63,7 +57,6 @@ const storySlides = [
       "https://res.cloudinary.com/drkgovcn7/image/upload/v1778698538/white-flowers-close-with-blue-background_vojyct.jpg",
     text: `«А что, если мы попробуем сами?»
 Мы сидели на кухне после очередного совместного букета, перебирали ленты и крафт, и кто-то неуверенно сказал: «Слушайте, а может, откроем свой магазин? Ну, чтобы не лазить по всему городу, а взять то, что нам самим нравится».`,
-    // accent: "с чего всё началось",
   },
   {
     id: "02",
@@ -72,7 +65,6 @@ const storySlides = [
     image:
       "https://res.cloudinary.com/drkgovcn7/image/upload/v1778697429/front-view-woman-making-flowers-arrangement_dckuj8.jpg",
     text: `пришли не сразу и без фанфар. Просто однажды к нам пришла девушка, которая делала букет для своей лучшей подруги и сказала: «Я искала такую ленту везде, а нашла только у вас. Спасибо, что вы есть». В этот момент мы поняли, что движемся в правильном направлении.`,
-    // accent: "Первые успехи",
   },
   {
     id: "03",
@@ -83,7 +75,6 @@ const storySlides = [
     text: `ошибались и спорили на кухне. Боялись, что ничего не выйдет. Но однажды просто взяли и сделали – открыли сайт, выложили первые позиции, набрались смелости.
 И когда пришёл первый заказ от незнакомого человека, мы поняли: это оно. То самое дело, ради которого стоит вставать по утрам.
 Так, без громких планов, из любви к цветам, честности и желания помогать творить, и родился наш Bee Craft.`,
-    // accent: "почему пчела",
   },
 ];
 
@@ -103,12 +94,9 @@ const team = [
 ];
 
 const principles = [
-  //   "Не добавляем в ассортимент всё подряд. Каждая позиция должна быть полезной, красивой и понятной в работе.",
   "Работам аккуратно и в указанные сроки",
-  //   "Проверяем цвет, плотность, фактуру и то, как материал ведёт себя в композиции.",
   "К каждому цветочку, букетику относимся трепетно",
   "Предлагаем только качественные товары по добросовестной цене",
-  //   "Упаковываем заказы аккуратно, потому что впечатление от бренда начинается ещё до использования товара.",
 ];
 
 const About = () => {
@@ -592,15 +580,15 @@ const About = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4">
             <img
-              src={kalla}
-              alt=""
+              src="https://res.cloudinary.com/drkgovcn7/image/upload/v1778939506/fialka_bqtjwc.webp"
+              alt="fialka"
               className="col-span-2 md:col-span-2 h-72 md:h-96 object-cover w-full rounded-sm hover:scale-[1.01] transition duration-500"
             />
 
             <div className="col-span-2 md:col-span-2 grid gap-3 md:gap-4">
               <img
-                src={gibiskuz}
-                alt=""
+                src="https://res.cloudinary.com/drkgovcn7/image/upload/v1778939506/fialka_bqtjwc.webp"
+                alt="fialka"
                 className="h-44 object-cover w-full rounded-sm hover:scale-[1.01] transition duration-500"
               />
 
@@ -614,8 +602,8 @@ const About = () => {
             </div>
 
             <img
-              src={fialka}
-              alt=""
+              src="https://res.cloudinary.com/drkgovcn7/image/upload/v1778939506/fialka_bqtjwc.webp"
+              alt="fialka"
               className="col-span-2 md:col-span-2 h-72 md:h-96 object-cover w-full rounded-sm hover:scale-[1.01] transition duration-500"
             />
           </div>

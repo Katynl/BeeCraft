@@ -9,8 +9,6 @@ import {
 import useProducts from "../hooks/useProducts";
 import ProductsCard from "../components/ProductCard";
 import FeedbackForm from "../components/FeedbackForm";
-import video from "../public/img/compressed_0_bee_daisy_1920x1080.webm";
-import fialka from "../public/img/fialka.webp";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -136,13 +134,13 @@ const Home = () => {
                   <div className="absolute -bottom-5 -right-5 hidden h-full w-full border border-[#d4aa2a]/40 md:block" />
 
                   <video
-                    src={video}
+                    src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778939599/compressed_0_bee_daisy_1920x1080_mgczvt.webm"
                     autoPlay
                     loop
                     muted
                     playsInline
                     preload="metadata"
-                    poster={fialka}
+                    poster="fialka"
                     className="relative z-10 hidden h-[400px] w-full rounded-sm object-cover shadow-2xl md:block"
                   />
                 </div>

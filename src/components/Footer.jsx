@@ -112,7 +112,7 @@ const Footer = () => {
                   beecraft@gmail.com
                 </a>
               </div>
-              <div className="flex items-center justify-start gap-2">
+              <div className="flex items-center justify-end gap-2">
                 <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <span className="text-sm">г. Владивосток, ул. Cветланская, 15</span>
                 <span className="text-sm">г. Владивосток, ул. Уткинская, 38</span>
@@ -120,7 +120,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Колонка 4: Соцсети и режим работы (ровно) */}
+          {/* Колонка 4: Соцсети и режим работы*/}
           <div className="flex flex-col items-center">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-stone-400 mb-4">
               Мы в соцсетях

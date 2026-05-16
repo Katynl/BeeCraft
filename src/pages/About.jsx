@@ -339,7 +339,7 @@ const About = () => {
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div className="space-y-3 md:space-y-4">
                 <img
-                  src={roza}
+                  src="https://res.cloudinary.com/drkgovcn7/image/upload/v1778939560/roza_qwhl3q.webp"
                   alt="Цветочные материалы"
                   className="w-full h-48 md:h-72 object-cover rounded-sm border border-stone-800/15 hover:scale-[1.02] transition duration-500"
                 />
@@ -366,7 +366,7 @@ const About = () => {
                 </div>
 
                 <img
-                  src={pion}
+                  src="https://res.cloudinary.com/drkgovcn7/image/upload/v1778939558/pion_m1n72y.webp"
                   alt="Флористическая эстетика"
                   className="w-full h-48 md:h-72 object-cover rounded-sm border border-stone-800/15 hover:scale-[1.02] transition duration-500"
                 />

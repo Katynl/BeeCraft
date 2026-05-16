@@ -85,14 +85,6 @@ const Footer = () => {
                   Контакты
                 </button>
               </li>
-              <li>
-                <button
-                  onClick={() => goTo("/cart")}
-                  className="hover:text-[#f4d864] transition duration-200"
-                >
-                  Корзина
-                </button>
-              </li>
             </ul>
           </div>
 
@@ -120,7 +112,7 @@ const Footer = () => {
                   beecraft@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-start gap-2">
                 <MapPinIcon className="h-4 w-4 text-stone-500 flex-shrink-0" />
                 <span className="text-sm">г. Владивосток, ул. Cветланская, 15</span>
                 <span className="text-sm">г. Владивосток, ул. Уткинская, 38</span>

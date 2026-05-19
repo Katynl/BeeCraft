@@ -241,7 +241,7 @@ const Catalog = () => {
       <div className="flex flex-col justify-between">
         <div>
           <div className="my-3 flex items-end justify-between gap-4">
-            <h3 className="text-base font-light leading-snug text-stone-800 md:text-xl">
+            <h3 className="text-base font-light leading-snug text-stone-800">
               {product.name}
             </h3>
 

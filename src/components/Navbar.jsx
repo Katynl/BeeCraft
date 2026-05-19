@@ -52,7 +52,6 @@ const Navbar = () => {
           </button>
           <nav className="hidden font-medium md:flex space-x-6">
             <NavLink onClick={() => goTo("/")}>Главная</NavLink>
-            <NavLink onClick={() => goTo("/about")}>О нас</NavLink>
             <NavLink onClick={() => goTo("/catalog")}>Каталог</NavLink>
             <NavLink onClick={() => goTo("/news")}>Новости</NavLink>
             <NavLink onClick={() => goTo("/contacts")}>Контакты</NavLink>

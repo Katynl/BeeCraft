@@ -62,14 +62,6 @@ const Footer = () => {
               </li>
               <li>
                 <button
-                  onClick={() => goTo("/about")}
-                  className="hover:text-[#f4d864] transition duration-200"
-                >
-                  О нас
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => goTo("/news")}
                   className="hover:text-[#f4d864] transition duration-200"
                 >

@@ -148,7 +148,7 @@ const Cart = () => {
                       className="block aspect-square overflow-hidden bg-stone-100"
                     >
                       <img
-                        src={item.image}
+                        src={item.image_url || item.image}
                         alt={item.name}
                         loading="lazy"
                         decoding="async"

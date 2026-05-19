@@ -18,7 +18,6 @@ import OrderDetail from "./pages/OrderDetail";
 import Contacts from "./pages/Contacts";
 import News from "./pages/News";
 import NewsDetails from "./pages/NewsDetails";
-import About from "./pages/About";
 
 import NotFound from "./pages/NotFound";
 
@@ -39,7 +38,6 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/news" element={<News />} />
-                <Route path="/about" element={<About />} />
                 <Route path="/news/:id" element={<NewsDetails />} />
                 <Route path="/catalog/:slug" element={<ProductPage />} />
                 <Route path="/cart" element={<Cart />} />

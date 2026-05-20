@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api";
 import {
@@ -9,8 +9,30 @@ import {
 } from "@heroicons/react/24/outline";
 import { useCart } from "../context/CartContext";
 
+// ========== Утилиты (можно вынести в helpers) ==========
 const focusClass =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
+const formatPrice = (price) => {
+  const number = Number(price);
+  return Number.isNaN(number)
+    ? `${price} ₽`
+    : `${number.toLocaleString("ru-RU")} ₽`;
+};
+
+// Оптимизация изображений через Cloudinary
+const getOptimizedImage = (url, width = 400, height = 533) => {
+  if (!url?.includes("cloudinary.com")) return url;
+  // Параметры: автоформат, качество 80%, ресайз
+  return `${url}?w=${width}&h=${height}&fit=crop&q=80&f=auto`;
+};
+
+// Нормализация строк
+const normalize = (value) =>
+  String(value || "")
+    .trim()
+    .toLowerCase()
+    .replaceAll("ё", "е");
 
 const CATEGORY_ALIASES = {
   lenty: ["ленты", "лента", "атласные ленты", "ribbons"],
@@ -19,23 +41,9 @@ const CATEGORY_ALIASES = {
   materials: ["материалы", "расходные материалы", "флористические материалы"],
 };
 
-const normalize = (value) =>
-  String(value || "")
-    .trim()
-    .toLowerCase()
-    .replaceAll("ё", "е");
-
 const getProductCategory = (product) => {
   const category = product.category;
-
-  if (!category) {
-    return {
-      id: "",
-      name: "",
-      slug: "",
-    };
-  }
-
+  if (!category) return { id: "", name: "", slug: "" };
   if (typeof category === "object") {
     return {
       id: String(category.id || ""),
@@ -43,7 +51,6 @@ const getProductCategory = (product) => {
       slug: normalize(category.slug),
     };
   }
-
   return {
     id: String(category),
     name: normalize(category),
@@ -53,11 +60,9 @@ const getProductCategory = (product) => {
 
 const matchesUrlCategory = (product, activeCategory) => {
   if (!activeCategory) return true;
-
   const wanted = normalize(activeCategory);
   const productCategory = getProductCategory(product);
   const aliases = CATEGORY_ALIASES[wanted]?.map(normalize) || [wanted];
-
   return (
     productCategory.id === wanted ||
     productCategory.slug === wanted ||
@@ -66,66 +71,130 @@ const matchesUrlCategory = (product, activeCategory) => {
   );
 };
 
-const formatPrice = (price) => {
-  const number = Number(price);
-  return Number.isNaN(number)
-    ? `${price} ₽`
-    : `${number.toLocaleString("ru-RU")} ₽`;
-};
+// ========== Мемоизированный компонент карточки товара ==========
+const ProductCard = React.memo(({ product, onAddToCart, onNavigate }) => {
+  const productName = product?.name || "Товар Bee Craft";
+  const optimizedImage = getOptimizedImage(product.image_url, 400, 533);
 
-const Catalog = () => {
+  const handleOpen = useCallback(() => {
+    onNavigate(`/catalog/${product.slug}`);
+  }, [onNavigate, product.slug]);
+
+  const handleAdd = useCallback(() => {
+    onAddToCart(product);
+  }, [onAddToCart, product]);
+
+  return (
+    <article className="group overflow-hidden transition-all duration-500 hover:-translate-y-1">
+      <button
+        type="button"
+        onClick={handleOpen}
+        className={`relative block aspect-[3/4] w-full overflow-hidden text-left ${focusClass}`}
+        aria-label={`Открыть товар: ${productName}`}
+      >
+        <img
+          src={optimizedImage}
+          alt={productName}
+          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+          loading="lazy"
+          decoding="async"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-stone-950/20 via-transparent to-transparent opacity-70"
+          aria-hidden="true"
+        />
+        {product.is_new && (
+          <span className="absolute left-4 top-4 bg-[#d4aa2a] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-stone-800">
+            Новинка
+          </span>
+        )}
+      </button>
+
+      <div className="flex flex-col justify-between">
+        <div className="my-3 flex items-end justify-between gap-4">
+          <h3 className="text-base font-light leading-snug text-stone-800">
+            {productName}
+          </h3>
+          <span className="shrink-0 text-sm font-light text-stone-800 md:text-xl">
+            {formatPrice(product.price)}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAdd}
+          aria-label={`Добавить товар ${productName} в корзину`}
+          className={`flex w-full items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] ${focusClass}`}
+        >
+          <ShoppingCartIcon aria-hidden="true" className="h-4 w-4" />
+          <span>В корзину</span>
+        </button>
+      </div>
+    </article>
+  );
+});
+
+ProductCard.displayName = "ProductCard";
+
+// ========== Основной компонент Catalog ==========
+const Catalog = React.memo(() => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
-
   const [searchParams] = useSearchParams();
   const activeCategory = searchParams.get("category");
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
-
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-
   const [tempMinPrice, setTempMinPrice] = useState("");
   const [tempMaxPrice, setTempMaxPrice] = useState("");
   const [tempSelectedCategories, setTempSelectedCategories] = useState([]);
-
   const [sortType, setSortType] = useState("default");
   const [loading, setLoading] = useState(true);
   const [cartMessage, setCartMessage] = useState("");
 
+  // Очистка таймера для сообщения
+  useEffect(() => {
+    if (!cartMessage) return;
+    const timer = setTimeout(() => setCartMessage(""), 2500);
+    return () => clearTimeout(timer);
+  }, [cartMessage]);
+
+  // Загрузка данных
   useEffect(() => {
     let isMounted = true;
+    const abortController = new AbortController();
 
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          api.get("/products/"),
-          api.get("/categories/"),
+          api.get("/products/", { signal: abortController.signal }),
+          api.get("/categories/", { signal: abortController.signal }),
         ]);
-
         if (!isMounted) return;
-
         setProducts(productsRes.data || []);
         setCategories(categoriesRes.data || []);
       } catch (err) {
-        console.error("Ошибка загрузки каталога", err);
+        if (err.name !== "AbortError") {
+          console.error("Ошибка загрузки каталога", err);
+        }
       } finally {
         if (isMounted) setLoading(false);
       }
     };
 
     fetchData();
-
     return () => {
       isMounted = false;
+      abortController.abort();
     };
   }, []);
 
+  // Синхронизация временных фильтров при открытии
   useEffect(() => {
     if (filterOpen) {
       setTempMinPrice(minPrice);
@@ -134,41 +203,38 @@ const Catalog = () => {
     }
   }, [filterOpen, minPrice, maxPrice, selectedCategories]);
 
+  // Мемоизация отфильтрованных по URL товаров
   const urlFilteredProducts = useMemo(() => {
     return products.filter((product) =>
       matchesUrlCategory(product, activeCategory),
     );
   }, [products, activeCategory]);
 
+  // Мемоизация финального списка (фильтры + сортировка)
   const filteredAndSorted = useMemo(() => {
     let result = [...urlFilteredProducts];
 
     if (selectedCategories.length > 0) {
       result = result.filter((product) => {
-        const productCategory = getProductCategory(product);
-        return selectedCategories.includes(Number(productCategory.id));
+        const cat = getProductCategory(product);
+        return selectedCategories.includes(Number(cat.id));
       });
     }
 
     const min = parseFloat(minPrice);
     const max = parseFloat(maxPrice);
-
     if (!Number.isNaN(min)) {
       result = result.filter((product) => Number(product.price) >= min);
     }
-
     if (!Number.isNaN(max)) {
       result = result.filter((product) => Number(product.price) <= max);
     }
 
     if (sortType === "price_asc") {
       result.sort((a, b) => Number(a.price) - Number(b.price));
-    }
-
-    if (sortType === "price_desc") {
+    } else if (sortType === "price_desc") {
       result.sort((a, b) => Number(b.price) - Number(a.price));
     }
-
     return result;
   }, [urlFilteredProducts, selectedCategories, minPrice, maxPrice, sortType]);
 
@@ -180,29 +246,25 @@ const Catalog = () => {
   const activeFiltersCount =
     selectedCategories.length + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0);
 
-  const getActiveCategoryTitle = () => {
+  // Мемоизация заголовка категории
+  const activeCategoryTitle = useMemo(() => {
     if (!activeCategory) return "Каталог";
-
     const wanted = normalize(activeCategory);
     const aliases = CATEGORY_ALIASES[wanted]?.map(normalize) || [];
-
     const matchedCategory = categories.find((category) => {
-      const categoryName = normalize(category.name);
-      const categorySlug = normalize(category.slug);
-
+      const catName = normalize(category.name);
+      const catSlug = normalize(category.slug);
       return (
-        categorySlug === wanted ||
-        aliases.includes(categoryName) ||
-        aliases.includes(categorySlug)
+        catSlug === wanted ||
+        aliases.includes(catName) ||
+        aliases.includes(catSlug)
       );
     });
+    return matchedCategory?.name || "Каталог";
+  }, [activeCategory, categories]);
 
-    if (matchedCategory?.name) return matchedCategory.name;
-
-    return "Каталог";
-  };
-
-  const resetFilters = () => {
+  // Обработчики с useCallback
+  const resetFilters = useCallback(() => {
     setSelectedCategories([]);
     setMinPrice("");
     setMaxPrice("");
@@ -212,81 +274,53 @@ const Catalog = () => {
     setSortType("default");
     setFilterOpen(false);
     setSortOpen(false);
-  };
+  }, []);
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     setSelectedCategories(tempSelectedCategories);
     setMinPrice(tempMinPrice);
     setMaxPrice(tempMaxPrice);
     setFilterOpen(false);
-  };
+  }, [tempSelectedCategories, tempMinPrice, tempMaxPrice]);
 
-  const handleAddToCart = (product) => {
-    addToCart(product);
-    setCartMessage(`${product.name} добавлен в корзину`);
+  const handleAddToCart = useCallback(
+    (product) => {
+      addToCart(product);
+      setCartMessage(`${product.name} добавлен в корзину`);
+    },
+    [addToCart],
+  );
 
-    window.setTimeout(() => {
-      setCartMessage("");
-    }, 2500);
-  };
+  const handleNavigate = useCallback(
+    (path) => {
+      navigate(path);
+    },
+    [navigate],
+  );
 
-  const ProductCard = ({ product }) => {
-    const productName = product?.name || "Товар Bee Craft";
+  const toggleSort = useCallback(() => {
+    setSortOpen((prev) => !prev);
+    setFilterOpen(false);
+  }, []);
 
-    return (
-      <article className="group overflow-hidden transition-all duration-500 hover:-translate-y-1">
-        <button
-          type="button"
-          onClick={() => navigate(`/catalog/${product.slug}`)}
-          className={`relative block aspect-[3/4] w-full overflow-hidden text-left ${focusClass}`}
-          aria-label={`Открыть товар: ${productName}`}
-        >
-          <img
-            src={product.image_url}
-            alt={productName}
-            className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-            loading="lazy"
-            decoding="async"
-          />
+  const toggleFilter = useCallback(() => {
+    setFilterOpen((prev) => !prev);
+    setSortOpen(false);
+  }, []);
 
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-stone-950/20 via-transparent to-transparent opacity-70"
-            aria-hidden="true"
-          />
+  const handleSortChange = useCallback((type) => {
+    setSortType(type);
+    setSortOpen(false);
+  }, []);
 
-          {product.is_new && (
-            <span className="absolute left-4 top-4 bg-[#d4aa2a] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-stone-800">
-              Новинка
-            </span>
-          )}
-        </button>
+  const handleCategoryClick = useCallback(
+    (slugOrId) => {
+      navigate(`/catalog?category=${slugOrId}`);
+    },
+    [navigate],
+  );
 
-        <div className="flex flex-col justify-between">
-          <div className="my-3 flex items-end justify-between gap-4">
-            <h3 className="text-base font-light leading-snug text-stone-800">
-              {productName}
-            </h3>
-
-            <span className="shrink-0 text-sm font-light text-stone-800 md:text-xl">
-              {formatPrice(product.price)}
-            </span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => handleAddToCart(product)}
-            aria-label={`Добавить товар ${productName} в корзину`}
-            className={`flex w-full items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] ${focusClass}`}
-          >
-            <ShoppingCartIcon aria-hidden="true" className="h-4 w-4" />
-            <span>В корзину</span>
-          </button>
-        </div>
-      </article>
-    );
-  };
-
-  const renderProducts = () => {
+  const renderProducts = useMemo(() => {
     if (filteredAndSorted.length === 0) {
       return (
         <div className="flex min-h-[380px] flex-col items-center justify-center px-6 py-20 text-center">
@@ -297,12 +331,10 @@ const Catalog = () => {
             </span>
             <div className="h-px w-10 bg-[#d4aa2a]" />
           </div>
-
           <p className="max-w-md text-stone-600">
             По выбранным параметрам пока нет позиций. Попробуйте изменить
             фильтры или посмотреть весь каталог.
           </p>
-
           <button
             type="button"
             onClick={resetFilters}
@@ -319,15 +351,15 @@ const Catalog = () => {
         .map((category) => ({
           ...category,
           products: filteredAndSorted.filter((product) => {
-            const productCategory = getProductCategory(product);
-            return Number(productCategory.id) === Number(category.id);
+            const cat = getProductCategory(product);
+            return Number(cat.id) === Number(category.id);
           }),
         }))
         .filter((group) => group.products.length > 0);
 
       return (
         <div className="space-y-20">
-          {grouped.map((group, index) => (
+          {grouped.map((group, idx) => (
             <section
               key={group.id}
               aria-labelledby={`catalog-category-${group.id}`}
@@ -340,26 +372,25 @@ const Catalog = () => {
                   >
                     <div className="h-px w-10 bg-[#d4aa2a]" />
                     <span className="text-xs uppercase tracking-[0.28em] text-stone-500">
-                      Раздел 0{index + 1}
+                      Раздел 0{idx + 1}
                     </span>
                   </div>
-
-                  <h2
-                    id={`catalog-category-${group.id}`}
-                    className="text-3xl font-light tracking-tight text-stone-800 md:text-4xl"
-                  >
+                  <h2 className="text-3xl font-light tracking-tight text-stone-800 md:text-4xl">
                     {group.name}
                   </h2>
                 </div>
-
                 <p className="text-sm text-stone-500">
                   {group.products.length} позиций
                 </p>
               </div>
-
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:gap-6">
                 {group.products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                    onNavigate={handleNavigate}
+                  />
                 ))}
               </div>
             </section>
@@ -371,20 +402,31 @@ const Catalog = () => {
     return (
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:gap-6">
         {filteredAndSorted.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={handleAddToCart}
+            onNavigate={handleNavigate}
+          />
         ))}
       </div>
     );
-  };
+  }, [
+    filteredAndSorted,
+    isGrouped,
+    categories,
+    resetFilters,
+    handleAddToCart,
+    handleNavigate,
+  ]);
 
+  // Состояние загрузки
   if (loading) {
     return (
       <main className="min-h-screen bg-stone-50 px-6 pt-32" aria-busy="true">
         <div className="mx-auto max-w-7xl" role="status" aria-live="polite">
           <span className="sr-only">Загрузка каталога</span>
-
           <div className="mb-10 h-10 w-56 animate-pulse bg-stone-200" />
-
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {[1, 2, 3, 4].map((item) => (
               <div key={item} className="border border-stone-200 bg-white p-4">
@@ -420,7 +462,7 @@ const Catalog = () => {
               id="catalog-title"
               className="text-5xl font-black leading-[0.95] tracking-tight text-stone-800 md:text-7xl lg:text-8xl"
             >
-              {getActiveCategoryTitle()}
+              {activeCategoryTitle}
             </h1>
 
             <div className="border border-stone-200 p-5">
@@ -433,12 +475,10 @@ const Catalog = () => {
                     {filteredAndSorted.length}
                   </p>
                 </div>
-
                 <div
                   className="h-px w-full bg-stone-200 sm:h-12 sm:w-px"
                   aria-hidden="true"
                 />
-
                 <div>
                   <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
                     Категорий
@@ -447,14 +487,12 @@ const Catalog = () => {
                     {categories.length}
                   </p>
                 </div>
-
                 {activeCategory && (
                   <>
                     <div
                       className="h-px w-full bg-stone-200 sm:h-12 sm:w-px"
                       aria-hidden="true"
                     />
-
                     <button
                       type="button"
                       onClick={() => navigate("/catalog")}
@@ -485,9 +523,7 @@ const Catalog = () => {
                   key={category.id}
                   type="button"
                   onClick={() =>
-                    navigate(
-                      `/catalog?category=${category.slug || category.id}`,
-                    )
+                    handleCategoryClick(category.slug || category.id)
                   }
                   className={`border border-stone-200 px-4 py-3 text-xs uppercase tracking-[0.18em] text-stone-600 transition hover:border-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                 >
@@ -497,13 +533,11 @@ const Catalog = () => {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+              {/* Сортировка */}
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => {
-                    setSortOpen((prev) => !prev);
-                    setFilterOpen(false);
-                  }}
+                  onClick={toggleSort}
                   aria-expanded={sortOpen}
                   aria-controls="catalog-sort-menu"
                   className={`flex w-full items-center justify-center gap-2 border border-stone-200 px-5 py-3 text-sm text-stone-700 transition hover:border-[#d4aa2a] sm:w-auto ${focusClass}`}
@@ -511,7 +545,6 @@ const Catalog = () => {
                   <ArrowsUpDownIcon aria-hidden="true" className="h-4 w-4" />
                   Сортировка
                 </button>
-
                 {sortOpen && (
                   <div
                     id="catalog-sort-menu"
@@ -525,10 +558,7 @@ const Catalog = () => {
                       <button
                         key={item.id}
                         type="button"
-                        onClick={() => {
-                          setSortType(item.id);
-                          setSortOpen(false);
-                        }}
+                        onClick={() => handleSortChange(item.id)}
                         className={`block w-full px-5 py-3 text-left text-sm transition ${
                           sortType === item.id
                             ? "bg-[#d4aa2a]/20 text-stone-800"
@@ -542,13 +572,11 @@ const Catalog = () => {
                 )}
               </div>
 
+              {/* Фильтр */}
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => {
-                    setFilterOpen((prev) => !prev);
-                    setSortOpen(false);
-                  }}
+                  onClick={toggleFilter}
                   aria-expanded={filterOpen}
                   aria-controls="catalog-filter-menu"
                   className={`flex w-full items-center justify-center gap-2 border border-stone-200 px-5 py-3 text-sm text-stone-700 transition hover:border-[#d4aa2a] sm:w-auto ${focusClass}`}
@@ -572,12 +600,10 @@ const Catalog = () => {
                         <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
                           Подбор
                         </p>
-
                         <h2 className="mt-1 text-xl font-light text-stone-800">
                           Фильтры
                         </h2>
                       </div>
-
                       <button
                         type="button"
                         onClick={() => setFilterOpen(false)}
@@ -592,7 +618,6 @@ const Catalog = () => {
                       <legend className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500">
                         Цена ₽
                       </legend>
-
                       <div className="grid grid-cols-2 gap-2">
                         <input
                           type="number"
@@ -602,7 +627,6 @@ const Catalog = () => {
                           onChange={(e) => setTempMinPrice(e.target.value)}
                           className={`w-full border border-stone-200 bg-stone-50 px-3 py-3 text-sm outline-none transition focus:border-[#d4aa2a] focus:bg-white ${focusClass}`}
                         />
-
                         <input
                           type="number"
                           aria-label="Максимальная цена"
@@ -618,7 +642,6 @@ const Catalog = () => {
                       <legend className="mb-3 block text-xs uppercase tracking-[0.2em] text-stone-500">
                         Категории
                       </legend>
-
                       <div className="max-h-52 space-y-2 overflow-y-auto pr-1">
                         {categories.map((category) => (
                           <label
@@ -628,7 +651,6 @@ const Catalog = () => {
                             <span className="text-sm text-stone-700">
                               {category.name}
                             </span>
-
                             <input
                               type="checkbox"
                               checked={tempSelectedCategories.includes(
@@ -637,10 +659,7 @@ const Catalog = () => {
                               onChange={() => {
                                 setTempSelectedCategories((prev) =>
                                   prev.includes(category.id)
-                                    ? prev.filter(
-                                        (categoryId) =>
-                                          categoryId !== category.id,
-                                      )
+                                    ? prev.filter((id) => id !== category.id)
                                     : [...prev, category.id],
                                 );
                               }}
@@ -659,7 +678,6 @@ const Catalog = () => {
                       >
                         Применить
                       </button>
-
                       <button
                         type="button"
                         onClick={() => setFilterOpen(false)}
@@ -687,7 +705,6 @@ const Catalog = () => {
               <span className="text-xs uppercase tracking-[0.22em] text-stone-500">
                 Активно:
               </span>
-
               {sortType !== "default" && (
                 <span className="border border-stone-200 bg-white px-3 py-2 text-xs text-stone-600">
                   {sortType === "price_asc"
@@ -695,25 +712,21 @@ const Catalog = () => {
                     : "Цена по убыванию"}
                 </span>
               )}
-
               {minPrice && (
                 <span className="border border-stone-200 bg-white px-3 py-2 text-xs text-stone-600">
                   от {minPrice} ₽
                 </span>
               )}
-
               {maxPrice && (
                 <span className="border border-stone-200 bg-white px-3 py-2 text-xs text-stone-600">
                   до {maxPrice} ₽
                 </span>
               )}
-
               {selectedCategories.length > 0 && (
                 <span className="border border-stone-200 bg-white px-3 py-2 text-xs text-stone-600">
                   категорий: {selectedCategories.length}
                 </span>
               )}
-
               <button
                 type="button"
                 onClick={resetFilters}
@@ -724,11 +737,13 @@ const Catalog = () => {
             </div>
           )}
 
-          <div aria-live="polite">{renderProducts()}</div>
+          <div aria-live="polite">{renderProducts}</div>
         </div>
       </section>
     </main>
   );
-};
+});
+
+Catalog.displayName = "Catalog";
 
 export default Catalog;

@@ -1,5 +1,10 @@
-import React, { useState, useMemo, lazy, Suspense } from "react";
-import "../input.css";
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   SparklesIcon,
@@ -7,16 +12,75 @@ import {
   BuildingStorefrontIcon,
 } from "@heroicons/react/24/outline";
 import useProducts from "../hooks/useProducts";
+import ProductsCard from "../components/ProductCard";
 import FeedbackForm from "../components/FeedbackForm";
 
-const ProductsCard = lazy(() => import("../components/ProductCard"));
 const focusClass =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
 
-const Home = () => {
+// Константы вне компонента
+const NEWS = [
+  {
+    id: 1,
+    title: "Новые декоративные ленты",
+    category: "Новинка",
+    date: "20 мая 2026",
+    image:
+      "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688192/lentaRed_koccd7.webp",
+    description:
+      "В коллекции появились новые мягкие оттенки для упаковки букетов и декора.",
+  },
+  {
+    id: 2,
+    title: "Открытие второго магазина",
+    category: "Важно",
+    date: "15 мая 2026",
+    image:
+      "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688415/ChatGPT_Image_14_%D0%BC%D0%B0%D1%8F_2026_%D0%B3._00_11_53_nqrrff.png",
+    description: "Новое пространство Bee Craft открылось в центре города.",
+  },
+  {
+    id: 3,
+    title: "Бесплатный мастер-класс",
+    category: "Событие",
+    date: "10 мая 2026",
+    image:
+      "https://res.cloudinary.com/drkgovcn7/image/upload/v1778697429/front-view-woman-making-flowers-arrangement_dckuj8.jpg",
+    description: "Онлайн-встреча о свадебной флористике и работе с текстурами.",
+  },
+];
+
+// Хелпер для оптимизации изображений Cloudinary
+const getOptimizedImage = (url, width = 600, height = 400) => {
+  if (!url.includes("cloudinary.com")) return url;
+  // Добавляем параметры трансформации: автоформат, качество, размер
+  return `${url}?w=${width}&h=${height}&fit=crop&q=80&f=auto`;
+};
+
+const Home = React.memo(() => {
   const navigate = useNavigate();
   const { products, error, loading } = useProducts();
   const [activeTab, setActiveTab] = useState("new");
+  const [videoVisible, setVideoVisible] = useState(false);
+  const videoRef = useRef(null);
+
+  // Отложенная загрузка видео при попадании в область видимости
+  useEffect(() => {
+    if (!videoRef.current || window.innerWidth < 768) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVideoVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "200px" },
+    );
+
+    observer.observe(videoRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const filteredProducts = useMemo(() => {
     if (!Array.isArray(products)) return [];
@@ -31,37 +95,13 @@ const Home = () => {
     return [];
   }, [products, activeTab]);
 
-  const news = [
-    {
-      id: 1,
-      title: "Новые декоративные ленты",
-      category: "Новинка",
-      date: "20 мая 2026",
-      image:
-        "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688192/lentaRed_koccd7.webp",
-      description:
-        "В коллекции появились новые мягкие оттенки для упаковки букетов и декора.",
-    },
-    {
-      id: 2,
-      title: "Открытие второго магазина",
-      category: "Важно",
-      date: "15 мая 2026",
-      image:
-        "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688415/ChatGPT_Image_14_%D0%BC%D0%B0%D1%8F_2026_%D0%B3._00_11_53_nqrrff.png",
-      description: "Новое пространство Bee Craft открылось в центре города.",
-    },
-    {
-      id: 3,
-      title: "Бесплатный мастер-класс",
-      category: "Событие",
-      date: "10 мая 2026",
-      image:
-        "https://res.cloudinary.com/drkgovcn7/image/upload/v1778697429/front-view-woman-making-flowers-arrangement_dckuj8.jpg",
-      description:
-        "Онлайн-встреча о свадебной флористике и работе с текстурами.",
-    },
-  ];
+  const handleCatalogClick = useCallback(() => {
+    navigate("/catalog");
+  }, [navigate]);
+
+  const handleTabChange = useCallback((tabId) => {
+    setActiveTab(tabId);
+  }, []);
 
   if (loading) {
     return (
@@ -127,7 +167,7 @@ const Home = () => {
                   <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                     <button
                       type="button"
-                      onClick={() => navigate("/catalog")}
+                      onClick={handleCatalogClick}
                       className={`bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                     >
                       Перейти в каталог
@@ -147,18 +187,30 @@ const Home = () => {
                     className="absolute -bottom-5 -right-5 hidden h-full w-full border border-[#d4aa2a]/40 md:block"
                     aria-hidden="true"
                   />
-                  <video
-                    src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778939599/compressed_0_bee_daisy_1920x1080_mgczvt.webm"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="none"
-                    poster="https://res.cloudinary.com/drkgovcn7/image/upload/v1778957864/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_558_vecrso.png"
-                    className="relative z-10 hidden h-[400px] w-full rounded-sm object-cover shadow-2xl md:block"
-                    aria-hidden="true"
-                    tabIndex={-1}
-                  />
+
+                  <div
+                    ref={videoRef}
+                    className="relative z-10 h-[400px] w-full rounded-sm object-cover shadow-2xl"
+                  >
+                    {videoVisible && (
+                      <video
+                        src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778939599/compressed_0_bee_daisy_1920x1080_mgczvt.webm"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="none"
+                        poster={getOptimizedImage(
+                          "https://res.cloudinary.com/drkgovcn7/image/upload/v1778957864/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_558_vecrso.png",
+                          800,
+                          450,
+                        )}
+                        className="h-full w-full rounded-sm object-cover"
+                        aria-hidden="true"
+                        tabIndex={-1}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -202,7 +254,6 @@ const Home = () => {
               },
             ].map((item) => {
               const Icon = item.icon;
-
               return (
                 <article
                   key={item.title}
@@ -266,7 +317,7 @@ const Home = () => {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {news.map((item) => (
+            {NEWS.map((item) => (
               <Link
                 key={item.id}
                 to={`/news/${item.id}`}
@@ -275,7 +326,7 @@ const Home = () => {
               >
                 <div className="relative h-72 overflow-hidden">
                   <img
-                    src={item.image}
+                    src={getOptimizedImage(item.image, 600, 400)}
                     alt={`Изображение новости: ${item.title}`}
                     loading="lazy"
                     decoding="async"
@@ -346,7 +397,7 @@ const Home = () => {
                 role="tab"
                 aria-selected={activeTab === tab.id}
                 aria-controls="home-products-panel"
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`border px-2 py-3 text-xs uppercase transition duration-300 md:px-6 md:tracking-[0.2em] ${
                   activeTab === tab.id
                     ? "border-stone-200 bg-stone-800 text-[#d4aa2a]"
@@ -358,17 +409,34 @@ const Home = () => {
             ))}
           </div>
 
-          <Suspense fallback={null}>
-            {filteredProducts.map((product, index) => (
-              <ProductsCard key={product.id} product={product} index={index} />
-            ))}
-          </Suspense>
+          <div id="home-products-panel" role="tabpanel" aria-live="polite">
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
+                {filteredProducts.map((product) => (
+                  <ProductsCard
+                    key={product.id}
+                    product={product}
+                    index={0} // index не используется в компоненте, можно убрать
+                  />
+                ))}
+              </div>
+            ) : (
+              <div
+                className="border border-stone-200 bg-white py-20 text-center text-stone-500"
+                role="status"
+              >
+                Пока нет товаров
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
       <FeedbackForm />
     </main>
   );
-};
+});
+
+Home.displayName = "Home";
 
 export default Home;

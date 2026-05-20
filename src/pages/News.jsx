@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+const focusClass =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
 const newsData = [
   {
     id: 1,
@@ -12,7 +15,6 @@ const newsData = [
     description:
       "В коллекции появились новые ленты в скандинавском стиле четырёх цветов.",
   },
-
   {
     id: 2,
     title: "Открытие второго магазина",
@@ -23,7 +25,6 @@ const newsData = [
     description:
       "Новое пространство Bee Craft в центре города уже готово встречать гостей.",
   },
-
   {
     id: 3,
     title: "Бесплатный мастер-класс",
@@ -34,7 +35,6 @@ const newsData = [
     description:
       "Онлайн-встреча о свадебной флористике и современных техниках оформления.",
   },
-
   {
     id: 4,
     title: "Благотворительность",
@@ -48,41 +48,47 @@ const newsData = [
 
 const News = () => {
   return (
-    <div className="bg-stone-50 overflow-hidden min-h-screen pb-44">
-      {/* HERO */}
-      <section>
+    <main className="min-h-screen overflow-hidden bg-stone-50 pb-44 text-stone-800">
+      <section aria-labelledby="news-title">
         <div className="grid grid-cols-2 grid-rows-1 md:mt-16">
-          <div className="mt-24 w-full border-t border-stone-200 col-start-1 col-end-3 row-start-1 h-[720px] md:h-[640px]" />
-          <div className="relative md:mx-12 border-l border-stone-200 col-start-1 col-end-3 row-start-1 px-8 pt-32">
-            <div className="absolute top-28 right-10 w-64 h-64 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
-            <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-px bg-[#d4aa2a]" />
+          <div
+            className="col-start-1 col-end-3 row-start-1 mt-24 h-[720px] w-full border-t border-stone-200 md:h-[640px]"
+            aria-hidden="true"
+          />
 
-                <span className="uppercase tracking-[0.25em] text-xs text-stone-500">
+          <div className="relative col-start-1 col-end-3 row-start-1 border-l border-stone-200 px-8 pt-32 md:mx-12">
+            <div
+              className="absolute right-10 top-28 h-64 w-64 rounded-full bg-[#d4aa2a]/20 blur-3xl"
+              aria-hidden="true"
+            />
+
+            <div className="relative z-10">
+              <div className="mb-6 flex items-center gap-4" aria-hidden="true">
+                <div className="h-px w-12 bg-[#d4aa2a]" />
+                <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                   Журнал Bee Craft
                 </span>
               </div>
-              <div className="flex justify-between items-center">
-                <h1 className="leading-none font-black text-xl md:text-5xl lg:text-7xl xl:text-8xl">
-                  НОВОСТИ
-                </h1>
 
-                <h2 className="text-stone-800 font-black text-xl md:text-5xl lg:text-7xl xl:text-8xl">
-                  И СОБЫТИЯ
-                </h2>
-              </div>
-              <div className="mt-10 grid lg:grid-cols-2 gap-8 items-end">
-                <div>
-                  <p className="mt-8 italic text-stone-500 text-lg leading-relaxed max-w-lg text-left">
-                    Новые коллекции, вдохновение, флористические события и
-                    атмосфера прямиком из нашей мастерской.
-                  </p>
-                </div>
+              <h1
+                id="news-title"
+                className="flex flex-wrap items-center justify-between gap-4 text-xl font-black leading-none text-stone-800 md:text-5xl lg:text-7xl xl:text-8xl"
+              >
+                <span>НОВОСТИ</span>
+                <span>И СОБЫТИЯ</span>
+              </h1>
 
-                {/* image */}
+              <div className="mt-10 grid items-end gap-8 lg:grid-cols-2">
+                <p className="mt-8 max-w-lg text-left text-lg italic leading-relaxed text-stone-600">
+                  Новые коллекции, вдохновение, флористические события и
+                  атмосфера прямиком из нашей мастерской.
+                </p>
+
                 <div className="relative">
-                  <div className="absolute -bottom-5 -right-5 w-full h-full border border-[#d4aa2a]/40" />
+                  <div
+                    className="absolute -bottom-5 -right-5 h-full w-full border border-[#d4aa2a]/40"
+                    aria-hidden="true"
+                  />
 
                   <video
                     src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778690375/3805779-hd_1920_1080_25fps_yiyai3.mp4"
@@ -91,7 +97,9 @@ const News = () => {
                     muted
                     playsInline
                     poster="https://res.cloudinary.com/drkgovcn7/image/upload/v1778697429/front-view-woman-making-flowers-arrangement_dckuj8.jpg"
-                    className="relative z-10 h-[400px] w-full object-cover rounded-sm shadow-2xl"
+                    className="relative z-10 h-[400px] w-full rounded-sm object-cover shadow-2xl"
+                    aria-hidden="true"
+                    tabIndex={-1}
                   />
                 </div>
               </div>
@@ -100,98 +108,101 @@ const News = () => {
         </div>
       </section>
 
-      {/* ПОСЛЕДНИЕ НОВОСТИ */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* heading */}
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
+      <section className="py-20 md:py-28" aria-labelledby="latest-news-title">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-10 h-px bg-[#d4aa2a]" />
-
-                <span className="uppercase tracking-[0.25em] text-xs text-stone-500">
+              <div className="mb-5 flex items-center gap-4" aria-hidden="true">
+                <div className="h-px w-10 bg-[#d4aa2a]" />
+                <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                   Последние публикации
                 </span>
               </div>
 
-              <h2 className="text-4xl md:text-5xl font-light tracking-tight text-stone-800">
+              <h2
+                id="latest-news-title"
+                className="text-4xl font-light tracking-tight text-stone-800 md:text-5xl"
+              >
                 Новости мастерской
               </h2>
             </div>
           </div>
 
-          {/* cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {newsData.map((news, index) => (
               <Link
                 key={news.id}
                 to={`/news/${news.id}`}
+                aria-label={`Читать новость: ${news.title}`}
                 className={`
                   group
-                  bg-white
+                  overflow-hidden
                   border
                   border-stone-200
-                  overflow-hidden
-                  hover:shadow-2xl
-                  hover:-translate-y-1
+                  bg-white
                   transition-all
                   duration-500
+                  hover:-translate-y-1
+                  hover:shadow-2xl
                   ${index % 2 !== 0 ? "md:translate-y-12" : ""}
+                  ${focusClass}
                 `}
               >
-                {/* image */}
-                <div className="relative overflow-hidden h-[380px] bg-stone-800">
+                <div className="relative h-[380px] overflow-hidden bg-stone-800">
                   <img
                     src={news.image}
-                    alt={news.title}
-                    className="
-                      w-full
-                      h-full
-                      object-cover
-                      transition-transform
-                      duration-700
-                      group-hover:scale-105
-                    "
+                    alt={`Изображение новости: ${news.title}`}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div
+                    className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"
+                    aria-hidden="true"
+                  />
 
-                  {/* badge */}
-                  <div className="absolute top-5 right-5 bg-[#d4aa2a] text-stone-800 text-[10px] font-semibold uppercase tracking-[0.2em] px-3 py-2 rounded-sm">
+                  <div className="absolute right-5 top-5 rounded-sm bg-[#d4aa2a] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-800">
                     {news.badge}
                   </div>
 
-                  {/* number */}
-                  <div className="absolute bottom-5 left-5 text-white/70 text-5xl font-black">
+                  <div
+                    className="absolute bottom-5 left-5 text-5xl font-black text-white/70"
+                    aria-hidden="true"
+                  >
                     0{news.id}
                   </div>
                 </div>
 
-                {/* content */}
                 <div className="p-8">
-                  <div className="text-sm text-stone-400 tracking-wide mb-5">
+                  <div className="mb-5 text-sm tracking-wide text-stone-500">
                     {news.date}
                   </div>
 
-                  <h3 className="text-3xl md:text-4xl font-light leading-tight text-stone-800 group-hover:text-black transition">
+                  <h3 className="text-3xl font-light leading-tight text-stone-800 transition group-hover:text-black md:text-4xl">
                     {news.title}
                   </h3>
 
-                  <p className="mt-6 text-stone-500 leading-relaxed">
+                  <p className="mt-6 leading-relaxed text-stone-600">
                     {news.description}
                   </p>
 
-                  {/* bottom */}
                   <div className="mt-10 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-px bg-[#d4aa2a]" />
+                      <div
+                        className="h-px w-8 bg-[#d4aa2a]"
+                        aria-hidden="true"
+                      />
 
-                      <span className="uppercase tracking-[0.25em] text-xs text-stone-400">
+                      <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                         Читать
                       </span>
                     </div>
 
-                    <span className="text-[#d4aa2a] text-xl group-hover:translate-x-1 transition">
+                    <span
+                      className="text-xl text-[#d4aa2a] transition group-hover:translate-x-1"
+                      aria-hidden="true"
+                    >
                       →
                     </span>
                   </div>
@@ -201,7 +212,7 @@ const News = () => {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 

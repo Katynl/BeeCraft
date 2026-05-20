@@ -10,28 +10,25 @@ import useProducts from "../hooks/useProducts";
 import ProductsCard from "../components/ProductCard";
 import FeedbackForm from "../components/FeedbackForm";
 
+const focusClass =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
 const Home = () => {
   const navigate = useNavigate();
   const { products, error, loading } = useProducts();
   const [activeTab, setActiveTab] = useState("new");
 
   const filteredProducts = useMemo(() => {
-    if (!products || !Array.isArray(products)) return [];
-    let filtered = [];
+    if (!Array.isArray(products)) return [];
 
-    if (activeTab === "new") {
-      filtered = products.filter((p) => p.is_new);
-    }
+    if (activeTab === "new")
+      return products.filter((p) => p.is_new).slice(0, 4);
+    if (activeTab === "popular")
+      return products.filter((p) => p.is_popular).slice(0, 4);
+    if (activeTab === "gifts")
+      return products.filter((p) => p.is_gifts).slice(0, 4);
 
-    if (activeTab === "popular") {
-      filtered = products.filter((p) => p.is_popular);
-    }
-
-    if (activeTab === "gifts") {
-      filtered = products.filter((p) => p.is_gifts);
-    }
-
-    return filtered.slice(0, 4);
+    return [];
   }, [products, activeTab]);
 
   const news = [
@@ -45,7 +42,6 @@ const Home = () => {
       description:
         "В коллекции появились новые мягкие оттенки для упаковки букетов и декора.",
     },
-
     {
       id: 2,
       title: "Открытие второго магазина",
@@ -55,7 +51,6 @@ const Home = () => {
         "https://res.cloudinary.com/drkgovcn7/image/upload/v1778688415/ChatGPT_Image_14_%D0%BC%D0%B0%D1%8F_2026_%D0%B3._00_11_53_nqrrff.png",
       description: "Новое пространство Bee Craft открылось в центре города.",
     },
-
     {
       id: 3,
       title: "Бесплатный мастер-класс",
@@ -70,68 +65,88 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center text-stone-500 text-lg">
-        Загрузка...
-      </div>
+      <main
+        className="flex min-h-screen items-center justify-center bg-stone-50 text-lg text-stone-500"
+        aria-busy="true"
+      >
+        <div role="status" aria-live="polite">
+          Загрузка...
+        </div>
+      </main>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center text-red-500">
-        {error}
-      </div>
+      <main className="flex min-h-screen items-center justify-center bg-stone-50 px-4 text-red-600">
+        <div role="alert">{error}</div>
+      </main>
     );
   }
 
   return (
-    <div className="bg-stone-50 overflow-hidden">
+    <main className="overflow-hidden bg-stone-50">
       {/* БАННЕР */}
-      <section>
+      <section aria-labelledby="home-title">
         <div className="grid grid-cols-2 grid-rows-1 md:mt-16">
-          <div className="mt-24 w-full border-t border-stone-200 col-start-1 col-end-3 row-start-1 h-[500px] md:h-[640px]" />
-          <div className="relative md:mx-12 border-l border-stone-200 col-start-1 col-end-3 row-start-1 px-8 pt-32">
-            <div className="absolute top-28 right-10 w-64 h-64 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
+          <div
+            className="col-start-1 col-end-3 row-start-1 mt-24 h-[500px] w-full border-t border-stone-200 md:h-[640px]"
+            aria-hidden="true"
+          />
+
+          <div className="relative col-start-1 col-end-3 row-start-1 border-l border-stone-200 px-8 pt-32 md:mx-12">
+            <div
+              className="absolute right-10 top-28 h-64 w-64 rounded-full bg-[#d4aa2a]/20 blur-3xl"
+              aria-hidden="true"
+            />
+
             <div className="relative z-10">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-px bg-stone-300" />
-                <span className="text-xs uppercase tracking-[0.3em] text-stone-400">
+              <div className="flex items-center gap-4" aria-hidden="true">
+                <div className="h-px w-16 bg-stone-300" />
+                <span className="text-xs uppercase tracking-[0.3em] text-stone-500">
                   Онлайн-магазин
                 </span>
               </div>
-              <div className="flex justify-between items-center">
-                <h1 className="text-[#d4aa2a] leading-none font-black text-3xl md:text-6xl lg:text-9xl">
-                  BEE
-                </h1>
-                <h2 className="text-stone-800 font-black text-3xl md:text-6xl lg:text-9xl">
-                  CRAFT
-                </h2>
-              </div>
-              <div className="mt-10 grid lg:grid-cols-2 gap-8 items-center">
+
+              <h1
+                id="home-title"
+                className="flex items-center justify-between gap-4 text-3xl font-black leading-none md:text-6xl lg:text-9xl"
+              >
+                <span className="text-[#d4aa2a]">BEE</span>
+                <span className="text-stone-800">CRAFT</span>
+              </h1>
+
+              <div className="mt-10 grid items-center gap-8 lg:grid-cols-2">
                 <div>
-                  <p className="mt-8 italic max-w-lg text-justify  text-stone-500 leading-relaxed text-base sm:text-lg">
+                  <p className="mt-8 max-w-lg text-left text-base italic leading-relaxed text-stone-600 sm:text-lg">
                     Пространство флористики, текстур и вдохновения. Материалы
                     для букетов, декора и творчества в эстетике тёплого
                     editorial-стиля.
                   </p>
-                  <div className="mt-10 flex flex-col sm:flex-row gap-4">
+
+                  <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                     <button
+                      type="button"
                       onClick={() => navigate("/catalog")}
-                      className="px-8 py-4 bg-stone-800 text-[#d4aa2a] uppercase tracking-[0.2em] text-sm hover:bg-[#d4aa2a] hover:text-stone-800 transition duration-300"
+                      className={`bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                     >
                       Перейти в каталог
                     </button>
 
                     <Link
                       to="/news"
-                      className="px-8 py-4 border border-stone-200 text-stone-700 uppercase tracking-[0.2em] text-sm hover:border-[#d4aa2a] hover:bg-[#d4aa2a]/10 transition duration-300 text-center"
+                      className={`border border-stone-200 px-8 py-4 text-center text-sm uppercase tracking-[0.2em] text-stone-700 transition duration-300 hover:border-[#d4aa2a] hover:bg-[#d4aa2a]/10 ${focusClass}`}
                     >
                       Читать новости
                     </Link>
                   </div>
                 </div>
-                <div className="hidden md:block relative">
-                  <div className="absolute -bottom-5 -right-5 hidden h-full w-full border border-[#d4aa2a]/40 md:block" />
+
+                <div className="relative hidden md:block">
+                  <div
+                    className="absolute -bottom-5 -right-5 hidden h-full w-full border border-[#d4aa2a]/40 md:block"
+                    aria-hidden="true"
+                  />
 
                   <video
                     src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778939599/compressed_0_bee_daisy_1920x1080_mgczvt.webm"
@@ -142,6 +157,8 @@ const Home = () => {
                     preload="metadata"
                     poster="https://res.cloudinary.com/drkgovcn7/image/upload/v1778957864/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_558_vecrso.png"
                     className="relative z-10 hidden h-[400px] w-full rounded-sm object-cover shadow-2xl md:block"
+                    aria-hidden="true"
+                    tabIndex={-1}
                   />
                 </div>
               </div>
@@ -151,119 +168,145 @@ const Home = () => {
       </section>
 
       {/* ПОЧЕМУ МЫ */}
-      <section className="py-24 my-24 md:py-32 bg-stone-800">
+      <section
+        className="my-24 bg-stone-800 py-24 md:py-32"
+        aria-labelledby="why-title"
+      >
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 mb-14">
-            <div className="w-12 h-px bg-[#d4aa2a]" />
-            <span className="uppercase tracking-[0.3em] text-xs text-stone-400">
+          <div className="mb-14 flex items-center gap-4">
+            <div className="h-px w-12 bg-[#d4aa2a]" aria-hidden="true" />
+            <span className="text-xs uppercase tracking-[0.3em] text-stone-400">
               Почему мы
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Карточка 1 */}
-            <div className="group relative bg-stone-50 rounded-sm p-8 text-center hover:shadow-xl transition-all duration-300 overflow-hidden">
-              <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-[#d4aa2a]/20 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <div className="w-16 h-16 bg-[#d4aa2a]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#d4aa2a] transition">
-                  <SparklesIcon className="h-8 w-8 text-stone-700 group-hover:text-white" />
-                </div>
-                <h3 className="text-xl font-medium text-stone-800 mb-2">
-                  Качество материалов
-                </h3>
-                <p className="text-stone-500 text-sm">
-                  Только проверенные поставщики и свежие цветы с собственных
-                  плантаций.
-                </p>
-              </div>
-            </div>
-            {/* Карточка 2 */}
-            <div className="group relative bg-stone-50 rounded-sm p-8 text-center hover:shadow-xl transition-all duration-300 overflow-hidden">
-              <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-[#d4aa2a]/20 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <div className="w-16 h-16 bg-[#d4aa2a]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#d4aa2a] transition">
-                  <BuildingStorefrontIcon className="h-8 w-8 text-stone-700 group-hover:text-white" />
-                </div>
-                <h3 className="text-xl font-medium text-stone-800 mb-2">
-                  Удобный самовывоз
-                </h3>
-                <p className="text-stone-500 text-sm">
-                  Два пункта выдачи в центре города, работаем без выходных.
-                </p>
-              </div>
-            </div>
-            {/* Карточка 3 */}
-            <div className="group relative bg-stone-50 rounded-sm p-8 text-center hover:shadow-xl transition-all duration-300 overflow-hidden">
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-[#d4aa2a]/20 to-transparent pointer-events-none" />
-              <div className="relative z-10">
-                <div className="w-16 h-16 bg-[#d4aa2a]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#d4aa2a] transition">
-                  <ChatBubbleLeftIcon className="h-8 w-8 text-stone-700 group-hover:text-white" />
-                </div>
-                <h3 className="text-xl font-medium text-stone-800 mb-2">
-                  Поддержка 24/7
-                </h3>
-                <p className="text-stone-500 text-sm">
-                  Наши флористы всегда готовы помочь с выбором и ответить на
-                  вопросы.
-                </p>
-              </div>
-            </div>
+
+          <h2 id="why-title" className="sr-only">
+            Почему выбирают Bee Craft
+          </h2>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            {[
+              {
+                icon: SparklesIcon,
+                title: "Качество материалов",
+                text: "Только проверенные поставщики и свежие цветы с собственных плантаций.",
+              },
+              {
+                icon: BuildingStorefrontIcon,
+                title: "Удобный самовывоз",
+                text: "Два пункта выдачи в центре города, работаем без выходных.",
+              },
+              {
+                icon: ChatBubbleLeftIcon,
+                title: "Поддержка 24/7",
+                text: "Наши флористы всегда готовы помочь с выбором и ответить на вопросы.",
+              },
+            ].map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <article
+                  key={item.title}
+                  className="group relative overflow-hidden rounded-sm bg-stone-50 p-8 text-center transition-all duration-300 hover:shadow-xl"
+                >
+                  <div
+                    className="pointer-events-none absolute inset-0 rounded-sm bg-gradient-to-br from-[#d4aa2a]/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+
+                  <div className="relative z-10">
+                    <div
+                      className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#d4aa2a]/20 transition group-hover:bg-[#d4aa2a]"
+                      aria-hidden="true"
+                    >
+                      <Icon className="h-8 w-8 text-stone-700 group-hover:text-white" />
+                    </div>
+
+                    <h3 className="mb-2 text-xl font-medium text-stone-800">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-sm text-stone-600">{item.text}</p>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* НОВОСТИ */}
-      <section className="py-24 bg-stone-50 border-y border-stone-200">
+      <section
+        className="border-y border-stone-200 bg-stone-50 py-24"
+        aria-labelledby="home-news-title"
+      >
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between gap-6 mb-14 flex-wrap">
+          <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-10 h-px bg-[#d4aa2a]" />
-                <span className="uppercase tracking-[0.3em] text-xs text-stone-500">
+              <div className="mb-4 flex items-center gap-4" aria-hidden="true">
+                <div className="h-px w-10 bg-[#d4aa2a]" />
+                <span className="text-xs uppercase tracking-[0.3em] text-stone-500">
                   Журнал
                 </span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-light tracking-tight text-stone-800">
+
+              <h2
+                id="home-news-title"
+                className="text-4xl font-light tracking-tight text-stone-800 md:text-5xl"
+              >
                 Новости и события
               </h2>
             </div>
+
             <Link
               to="/news"
-              className="uppercase tracking-[0.2em] text-sm text-stone-500 hover:text-stone-800 transition"
+              className={`text-sm uppercase tracking-[0.2em] text-stone-600 transition hover:text-stone-800 ${focusClass}`}
             >
               Смотреть всё →
             </Link>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+
+          <div className="grid gap-6 md:grid-cols-3">
             {news.map((item) => (
               <Link
                 key={item.id}
                 to={`/news/${item.id}`}
-                className="group bg-white border border-stone-200 overflow-hidden hover:shadow-2xl transition-all duration-500"
+                aria-label={`Читать новость: ${item.title}`}
+                className={`group overflow-hidden border border-stone-200 bg-white transition-all duration-500 hover:shadow-2xl ${focusClass}`}
               >
-                <div className="relative overflow-hidden h-72">
+                <div className="relative h-72 overflow-hidden">
                   <img
                     src={item.image}
-                    alt={item.title}
+                    alt={`Изображение новости: ${item.title}`}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                    decoding="async"
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-sm text-[10px] uppercase tracking-[0.25em] text-stone-700">
+
+                  <div className="absolute left-4 top-4 rounded-sm bg-white/80 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-stone-700 backdrop-blur-md">
                     {item.category}
                   </div>
                 </div>
+
                 <div className="p-6">
-                  <div className="text-xs uppercase tracking-[0.2em] text-stone-400 mb-4">
+                  <div className="mb-4 text-xs uppercase tracking-[0.2em] text-stone-500">
                     {item.date}
                   </div>
-                  <h3 className="text-2xl font-light text-stone-800 leading-tight mb-4">
+
+                  <h3 className="mb-4 text-2xl font-light leading-tight text-stone-800">
                     {item.title}
                   </h3>
-                  <p className="text-stone-500 leading-relaxed text-sm">
+
+                  <p className="text-sm leading-relaxed text-stone-600">
                     {item.description}
                   </p>
-                  <div className="mt-6 inline-flex items-center gap-2 uppercase tracking-[0.2em] text-xs text-[#d4aa2a]">
+
+                  <div className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#b89422]">
                     Читать
-                    <span className="group-hover:translate-x-1 transition">
+                    <span
+                      className="transition group-hover:translate-x-1"
+                      aria-hidden="true"
+                    >
                       →
                     </span>
                   </div>
@@ -275,16 +318,24 @@ const Home = () => {
       </section>
 
       {/* КАТАЛОГ */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-10">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="w-10 h-px bg-[#d4aa2a]" />
-            <span className="uppercase tracking-[0.3em] text-xs text-stone-500">
+      <section className="py-24 md:py-32" aria-labelledby="home-catalog-title">
+        <div className="mx-auto max-w-[1700px] px-4 sm:px-6 lg:px-10">
+          <div className="mb-12 flex items-center gap-4">
+            <div className="h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+            <span className="text-xs uppercase tracking-[0.3em] text-stone-500">
               Каталог
             </span>
           </div>
-          {/* Вкладки */}
-          <div className="flex flex-wrap md:justify-start sm:justify-between gap-3 mb-12">
+
+          <h2 id="home-catalog-title" className="sr-only">
+            Товары каталога
+          </h2>
+
+          <div
+            className="mb-12 flex flex-wrap gap-3 sm:justify-between md:justify-start"
+            role="tablist"
+            aria-label="Фильтр товаров на главной"
+          >
             {[
               { id: "new", label: "Новинки" },
               { id: "popular", label: "Популярное" },
@@ -292,40 +343,47 @@ const Home = () => {
             ].map((tab) => (
               <button
                 key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.id}
+                aria-controls="home-products-panel"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-2 md:px-6 py-3 uppercase md:tracking-[0.2em] text-xs border transition duration-300 ${
+                className={`border px-2 py-3 text-xs uppercase transition duration-300 md:px-6 md:tracking-[0.2em] ${
                   activeTab === tab.id
-                    ? "bg-stone-800 text-[#d4aa2a] border-stone-200"
-                    : "border-stone-200 text-stone-500 hover:border-[#d4aa2a]"
-                }`}
+                    ? "border-stone-200 bg-stone-800 text-[#d4aa2a]"
+                    : "border-stone-200 text-stone-600 hover:border-[#d4aa2a]"
+                } ${focusClass}`}
               >
                 {tab.label}
               </button>
             ))}
           </div>
 
-          {/* Карточки */}
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {filteredProducts.map((product, index) => (
-                <ProductsCard
-                  key={product.id}
-                  product={product}
-                  index={index}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white border border-stone-200 py-20 text-center text-stone-400">
-              Пока нет товаров
-            </div>
-          )}
+          <div id="home-products-panel" role="tabpanel" aria-live="polite">
+            {filteredProducts.length > 0 ? (
+              <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
+                {filteredProducts.map((product, index) => (
+                  <ProductsCard
+                    key={product.id}
+                    product={product}
+                    index={index}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div
+                className="border border-stone-200 bg-white py-20 text-center text-stone-500"
+                role="status"
+              >
+                Пока нет товаров
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
-      {/* ФОРМА ОБРАТНОЙ СВЯЗИ */}
       <FeedbackForm />
-    </div>
+    </main>
   );
 };
 

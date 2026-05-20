@@ -9,14 +9,14 @@ import {
   MinusIcon,
 } from "@heroicons/react/24/outline";
 
+const focusClass =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
 const formatPrice = (price) => {
   const value = Number(price);
-
-  if (Number.isNaN(value)) {
-    return `${price} ₽`;
-  }
-
-  return `${value.toLocaleString("ru-RU")} ₽`;
+  return Number.isNaN(value)
+    ? `${price} ₽`
+    : `${value.toLocaleString("ru-RU")} ₽`;
 };
 
 const ProductPage = () => {
@@ -29,6 +29,7 @@ const ProductPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [cartMessage, setCartMessage] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -106,27 +107,37 @@ const ProductPage = () => {
   };
 
   const handleAddToCart = () => {
-    if (!product) return;
+    if (!product || !addToCart) return;
 
-    if (addToCart) {
-      addToCart(product, quantity);
-    }
+    addToCart(product, quantity);
+    setCartMessage(
+      `${product.name} добавлен в корзину, количество: ${quantity}`,
+    );
+
+    window.setTimeout(() => {
+      setCartMessage("");
+    }, 2500);
   };
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-stone-50 px-4 pt-28 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-8 h-4 w-56 animate-pulse bg-stone-50" />
+      <main
+        className="min-h-screen bg-stone-50 px-4 pt-28 sm:px-6 lg:px-8"
+        aria-busy="true"
+      >
+        <div className="mx-auto max-w-7xl" role="status" aria-live="polite">
+          <span className="sr-only">Загрузка товара</span>
+
+          <div className="mb-8 h-4 w-56 animate-pulse bg-stone-200" />
 
           <div className="grid gap-10 lg:grid-cols-2">
-            <div className="aspect-[4/5] animate-pulse bg-stone-50" />
+            <div className="aspect-[4/5] animate-pulse bg-stone-200" />
 
             <div className="space-y-6">
-              <div className="h-16 w-3/4 animate-pulse bg-stone-50" />
-              <div className="h-8 w-40 animate-pulse bg-stone-50" />
-              <div className="h-32 w-full animate-pulse bg-stone-50" />
-              <div className="h-14 w-full animate-pulse bg-stone-50" />
+              <div className="h-16 w-3/4 animate-pulse bg-stone-200" />
+              <div className="h-8 w-40 animate-pulse bg-stone-200" />
+              <div className="h-32 w-full animate-pulse bg-stone-200" />
+              <div className="h-14 w-full animate-pulse bg-stone-200" />
             </div>
           </div>
         </div>
@@ -137,10 +148,20 @@ const ProductPage = () => {
   if (error || !product) {
     return (
       <main className="min-h-screen bg-stone-50 px-4 pt-32 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-xl bg-white p-8 text-center shadow-[0_18px_60px_rgba(41,37,36,0.06)]">
-          <div className="mx-auto mb-6 h-px w-16 bg-[#d4aa2a]" />
+        <section
+          className="mx-auto max-w-xl bg-white p-8 text-center shadow-[0_18px_60px_rgba(41,37,36,0.06)]"
+          role="alert"
+          aria-labelledby="product-error-title"
+        >
+          <div
+            className="mx-auto mb-6 h-px w-16 bg-[#d4aa2a]"
+            aria-hidden="true"
+          />
 
-          <h1 className="text-3xl font-light text-stone-800">
+          <h1
+            id="product-error-title"
+            className="text-3xl font-light text-stone-800"
+          >
             Товар не найден
           </h1>
 
@@ -150,69 +171,97 @@ const ProductPage = () => {
 
           <Link
             to="/catalog"
-            className="mt-8 inline-flex items-center justify-center bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.22em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
+            className={`mt-8 inline-flex items-center justify-center bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.22em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
           >
             Вернуться в каталог
           </Link>
-        </div>
+        </section>
       </main>
     );
   }
 
   return (
     <main className="min-h-screen overflow-hidden bg-stone-50 text-stone-800">
-      {/* БАННЕР */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {cartMessage}
+      </p>
+
       <section className="relative border-b border-stone-200 pt-28 md:pt-32">
-        <div className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
-        <div className="pointer-events-none absolute -left-10 top-36 hidden text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block">
+        <div
+          className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl"
+          aria-hidden="true"
+        />
+
+        <div
+          className="pointer-events-none absolute -left-10 top-36 hidden text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block"
+          aria-hidden="true"
+        >
           BEE
         </div>
+
         <div className="relative z-10 mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8 md:pb-14">
-          <div className="mb-8 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-stone-400">
-            <Link to="/" className="transition hover:text-stone-800">
+          <nav
+            className="mb-8 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-stone-500"
+            aria-label="Хлебные крошки"
+          >
+            <Link
+              to="/"
+              className={`transition hover:text-stone-800 ${focusClass}`}
+            >
               Главная
             </Link>
-            <span>/</span>
-            <Link to="/catalog" className="transition hover:text-stone-800">
+            <span aria-hidden="true">/</span>
+            <Link
+              to="/catalog"
+              className={`transition hover:text-stone-800 ${focusClass}`}
+            >
               Каталог
             </Link>
-            <span>/</span>
-            <span className="text-stone-600">{product.name}</span>
-          </div>
+            <span aria-hidden="true">/</span>
+            <span className="text-stone-700" aria-current="page">
+              {product.name}
+            </span>
+          </nav>
+
           <Link
             to="/catalog"
-            className="mb-8 inline-flex items-center gap-2 text-sm text-stone-500 transition hover:text-stone-800"
+            className={`mb-8 inline-flex items-center gap-2 text-sm text-stone-600 transition hover:text-stone-800 ${focusClass}`}
           >
-            <ArrowLeftIcon className="h-4 w-4" />
+            <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
             Назад в каталог
           </Link>
+
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-            {/* КАРТИНКА */}
             <div className="relative">
-              <div className="absolute -bottom-4 -right-4 hidden h-full w-full border border-[#d4aa2a]/40 md:block" />
+              <div
+                className="absolute -bottom-4 -right-4 hidden h-full w-full border border-[#d4aa2a]/40 md:block"
+                aria-hidden="true"
+              />
 
               <div className="relative z-10 overflow-hidden border border-stone-200 bg-white shadow-[0_24px_80px_rgba(41,37,36,0.10)]">
                 <img
                   src={product.image_url}
-                  alt={product.name}
+                  alt={product.name || "Товар Bee Craft"}
                   className="h-[460px] w-full object-cover object-center sm:h-[620px] lg:h-[720px]"
                   loading="eager"
                   decoding="async"
                 />
               </div>
             </div>
-            {/* ИНФО */}
+
             <div className="lg:sticky lg:top-28">
               <div className="bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.06)] sm:p-8 lg:p-10">
                 <div className="mb-4 inline-flex bg-[#d4aa2a]/20 px-4 py-2 text-xs uppercase tracking-[0.22em] text-stone-700">
                   {categoryName}
                 </div>
+
                 <h1 className="text-4xl font-light leading-[0.98] tracking-tight text-stone-800 sm:text-5xl lg:text-6xl">
                   {product.name}
                 </h1>
+
                 <div className="mt-7 flex items-end justify-between gap-6 border-b border-stone-200 pb-7">
                   <div>
-                    <p className="mb-1 text-xs uppercase tracking-[0.22em] text-stone-400">
+                    <p className="mb-1 text-xs uppercase tracking-[0.22em] text-stone-500">
                       Цена
                     </p>
 
@@ -220,26 +269,38 @@ const ProductPage = () => {
                       {formatPrice(product.price)}
                     </p>
                   </div>
+
                   {product.is_new && (
                     <span className="bg-[#d4aa2a] px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-stone-800">
                       Новинка
                     </span>
                   )}
                 </div>
+
                 <div className="mt-8 space-y-8">
-                  <section>
-                    <h2 className="mb-3 text-xs uppercase tracking-[0.25em] text-stone-400">
+                  <section aria-labelledby="product-description-title">
+                    <h2
+                      id="product-description-title"
+                      className="mb-3 text-xs uppercase tracking-[0.25em] text-stone-500"
+                    >
                       Описание
                     </h2>
 
-                    <p className="whitespace-pre-line text-[15px] text-justify text-stone-600">
+                    <p className="whitespace-pre-line text-left text-[15px] leading-7 text-stone-600">
                       {product.description ||
                         "Описание пока не добавлено, но этот товар отлично подойдёт для флористики, упаковки и декоративных композиций."}
                     </p>
                   </section>
+
                   {product.specifications && (
-                    <section className="border-t border-stone-200 pt-7">
-                      <h2 className="mb-3 text-xs uppercase tracking-[0.25em] text-stone-400">
+                    <section
+                      className="border-t border-stone-200 pt-7"
+                      aria-labelledby="product-specifications-title"
+                    >
+                      <h2
+                        id="product-specifications-title"
+                        className="mb-3 text-xs uppercase tracking-[0.25em] text-stone-500"
+                      >
                         Характеристики
                       </h2>
 
@@ -249,46 +310,57 @@ const ProductPage = () => {
                     </section>
                   )}
                 </div>
+
                 <div className="mt-9 border-t border-stone-200 pt-7">
-                  <div className="mb-4 text-xs uppercase tracking-[0.25em] text-stone-400">
+                  <label
+                    htmlFor="product-quantity"
+                    className="mb-4 block text-xs uppercase tracking-[0.25em] text-stone-500"
+                  >
                     Количество
-                  </div>
+                  </label>
+
                   <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-stretch">
                     <div className="flex h-14 w-fit items-center overflow-hidden border border-stone-200 bg-stone-50 sm:self-auto">
                       <button
                         type="button"
                         onClick={decreaseQuantity}
-                        className="flex h-full w-11 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800 sm:w-14"
-                        aria-label="Уменьшить количество"
+                        className={`flex h-full w-11 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800 sm:w-14 ${focusClass}`}
+                        aria-label={`Уменьшить количество товара ${product.name}`}
                       >
-                        <MinusIcon className="h-4 w-4" />
+                        <MinusIcon aria-hidden="true" className="h-4 w-4" />
                       </button>
 
                       <input
+                        id="product-quantity"
                         type="number"
                         value={quantity}
                         onChange={handleQuantityChange}
                         min="1"
-                        className="h-full w-14 border-x border-stone-200 bg-white text-center text-stone-800 outline-none sm:w-16"
-                        aria-label="Количество товара"
+                        inputMode="numeric"
+                        className={`h-full w-14 border-x border-stone-200 bg-white text-center text-stone-800 outline-none sm:w-16 ${focusClass}`}
                       />
 
                       <button
                         type="button"
                         onClick={increaseQuantity}
-                        className="flex h-full w-11 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800 sm:w-14"
-                        aria-label="Увеличить количество"
+                        className={`flex h-full w-11 items-center justify-center text-stone-500 transition hover:bg-white hover:text-stone-800 sm:w-14 ${focusClass}`}
+                        aria-label={`Увеличить количество товара ${product.name}`}
                       >
-                        <PlusIcon className="h-4 w-4" />
+                        <PlusIcon aria-hidden="true" className="h-4 w-4" />
                       </button>
                     </div>
 
                     <button
                       type="button"
                       onClick={handleAddToCart}
-                      className="group flex h-14 w-full items-center justify-center gap-3 bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] sm:flex-1"
+                      aria-label={`Добавить товар ${product.name} в корзину, количество: ${quantity}`}
+                      className={`group flex h-14 w-full items-center justify-center gap-3 bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] sm:flex-1 ${focusClass}`}
                     >
-                      <ShoppingCartIcon className="h-5 w-5" />В корзину
+                      <ShoppingCartIcon
+                        aria-hidden="true"
+                        className="h-5 w-5"
+                      />
+                      В корзину
                     </button>
                   </div>
                 </div>
@@ -298,53 +370,65 @@ const ProductPage = () => {
         </div>
       </section>
 
-      {/* ПОХОЖИЕ ПОЗИЦИИ */}
       {similarProducts.length > 0 && (
-        <section className="py-20 md:py-28">
+        <section
+          className="py-20 md:py-28"
+          aria-labelledby="similar-products-title"
+        >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
               <div>
                 <div className="mb-5 flex items-center gap-4">
-                  <div className="h-px w-10 bg-[#d4aa2a]" />
+                  <div className="h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
                   <span className="text-xs uppercase tracking-[0.28em] text-stone-500">
                     Похожие позиции
                   </span>
                 </div>
-                <h2 className="text-4xl font-light tracking-tight text-stone-800 md:text-5xl">
+
+                <h2
+                  id="similar-products-title"
+                  className="text-4xl font-light tracking-tight text-stone-800 md:text-5xl"
+                >
                   Вам может понравиться
                 </h2>
               </div>
+
               <Link
                 to="/catalog"
-                className="text-sm uppercase tracking-[0.2em] text-stone-500 transition hover:text-stone-800"
+                className={`text-sm uppercase tracking-[0.2em] text-stone-600 transition hover:text-stone-800 ${focusClass}`}
               >
                 Смотреть каталог →
               </Link>
             </div>
+
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {similarProducts.map((similar) => (
                 <Link
                   key={similar.id}
                   to={`/catalog/${similar.slug}`}
-                  className="group transition-all duration-500 hover:-translate-y-1"
+                  aria-label={`Открыть похожий товар: ${similar.name}`}
+                  className={`group transition-all duration-500 hover:-translate-y-1 ${focusClass}`}
                 >
                   <div className="aspect-[3/4] overflow-hidden bg-stone-100">
                     <img
                       src={similar.image_url}
-                      alt={similar.name}
+                      alt={similar.name || "Похожий товар Bee Craft"}
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
-                  <div className="flex justify-between items-end">
+
+                  <div className="flex items-end justify-between gap-4">
                     <h3 className="line-clamp-2 text-xl font-light leading-snug text-stone-800">
                       {similar.name}
                     </h3>
-                    <p className="mt-3 font-light text-xl text-stone-800">
+
+                    <p className="mt-3 shrink-0 text-xl font-light text-stone-800">
                       {formatPrice(similar.price)}
                     </p>
                   </div>
+
                   <div className="mt-5 text-sm font-light uppercase tracking-[0.2em] text-[#b89422]">
                     Смотреть →
                   </div>

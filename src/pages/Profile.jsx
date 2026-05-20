@@ -9,6 +9,13 @@ import {
   ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
 
+const focusClass =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
+const inputClass = `w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800
+  outline-none transition focus:border-[#d4aa2a] focus:bg-white
+  focus:ring-2 focus:ring-[#d4aa2a]/20 ${focusClass}`;
+
 const getStatusText = (status) => {
   const statusMap = {
     new: "Новый",
@@ -35,12 +42,9 @@ const getStatusClasses = (status) => {
 
 const formatPrice = (price) => {
   const value = Number(price);
-
-  if (Number.isNaN(value)) {
-    return `${price} ₽`;
-  }
-
-  return `${value.toLocaleString("ru-RU")} ₽`;
+  return Number.isNaN(value)
+    ? `${price} ₽`
+    : `${value.toLocaleString("ru-RU")} ₽`;
 };
 
 const Profile = () => {
@@ -51,6 +55,9 @@ const Profile = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [saveMessage, setSaveMessage] = useState("");
+  const [saveError, setSaveError] = useState("");
 
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -92,9 +99,7 @@ const Profile = () => {
           navigate("/login");
         }
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -136,6 +141,8 @@ const Profile = () => {
 
   const handleCancelEdit = () => {
     setIsEditing(false);
+    setSaveError("");
+    setSaveMessage("");
 
     setEditForm({
       username: profile?.username || "",
@@ -146,6 +153,8 @@ const Profile = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+    setSaveError("");
+    setSaveMessage("");
 
     try {
       const response = await api.put("/profile/", {
@@ -156,18 +165,22 @@ const Profile = () => {
 
       setProfile(response.data);
       setIsEditing(false);
+      setSaveMessage("Профиль обновлён");
     } catch (err) {
       console.error(err);
-      alert("Ошибка сохранения");
+      setSaveError("Ошибка сохранения. Попробуйте ещё раз.");
     }
   };
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-stone-50 px-4 pt-32 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
+      <main
+        className="min-h-screen bg-stone-50 px-4 pt-32 sm:px-6 lg:px-8"
+        aria-busy="true"
+      >
+        <div className="mx-auto max-w-7xl" role="status" aria-live="polite">
+          <span className="sr-only">Загрузка профиля</span>
           <div className="mb-10 h-12 w-72 animate-pulse bg-stone-200" />
-
           <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="h-96 animate-pulse border border-stone-200 bg-white" />
             <div className="h-96 animate-pulse border border-stone-200 bg-white" />
@@ -179,21 +192,33 @@ const Profile = () => {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-stone-50 flex items-center justify-center px-6">
-        <div className="max-w-md border border-stone-200 bg-white p-8 text-center shadow-[0_18px_60px_rgba(41,37,36,0.06)]">
-          <div className="mx-auto mb-6 h-px w-16 bg-[#d4aa2a]" />
+      <main className="flex min-h-screen items-center justify-center bg-stone-50 px-6">
+        <section
+          className="max-w-md border border-stone-200 bg-white p-8 text-center shadow-[0_18px_60px_rgba(41,37,36,0.06)]"
+          role="alert"
+          aria-labelledby="profile-error-title"
+        >
+          <div
+            className="mx-auto mb-6 h-px w-16 bg-[#d4aa2a]"
+            aria-hidden="true"
+          />
 
-          <h1 className="text-3xl font-light text-stone-800">Ошибка</h1>
+          <h1
+            id="profile-error-title"
+            className="text-3xl font-light text-stone-800"
+          >
+            Ошибка
+          </h1>
 
           <p className="mt-4 text-stone-500">{error}</p>
 
           <Link
             to="/"
-            className="mt-8 inline-flex bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
+            className={`mt-8 inline-flex bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
           >
             На главную
           </Link>
-        </div>
+        </section>
       </main>
     );
   }
@@ -205,11 +230,16 @@ const Profile = () => {
 
   return (
     <main className="min-h-screen overflow-hidden bg-stone-50 text-stone-800">
-      {/* HERO */}
       <section className="relative border-b border-stone-200 pt-28 md:pt-32">
-        <div className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
+        <div
+          className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl"
+          aria-hidden="true"
+        />
 
-        <div className="pointer-events-none absolute -left-8 top-36 hidden text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block">
+        <div
+          className="pointer-events-none absolute -left-8 top-36 hidden text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block"
+          aria-hidden="true"
+        >
           BEE
         </div>
 
@@ -220,7 +250,7 @@ const Profile = () => {
                 Профиль
               </h1>
 
-              <p className="mt-8 italic max-w-2xl text-base leading-relaxed text-stone-500 md:text-lg">
+              <p className="mt-8 max-w-2xl text-base italic leading-relaxed text-stone-600 md:text-lg">
                 Добро пожаловать, {profile.username}. Здесь можно посмотреть
                 заказы, обновить контактные данные и вернуться к любимым
                 материалам Bee Craft.
@@ -230,40 +260,35 @@ const Profile = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex w-fit items-center gap-3 border border-stone-300 bg-white px-6 py-4 text-sm text-stone-600 transition hover:border-[#d4aa2a] hover:text-stone-800"
+              className={`inline-flex w-fit items-center gap-3 border border-stone-300 bg-white px-6 py-4 text-sm text-stone-600 transition hover:border-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
             >
-              <ArrowRightOnRectangleIcon className="h-5 w-5" />
+              <ArrowRightOnRectangleIcon
+                aria-hidden="true"
+                className="h-5 w-5"
+              />
               Выйти
             </button>
           </div>
         </div>
       </section>
 
-      {/* STATS */}
-      <section className="border-b border-stone-200 bg-stone-50 py-6">
+      <section
+        className="border-b border-stone-200 bg-stone-50 py-6"
+        aria-label="Статистика профиля"
+      >
         <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
           {[
-            {
-              label: "Заказов",
-              value: totalOrders,
-            },
-            {
-              label: "Сумма заказов",
-              value: formatPrice(totalSpent),
-            },
-            {
-              label: "Последний заказ",
-              value: lastOrderDate,
-            },
+            { label: "Заказов", value: totalOrders },
+            { label: "Сумма заказов", value: formatPrice(totalSpent) },
+            { label: "Последний заказ", value: lastOrderDate },
           ].map((item) => (
             <div
               key={item.label}
               className="border border-stone-200 bg-white px-6 py-5"
             >
-              <p className="text-xs uppercase tracking-[0.25em] text-stone-400">
+              <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
                 {item.label}
               </p>
-
               <p className="mt-2 text-2xl font-light text-stone-800">
                 {item.value}
               </p>
@@ -272,15 +297,16 @@ const Profile = () => {
         </div>
       </section>
 
-      {/* CONTENT */}
       <section className="py-14 md:py-20">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
-          {/* PROFILE CARD */}
           <aside>
             <div className="border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.05)] sm:p-8">
               <div className="mb-8 flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#d4aa2a]/20 text-stone-800 ring-1 ring-[#d4aa2a]/30">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full bg-[#d4aa2a]/20 text-stone-800 ring-1 ring-[#d4aa2a]/30"
+                    aria-hidden="true"
+                  >
                     <span className="text-2xl font-light uppercase tracking-tight">
                       {userInitial}
                     </span>
@@ -290,26 +316,48 @@ const Profile = () => {
                 {!isEditing && (
                   <button
                     type="button"
-                    onClick={() => setIsEditing(true)}
-                    className="flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-400 transition hover:border-[#d4aa2a] hover:text-stone-800"
+                    onClick={() => {
+                      setIsEditing(true);
+                      setSaveError("");
+                      setSaveMessage("");
+                    }}
+                    className={`flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-400 transition hover:border-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                     aria-label="Редактировать профиль"
                   >
-                    <PencilIcon className="h-5 w-5" />
+                    <PencilIcon aria-hidden="true" className="h-5 w-5" />
                   </button>
                 )}
               </div>
 
+              {saveMessage && (
+                <p
+                  role="status"
+                  className="mb-5 border border-[#d4aa2a]/40 bg-[#d4aa2a]/10 px-4 py-3 text-sm text-stone-800"
+                >
+                  {saveMessage}
+                </p>
+              )}
+
+              {saveError && (
+                <p
+                  role="alert"
+                  className="mb-5 border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+                >
+                  {saveError}
+                </p>
+              )}
+
               {!isEditing ? (
                 <div className="space-y-6">
                   <div className="border-b border-stone-100 pb-5">
-                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-400">
+                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-500">
                       Имя пользователя
                     </p>
                     <p className="text-lg text-stone-800">{profile.username}</p>
                   </div>
 
                   <div className="border-b border-stone-100 pb-5">
-                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-400">
+                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-500">
                       Email
                     </p>
                     <p className="break-all text-lg text-stone-800">
@@ -318,7 +366,7 @@ const Profile = () => {
                   </div>
 
                   <div>
-                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-400">
+                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-500">
                       Телефон
                     </p>
                     <p className="text-lg text-stone-800">
@@ -327,15 +375,20 @@ const Profile = () => {
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSave} className="space-y-5">
+                <form onSubmit={handleSave} className="space-y-5" noValidate>
                   <div>
-                    <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-400">
+                    <label
+                      htmlFor="profile-username"
+                      className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                    >
                       Имя пользователя
                     </label>
 
                     <input
+                      id="profile-username"
                       type="text"
                       value={editForm.username}
+                      autoComplete="username"
                       onChange={(e) =>
                         setEditForm((prev) => ({
                           ...prev,
@@ -343,18 +396,24 @@ const Profile = () => {
                         }))
                       }
                       required
-                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
+                      aria-required="true"
+                      className={inputClass}
                     />
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-400">
+                    <label
+                      htmlFor="profile-email"
+                      className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                    >
                       Email
                     </label>
 
                     <input
+                      id="profile-email"
                       type="email"
                       value={editForm.email}
+                      autoComplete="email"
                       onChange={(e) =>
                         setEditForm((prev) => ({
                           ...prev,
@@ -362,43 +421,49 @@ const Profile = () => {
                         }))
                       }
                       required
-                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
+                      aria-required="true"
+                      className={inputClass}
                     />
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-400">
+                    <label
+                      htmlFor="profile-phone"
+                      className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                    >
                       Телефон
                     </label>
 
                     <input
+                      id="profile-phone"
                       type="tel"
                       value={editForm.phone}
+                      autoComplete="tel"
                       onChange={(e) =>
                         setEditForm((prev) => ({
                           ...prev,
                           phone: e.target.value,
                         }))
                       }
-                      className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
+                      className={inputClass}
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 pt-3">
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
+                      className={`flex items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                     >
-                      <CheckIcon className="h-4 w-4" />
+                      <CheckIcon aria-hidden="true" className="h-4 w-4" />
                       Сохранить
                     </button>
 
                     <button
                       type="button"
                       onClick={handleCancelEdit}
-                      className="flex items-center justify-center gap-2 border border-stone-200 px-5 py-4 text-sm text-stone-600 transition hover:border-stone-400 hover:text-stone-800"
+                      className={`flex items-center justify-center gap-2 border border-stone-200 px-5 py-4 text-sm text-stone-600 transition hover:border-stone-400 hover:text-stone-800 ${focusClass}`}
                     >
-                      <XMarkIcon className="h-4 w-4" />
+                      <XMarkIcon aria-hidden="true" className="h-4 w-4" />
                       Отмена
                     </button>
                   </div>
@@ -407,12 +472,10 @@ const Profile = () => {
             </div>
 
             <div className="mt-5 border border-stone-200 bg-white p-6">
-              <div className="mb-4 h-px w-10 bg-[#d4aa2a]" />
-
-              <h3 className="text-xl font-light text-stone-800">
+              <div className="mb-4 h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+              <h2 className="text-xl font-light text-stone-800">
                 Нужна помощь?
-              </h3>
-
+              </h2>
               <p className="mt-3 text-sm text-stone-500">
                 Если нужно уточнить заказ, подобрать оттенки или материалы —
                 напишите нам через форму обратной связи.
@@ -420,13 +483,12 @@ const Profile = () => {
             </div>
           </aside>
 
-          {/* ORDERS */}
           <section className="border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.05)] sm:p-8">
             <div className="mb-8 flex flex-col gap-5 border-b border-stone-100 pb-6 md:flex-row md:items-end md:justify-between">
               <div>
                 <div className="mb-4 flex items-center gap-4">
-                  <div className="h-px w-10 bg-[#d4aa2a]" />
-                  <span className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                  <div className="h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+                  <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                     История
                   </span>
                 </div>
@@ -438,7 +500,7 @@ const Profile = () => {
 
               <Link
                 to="/catalog"
-                className="text-sm uppercase tracking-[0.18em] text-[#d4aa2a] transition hover:text-stone-800"
+                className={`text-sm uppercase tracking-[0.18em] text-[#b89422] transition hover:text-stone-800 ${focusClass}`}
               >
                 В каталог →
               </Link>
@@ -446,20 +508,23 @@ const Profile = () => {
 
             {orders.length === 0 ? (
               <div className="flex min-h-[320px] flex-col items-center justify-center border border-dashed border-stone-200 bg-stone-50 px-6 py-12 text-center">
-                <ShoppingBagIcon className="mb-6 h-14 w-14 text-stone-300" />
+                <ShoppingBagIcon
+                  aria-hidden="true"
+                  className="mb-6 h-14 w-14 text-stone-300"
+                />
 
                 <h3 className="text-2xl font-light text-stone-800">
                   Заказов пока нет
                 </h3>
 
                 <p className="mt-4 max-w-md text-stone-500">
-                  Посмотрите каталог Bloom..ing Craft — возможно, там уже ждут
-                  ваши будущие ленты, сухоцветы и детали для декора.
+                  Посмотрите каталог Bee Craft — возможно, там уже ждут ваши
+                  будущие ленты, сухоцветы и детали для декора.
                 </p>
 
                 <Link
                   to="/catalog"
-                  className="mt-8 bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800"
+                  className={`mt-8 bg-stone-800 px-8 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                 >
                   Перейти в каталог
                 </Link>
@@ -470,7 +535,8 @@ const Profile = () => {
                   <Link
                     key={order.id}
                     to={`/profile/orders/${order.id}`}
-                    className="group block border border-stone-200 bg-stone-50 p-5 transition hover:border-[#d4aa2a]/60 hover:bg-white hover:shadow-[0_14px_50px_rgba(41,37,36,0.07)]"
+                    aria-label={`Открыть заказ номер ${order.id}, статус: ${getStatusText(order.status)}, сумма: ${formatPrice(order.total)}`}
+                    className={`group block border border-stone-200 bg-stone-50 p-5 transition hover:border-[#d4aa2a]/60 hover:bg-white hover:shadow-[0_14px_50px_rgba(41,37,36,0.07)] ${focusClass}`}
                   >
                     <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
                       <div>
@@ -480,15 +546,13 @@ const Profile = () => {
                           </h3>
 
                           <span
-                            className={`border px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${getStatusClasses(
-                              order.status,
-                            )}`}
+                            className={`border px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${getStatusClasses(order.status)}`}
                           >
-                            {getStatusText(order.status)}
+                            Статус: {getStatusText(order.status)}
                           </span>
                         </div>
 
-                        <p className="text-sm text-stone-400">
+                        <p className="text-sm text-stone-500">
                           {new Date(order.created_at).toLocaleDateString(
                             "ru-RU",
                             {
@@ -502,7 +566,7 @@ const Profile = () => {
 
                       <div className="flex items-center justify-between gap-6 md:text-right">
                         <div>
-                          <p className="text-xs uppercase tracking-[0.2em] text-stone-400">
+                          <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
                             Сумма
                           </p>
 
@@ -511,7 +575,10 @@ const Profile = () => {
                           </p>
                         </div>
 
-                        <span className="text-[#d4aa2a] transition group-hover:translate-x-1">
+                        <span
+                          aria-hidden="true"
+                          className="text-[#d4aa2a] transition group-hover:translate-x-1"
+                        >
                           →
                         </span>
                       </div>

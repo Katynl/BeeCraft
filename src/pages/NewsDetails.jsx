@@ -1,6 +1,9 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
+const focusClass =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
 const newsData = {
   1: {
     title: "Новые декоративные ленты",
@@ -60,7 +63,6 @@ Bee Craft открывает второе пространство в центр
 Друзья, мы тут подумали: цветы и природа дают нам столько красоты и вдохновения, что грех не сказать им спасибо. Поэтому с каждого заказа, будь то ленточка для букета или декоративная корзинка, мы откладываем 1% в специальную копилку.
 
 Эти деньги мы перечисляем в фонд, который заботится о растениях: высаживает новые деревья, восстанавливает луга и помогает редким цветам не исчезнуть. Знаете, такая наша маленькая зелёная благодарность.
-
 `,
   },
 };
@@ -71,9 +73,35 @@ const NewsDetails = () => {
 
   if (!news) {
     return (
-      <div className="min-h-screen bg-stone-50 text-stone-700 flex items-center justify-center px-6">
-        Новость не найдена
-      </div>
+      <main className="flex min-h-screen items-center justify-center bg-stone-50 px-6 text-stone-700">
+        <section
+          className="max-w-md border border-stone-200 bg-white p-8 text-center shadow-[0_18px_60px_rgba(41,37,36,0.06)]"
+          aria-labelledby="news-not-found-title"
+        >
+          <div
+            className="mx-auto mb-6 h-px w-16 bg-[#d4aa2a]"
+            aria-hidden="true"
+          />
+
+          <h1
+            id="news-not-found-title"
+            className="text-3xl font-light text-stone-800"
+          >
+            Новость не найдена
+          </h1>
+
+          <p className="mt-4 text-stone-500">
+            Возможно, ссылка устарела или материал уже сняли с публикации.
+          </p>
+
+          <Link
+            to="/news"
+            className={`mt-8 inline-flex items-center justify-center bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
+          >
+            Ко всем новостям
+          </Link>
+        </section>
+      </main>
     );
   }
 
@@ -82,45 +110,79 @@ const NewsDetails = () => {
     .slice(0, 2);
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-800 overflow-hidden">
-      {/* HERO */}
-      <section className="relative pt-28 md:pt-32 pb-44">
-        <div className="absolute top-16 right-0 w-72 h-72 bg-[#d4aa2a]/15 blur-3xl rounded-full pointer-events-none" />
-        <div className="hidden lg:block absolute -left-10 top-32 text-[120px] md:text-[220px] font-black text-stone-200/60 leading-none select-none pointer-events-none">
+    <main className="min-h-screen overflow-hidden bg-stone-50 text-stone-800">
+      <section className="relative pb-44 pt-28 md:pt-32">
+        <div
+          className="pointer-events-none absolute right-0 top-16 h-72 w-72 rounded-full bg-[#d4aa2a]/15 blur-3xl"
+          aria-hidden="true"
+        />
+
+        <div
+          className="pointer-events-none absolute -left-10 top-32 hidden select-none text-[120px] font-black leading-none text-stone-200/60 md:text-[220px] lg:block"
+          aria-hidden="true"
+        >
           BEE
         </div>
 
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-10 items-end">
+          <nav
+            className="mb-8 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-stone-500"
+            aria-label="Хлебные крошки"
+          >
+            <Link
+              to="/"
+              className={`transition hover:text-stone-800 ${focusClass}`}
+            >
+              Главная
+            </Link>
+            <span aria-hidden="true">/</span>
+            <Link
+              to="/news"
+              className={`transition hover:text-stone-800 ${focusClass}`}
+            >
+              Новости
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-stone-700" aria-current="page">
+              {news.title}
+            </span>
+          </nav>
+
+          <div className="grid items-end gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-px bg-[#d4aa2a]" />
+              <div className="mb-6 flex items-center gap-4" aria-hidden="true">
+                <div className="h-px w-12 bg-[#d4aa2a]" />
               </div>
 
               <span className="inline-flex items-center rounded-sm bg-[#d4aa2a]/20 px-4 py-2 text-xs uppercase tracking-[0.22em] text-stone-700">
                 {news.category}
               </span>
 
-              <h1 className="mt-6 text-3xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-tight text-stone-800">
+              <h1 className="mt-6 text-3xl font-light leading-[0.95] tracking-tight text-stone-800 md:text-6xl lg:text-7xl">
                 {news.title}
               </h1>
 
-              <p className="mt-6 text-center italic text-stone-500 text-lg leading-relaxed">
+              <p className="mt-6 text-left text-lg italic leading-relaxed text-stone-600 md:text-center">
                 {news.intro}
               </p>
 
-              <div className="mt-8 text-sm uppercase tracking-[0.25em] text-stone-400">
+              <div className="mt-8 text-sm uppercase tracking-[0.25em] text-stone-500">
                 {news.date}
               </div>
             </div>
 
             <div className="lg:col-span-7">
               <div className="relative">
-                <div className="absolute -bottom-4 -right-4 w-full h-full border border-[#d4aa2a]/40" />
+                <div
+                  className="absolute -bottom-4 -right-4 h-full w-full border border-[#d4aa2a]/40"
+                  aria-hidden="true"
+                />
                 <img
                   src={news.image}
-                  alt={news.title}
-                  className="relative z-10 w-full h-[420px] md:h-[560px] object-cover shadow-[0_20px_60px_rgba(0,0,0,0.12)]"
+                  alt={`Изображение новости: ${news.title}`}
+                  className="relative z-10 h-[420px] w-full object-cover shadow-[0_20px_60px_rgba(0,0,0,0.12)] md:h-[560px]"
+                  loading="eager"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -128,47 +190,49 @@ const NewsDetails = () => {
         </div>
       </section>
 
-      {/* ARTICLE */}
       <section className="pb-24 md:pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-10 items-start">
-            {/* ASIDE */}
-            <aside className="lg:col-span-3 lg:sticky lg:top-28">
-              <div className="bg-white shadow-sm p-6">
-                <div className="space-y-4 text-sm text-stone-500">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-start gap-10 lg:grid-cols-12">
+            <aside className="lg:sticky lg:top-28 lg:col-span-3">
+              <div className="bg-white p-6 shadow-sm">
+                <dl className="space-y-4 text-sm text-stone-500">
                   <div className="flex justify-between gap-4 border-b border-stone-100 pb-3">
-                    <span>Категория</span>
-                    <span className="text-stone-700">{news.category}</span>
+                    <dt>Категория</dt>
+                    <dd className="text-stone-700">{news.category}</dd>
                   </div>
+
                   <div className="flex justify-between gap-4 border-b border-stone-100 pb-3">
-                    <span>Дата</span>
-                    <span className="text-stone-700">{news.date}</span>
+                    <dt>Дата</dt>
+                    <dd className="text-stone-700">{news.date}</dd>
                   </div>
+
                   <div className="flex justify-between gap-4">
-                    <span>Бренд</span>
-                    <span className="text-stone-700">Bee Craft</span>
+                    <dt>Бренд</dt>
+                    <dd className="text-stone-700">Bee Craft</dd>
                   </div>
-                </div>
+                </dl>
               </div>
             </aside>
 
-            {/* MAIN TEXT */}
             <article className="lg:col-span-6">
-              <div className="bg-white shadow-sm p-6 md:p-10">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-10 h-px bg-[#d4aa2a]" />
-                  <span className="uppercase tracking-[0.25em] text-xs text-stone-500">
+              <div className="bg-white p-6 shadow-sm md:p-10">
+                <div
+                  className="mb-8 flex items-center gap-4"
+                  aria-hidden="true"
+                >
+                  <div className="h-px w-10 bg-[#d4aa2a]" />
+                  <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                     Детали
                   </span>
                 </div>
 
-                <div className="rounded-sm border-l-4 border-[#d4aa2a] bg-stone-50 px-5 py-4 mb-8">
-                  <p className="text-stone-700 leading-relaxed italic">
+                <div className="mb-8 rounded-sm border-l-4 border-[#d4aa2a] bg-stone-50 px-5 py-4">
+                  <p className="leading-relaxed text-stone-700 italic">
                     {news.intro}
                   </p>
                 </div>
 
-                <div className="space-y-4 text-[17px] text-justify leading-[1.5] text-stone-600">
+                <div className="space-y-4 text-left text-[17px] leading-[1.7] text-stone-600">
                   {news.text
                     .trim()
                     .split("\n\n")
@@ -180,14 +244,14 @@ const NewsDetails = () => {
                 <div className="mt-10 flex flex-wrap justify-between gap-4">
                   <Link
                     to="/news"
-                    className="inline-flex items-center justify-center px-6 py-3 border border-stone-300  text-stone-700 text-sm uppercase tracking-[0.2em] hover:border-[#d4aa2a] hover:bg-[#d4aa2a]/10 transition"
+                    className={`inline-flex items-center justify-center border border-stone-300 px-6 py-3 text-sm uppercase tracking-[0.2em] text-stone-700 transition hover:border-[#d4aa2a] hover:bg-[#d4aa2a]/10 ${focusClass}`}
                   >
                     ← Ко всем новостям
                   </Link>
 
                   <Link
                     to="/catalog"
-                    className="inline-flex items-center justify-center px-6 py-3 bg-stone-800 text-[#d4aa2a] text-sm uppercase tracking-[0.2em] hover:bg-[#d4aa2a] hover:text-stone-800 transition"
+                    className={`inline-flex items-center justify-center bg-stone-800 px-6 py-3 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
                   >
                     В каталог
                   </Link>
@@ -195,59 +259,76 @@ const NewsDetails = () => {
               </div>
             </article>
 
-            {/* Картинка */}
-            <div className="lg:col-span-3">
+            <aside
+              className="lg:col-span-3"
+              aria-label="Дополнительное изображение новости"
+            >
               <div className="flex flex-col justify-between space-y-6">
                 <div className="overflow-hidden shadow-sm">
                   <img
                     src={news.image}
                     alt=""
-                    className="w-full h-full object-cover"
+                    aria-hidden="true"
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* RELATED */}
-      <section className="py-16 md:py-20 border-t border-stone-200 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 mb-10">
-            <div className="w-10 h-px bg-[#d4aa2a]" />
-            <span className="uppercase tracking-[0.25em] text-xs text-stone-500">
+      <section
+        className="border-t border-stone-200 bg-stone-50 py-16 md:py-20"
+        aria-labelledby="related-news-title"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex items-center gap-4">
+            <div className="h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+            <h2
+              id="related-news-title"
+              className="text-xs uppercase tracking-[0.25em] text-stone-500"
+            >
               Ещё новости
-            </span>
+            </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid gap-6 md:grid-cols-2">
             {relatedNews.map(([key, item]) => (
               <Link
                 key={key}
                 to={`/news/${key}`}
-                className="group bg-white border border-stone-200 overflow-hidden hover:shadow-xl transition-all duration-500"
+                aria-label={`Читать новость: ${item.title}`}
+                className={`group overflow-hidden border border-stone-200 bg-white transition-all duration-500 hover:shadow-xl ${focusClass}`}
               >
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-[1.03] transition duration-700"
+                    alt={`Изображение новости: ${item.title}`}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                    loading="lazy"
+                    decoding="async"
                   />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-stone-700 rounded-sm">
+                  <div className="absolute left-4 top-4 rounded-sm bg-white/90 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-stone-700 backdrop-blur-sm">
                     {item.category}
                   </div>
                 </div>
 
                 <div className="p-6">
-                  <div className="text-sm text-stone-400 mb-3">{item.date}</div>
-                  <h3 className="text-2xl font-light leading-tight text-stone-800 group-hover:text-black transition">
+                  <div className="mb-3 text-sm text-stone-500">{item.date}</div>
+
+                  <h3 className="text-2xl font-light leading-tight text-stone-800 transition group-hover:text-black">
                     {item.title}
                   </h3>
 
-                  <div className="mt-6 inline-flex items-center gap-2 text-[#d4aa2a] uppercase tracking-[0.2em] text-xs">
+                  <div className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#b89422]">
                     Читать
-                    <span className="group-hover:translate-x-1 transition">
+                    <span
+                      className="transition group-hover:translate-x-1"
+                      aria-hidden="true"
+                    >
                       →
                     </span>
                   </div>
@@ -257,7 +338,7 @@ const NewsDetails = () => {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 

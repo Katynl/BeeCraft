@@ -15,14 +15,18 @@ import {
   ArrowRightIcon,
 } from "@heroicons/react/24/outline";
 
+const focusClass =
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
+
+const inputClass = `w-full border border-stone-200 bg-stone-50 px-4 py-4 pl-11 text-stone-800
+  placeholder:text-stone-500 outline-none transition focus:border-[#d4aa2a]
+  focus:bg-white focus:ring-2 focus:ring-[#d4aa2a]/20 ${focusClass}`;
+
 const formatPrice = (price) => {
   const value = Number(price);
-
-  if (Number.isNaN(value)) {
-    return `${price} ₽`;
-  }
-
-  return `${value.toLocaleString("ru-RU")} ₽`;
+  return Number.isNaN(value)
+    ? `${price} ₽`
+    : `${value.toLocaleString("ru-RU")} ₽`;
 };
 
 const Checkout = () => {
@@ -30,6 +34,8 @@ const Checkout = () => {
   const { cartItems, totalPrice, clearCart } = useCart();
 
   const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [formStatus, setFormStatus] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -56,25 +62,43 @@ const Checkout = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    setFormError("");
+    setFormStatus("");
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
+  const validateForm = () => {
+    if (!formData.name.trim()) return "Введите имя получателя";
+    if (!formData.phone.trim()) return "Введите телефон";
+    if (!formData.email.trim()) return "Введите email";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      return "Введите корректный email";
+    }
+
+    return "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.name.trim() ||
-      !formData.phone.trim() ||
-      !formData.email.trim()
-    ) {
-      alert("Пожалуйста, заполните имя, телефон и email");
+    const validationError = validateForm();
+
+    if (validationError) {
+      setFormError(validationError);
       return;
     }
 
     setLoading(true);
+    setFormError("");
+    setFormStatus(
+      formData.payment_method === "card"
+        ? "Имитируем оплату картой и оформляем заказ..."
+        : "Оформляем заказ...",
+    );
 
     const orderData = {
       name: formData.name.trim(),
@@ -90,53 +114,46 @@ const Checkout = () => {
     };
 
     try {
-      if (formData.payment_method === "card") {
-        const paymentConfirmed = window.confirm(
-          "Оплата прошла успешно! Нажмите ОК, чтобы подтвердить заказ.",
-        );
-
-        if (!paymentConfirmed) {
-          setLoading(false);
-          return;
-        }
-      }
-
       const response = await api.post("/orders/", orderData);
 
       clearCart();
-
       navigate(`/profile/orders/${response.data.id}`);
     } catch (err) {
       console.error(err);
-      alert(
-        "Ошибка при оформлении заказа: " + JSON.stringify(err.response?.data),
+      setFormError(
+        `Ошибка при оформлении заказа${
+          err.response?.data ? `: ${JSON.stringify(err.response.data)}` : ""
+        }`,
       );
     } finally {
       setLoading(false);
+      setFormStatus("");
     }
   };
 
   if (cartItems.length === 0) return null;
 
-  const inputClass =
-    "w-full border border-stone-200 bg-stone-50 px-4 py-4 pl-11 text-stone-800 placeholder:text-stone-400 outline-none transition focus:border-[#d4aa2a] focus:bg-white";
-
   return (
     <main className="min-h-screen overflow-hidden bg-stone-50 text-stone-800">
-      {/* HERO */}
       <section className="relative border-b border-stone-200 pt-28 md:pt-32">
-        <div className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl" />
+        <div
+          className="pointer-events-none absolute right-0 top-20 h-72 w-72 rounded-full bg-[#d4aa2a]/20 blur-3xl"
+          aria-hidden="true"
+        />
 
-        <div className="pointer-events-none absolute -left-10 top-36 hidden select-none text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block">
+        <div
+          className="pointer-events-none absolute -left-10 top-36 hidden select-none text-[180px] font-black leading-none tracking-[-0.08em] text-stone-200/70 md:block"
+          aria-hidden="true"
+        >
           BEE
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8 md:pb-16">
           <Link
             to="/cart"
-            className="mb-8 inline-flex items-center gap-2 text-sm text-stone-500 transition hover:text-stone-800"
+            className={`mb-8 inline-flex items-center gap-2 text-sm text-stone-600 transition hover:text-stone-800 ${focusClass}`}
           >
-            <ArrowLeftIcon className="h-4 w-4" />
+            <ArrowLeftIcon aria-hidden="true" className="h-4 w-4" />
             Назад в корзину
           </Link>
 
@@ -148,7 +165,7 @@ const Checkout = () => {
                 заказа
               </h1>
 
-              <p className="mt-8 italic max-w-2xl text-base leading-relaxed text-stone-500 md:text-lg">
+              <p className="mt-8 max-w-2xl text-base italic leading-relaxed text-stone-600 md:text-lg">
                 Заполните контактные данные, выберите способ оплаты и удобный
                 магазин для самовывоза.
               </p>
@@ -156,7 +173,7 @@ const Checkout = () => {
 
             <div className="grid grid-cols-2 gap-3 sm:min-w-[320px]">
               <div className="border border-stone-200 bg-white px-5 py-4">
-                <p className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
                   Товаров
                 </p>
                 <p className="mt-2 text-3xl font-light text-stone-800">
@@ -165,7 +182,7 @@ const Checkout = () => {
               </div>
 
               <div className="border border-stone-200 bg-white px-5 py-4">
-                <p className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
                   Сумма
                 </p>
                 <p className="mt-2 text-3xl font-light text-stone-800">
@@ -177,19 +194,18 @@ const Checkout = () => {
         </div>
       </section>
 
-      {/* CONTENT */}
       <section className="py-12 md:py-16">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_420px] lg:px-8">
-          {/* FORM */}
           <form
             id="checkout-form"
             onSubmit={handleSubmit}
+            noValidate
             className="border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.06)] sm:p-8 lg:p-10"
           >
             <div className="mb-8">
-              <div className="mb-5 flex items-center gap-4">
+              <div className="mb-5 flex items-center gap-4" aria-hidden="true">
                 <div className="h-px w-10 bg-[#d4aa2a]" />
-                <span className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                   Контакты
                 </span>
               </div>
@@ -198,83 +214,134 @@ const Checkout = () => {
                 Данные получателя
               </h2>
 
-              <p className="mt-3 italic w-full text-center text-stone-500">
+              <p className="mt-3 w-full text-center italic text-stone-600">
                 Мы используем эти данные только для подтверждения и выдачи
                 заказа.
               </p>
             </div>
 
+            {formError && (
+              <div
+                role="alert"
+                className="mb-6 border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+              >
+                {formError}
+              </div>
+            )}
+
+            {formStatus && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mb-6 border border-[#d4aa2a]/40 bg-[#d4aa2a]/10 px-4 py-3 text-sm text-stone-800"
+              >
+                {formStatus}
+              </div>
+            )}
+
             <div className="grid gap-5 md:grid-cols-2">
               <div className="relative md:col-span-1">
-                <UserIcon className="absolute left-4 top-[20px] h-5 w-5 text-stone-400" />
-
+                <label htmlFor="checkout-name" className="sr-only">
+                  Ваше имя
+                </label>
+                <UserIcon
+                  aria-hidden="true"
+                  className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
+                />
                 <input
+                  id="checkout-name"
                   type="text"
                   name="name"
                   placeholder="Ваше имя"
+                  autoComplete="name"
                   value={formData.name}
                   onChange={handleChange}
                   required
+                  aria-required="true"
+                  aria-invalid={Boolean(formError && !formData.name.trim())}
                   className={inputClass}
                 />
               </div>
 
               <div className="relative md:col-span-1">
-                <PhoneIcon className="absolute left-4 top-[20px] h-5 w-5 text-stone-400" />
-
+                <label htmlFor="checkout-phone" className="sr-only">
+                  Телефон
+                </label>
+                <PhoneIcon
+                  aria-hidden="true"
+                  className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
+                />
                 <input
+                  id="checkout-phone"
                   type="tel"
                   name="phone"
                   placeholder="+7..."
+                  autoComplete="tel"
                   value={formData.phone}
                   onChange={handleChange}
                   required
+                  aria-required="true"
+                  aria-invalid={Boolean(formError && !formData.phone.trim())}
                   className={inputClass}
                 />
               </div>
 
               <div className="relative md:col-span-2">
-                <EnvelopeIcon className="absolute left-4 top-[20px] h-5 w-5 text-stone-400" />
-
+                <label htmlFor="checkout-email" className="sr-only">
+                  Email
+                </label>
+                <EnvelopeIcon
+                  aria-hidden="true"
+                  className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
+                />
                 <input
+                  id="checkout-email"
                   type="email"
                   name="email"
                   placeholder="example@mail.com"
+                  autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  aria-required="true"
+                  aria-invalid={Boolean(formError && !formData.email.trim())}
                   className={inputClass}
                 />
               </div>
 
               <div className="relative md:col-span-2">
-                <ChatBubbleLeftEllipsisIcon className="absolute left-4 top-[20px] h-5 w-5 text-stone-400" />
-
+                <label htmlFor="checkout-comment" className="sr-only">
+                  Комментарий к заказу
+                </label>
+                <ChatBubbleLeftEllipsisIcon
+                  aria-hidden="true"
+                  className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
+                />
                 <textarea
+                  id="checkout-comment"
                   name="comment"
                   placeholder="Комментарий к заказу, если нужно"
                   value={formData.comment}
                   onChange={handleChange}
-                  rows="4"
+                  rows={4}
                   className={`${inputClass} resize-none`}
                 />
               </div>
             </div>
 
-            {/* OPTIONS */}
             <div className="mt-10 border-t border-stone-200 pt-8">
-              <div className="mb-6 flex items-center gap-4">
+              <div className="mb-6 flex items-center gap-4" aria-hidden="true">
                 <div className="h-px w-10 bg-[#d4aa2a]" />
-                <span className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                   Оплата и самовывоз
                 </span>
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                  <p className="mb-3 text-xs uppercase tracking-[0.2em] text-stone-400">
+                <fieldset>
+                  <legend className="mb-3 text-xs uppercase tracking-[0.2em] text-stone-500">
                     Способ оплаты
-                  </p>
+                  </legend>
 
                   <div className="space-y-3">
                     <label
@@ -290,10 +357,13 @@ const Checkout = () => {
                         value="card"
                         checked={formData.payment_method === "card"}
                         onChange={handleChange}
-                        className="accent-[#d4aa2a]"
+                        className={`accent-[#d4aa2a] ${focusClass}`}
                       />
 
-                      <CreditCardIcon className="h-5 w-5 text-stone-600" />
+                      <CreditCardIcon
+                        aria-hidden="true"
+                        className="h-5 w-5 text-stone-600"
+                      />
 
                       <span className="text-stone-700">Банковская карта</span>
                     </label>
@@ -311,34 +381,44 @@ const Checkout = () => {
                         value="cash"
                         checked={formData.payment_method === "cash"}
                         onChange={handleChange}
-                        className="accent-[#d4aa2a]"
+                        className={`accent-[#d4aa2a] ${focusClass}`}
                       />
 
-                      <BanknotesIcon className="h-5 w-5 text-stone-600" />
+                      <BanknotesIcon
+                        aria-hidden="true"
+                        className="h-5 w-5 text-stone-600"
+                      />
 
                       <span className="text-stone-700">
                         Наличные при получении
                       </span>
                     </label>
                   </div>
-                </div>
+                </fieldset>
 
                 <div>
-                  <label className="mb-3 block text-xs uppercase tracking-[0.2em] text-stone-400">
+                  <label
+                    htmlFor="pickup-location"
+                    className="mb-3 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                  >
                     Магазин самовывоза
                   </label>
 
                   <div className="relative">
-                    <BuildingStorefrontIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
+                    <BuildingStorefrontIcon
+                      aria-hidden="true"
+                      className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400"
+                    />
 
                     <select
+                      id="pickup-location"
                       name="pickup_location"
                       value={formData.pickup_location}
                       onChange={handleChange}
-                      className="w-full appearance-none border border-stone-200 bg-stone-50 px-4 py-4 pl-11 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white"
+                      className={`w-full appearance-none border border-stone-200 bg-stone-50 px-4 py-4 pl-11 text-stone-800 outline-none transition focus:border-[#d4aa2a] focus:bg-white ${focusClass}`}
                     >
                       <option value="ул. Уткинская, д. 38">
-                        ул. Уткинская, д. 38"
+                        ул. Уткинская, д. 38
                       </option>
                       <option value="ул. Светланская, д. 15">
                         ул. Светланская, д. 15
@@ -346,7 +426,7 @@ const Checkout = () => {
                     </select>
                   </div>
 
-                  <div className="mt-4 border-l-4 border-[#d4aa2a] bg-stone-50 px-4 py-3 text-sm leading-relaxed text-stone-500">
+                  <div className="mt-4 border-l-4 border-[#d4aa2a] bg-stone-50 px-4 py-3 text-sm leading-relaxed text-stone-600">
                     После оформления заказа мы свяжемся с вами для
                     подтверждения.
                   </div>
@@ -355,19 +435,24 @@ const Checkout = () => {
             </div>
           </form>
 
-          {/* SUMMARY */}
-          <aside className="lg:sticky lg:top-28 h-fit">
+          <aside className="h-fit lg:sticky lg:top-28">
             <div className="overflow-hidden border border-stone-200 bg-white shadow-[0_18px_60px_rgba(41,37,36,0.06)]">
               <div className="border-b border-stone-100 p-6 sm:p-8">
-                <div className="mb-5 flex items-center gap-4">
+                <div
+                  className="mb-5 flex items-center gap-4"
+                  aria-hidden="true"
+                >
                   <div className="h-px w-10 bg-[#d4aa2a]" />
-                  <span className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                  <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                     Сводка
                   </span>
                 </div>
 
                 <h2 className="flex items-center gap-3 text-3xl font-light tracking-tight text-stone-800">
-                  <ShoppingBagIcon className="h-7 w-7 text-[#d4aa2a]" />
+                  <ShoppingBagIcon
+                    aria-hidden="true"
+                    className="h-7 w-7 text-[#d4aa2a]"
+                  />
                   Ваш заказ
                 </h2>
               </div>
@@ -380,10 +465,10 @@ const Checkout = () => {
                     <div key={item.id} className="flex gap-4 p-5">
                       <img
                         src={item.image_url || item.image}
-                        alt={item.name}
+                        alt={item.name || "Товар Bee Craft"}
                         loading="lazy"
                         decoding="async"
-                        className="h-20 w-20 shrink-0 object-cover bg-stone-100"
+                        className="h-20 w-20 shrink-0 bg-stone-100 object-cover"
                       />
 
                       <div className="min-w-0 flex-1">
@@ -408,17 +493,17 @@ const Checkout = () => {
 
               <div className="border-t border-stone-100 bg-stone-50 p-6 sm:p-8">
                 <div className="space-y-4">
-                  <div className="flex justify-between gap-4 text-stone-500">
+                  <div className="flex justify-between gap-4 text-stone-600">
                     <span>Товары</span>
                     <span>{itemsCount} шт.</span>
                   </div>
 
-                  <div className="flex justify-between gap-4 text-stone-500">
+                  <div className="flex justify-between gap-4 text-stone-600">
                     <span>Сумма заказа</span>
                     <span>{formatPrice(totalPrice)}</span>
                   </div>
 
-                  <div className="flex justify-between gap-4 text-stone-500">
+                  <div className="flex justify-between gap-4 text-stone-600">
                     <span>Самовывоз</span>
                     <span className="text-right">
                       {formData.pickup_location}
@@ -428,7 +513,7 @@ const Checkout = () => {
 
                 <div className="mt-7 border-t border-stone-200 pt-6">
                   <div className="flex items-end justify-between gap-4">
-                    <span className="text-xs uppercase tracking-[0.25em] text-stone-400">
+                    <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                       Итого
                     </span>
 
@@ -442,11 +527,16 @@ const Checkout = () => {
                   type="submit"
                   form="checkout-form"
                   disabled={loading}
-                  className="mt-8 flex w-full items-center justify-center gap-3 bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+                  aria-busy={loading}
+                  className={`mt-8 flex w-full items-center justify-center gap-3 bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 ${focusClass}`}
                 >
                   {loading ? (
                     <>
-                      <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+                      <svg
+                        aria-hidden="true"
+                        className="h-5 w-5 animate-spin"
+                        viewBox="0 0 24 24"
+                      >
                         <circle
                           className="opacity-25"
                           cx="12"
@@ -467,12 +557,12 @@ const Checkout = () => {
                   ) : (
                     <>
                       Оформить заказ
-                      <ArrowRightIcon className="h-4 w-4" />
+                      <ArrowRightIcon aria-hidden="true" className="h-4 w-4" />
                     </>
                   )}
                 </button>
 
-                <p className="mt-4 text-center text-xs leading-relaxed text-stone-400">
+                <p className="mt-4 text-center text-xs leading-relaxed text-stone-500">
                   Нажимая «Оформить заказ», вы соглашаетесь с условиями
                   обработки данных.
                 </p>

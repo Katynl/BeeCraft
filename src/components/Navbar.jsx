@@ -58,7 +58,6 @@ const Navbar = () => {
 
           <nav className="hidden space-x-6 font-medium md:flex" aria-label="Основная навигация">
             <NavLink onClick={() => goTo("/")}>Главная</NavLink>
-            <NavLink onClick={() => goTo("/about")}>О нас</NavLink>
             <NavLink onClick={() => goTo("/catalog")}>Каталог</NavLink>
             <NavLink onClick={() => goTo("/news")}>Новости</NavLink>
             <NavLink onClick={() => goTo("/contacts")}>Контакты</NavLink>
@@ -130,7 +129,6 @@ const Navbar = () => {
           aria-label="Мобильная навигация"
         >
           <MobileNavLink onClick={() => goTo("/")}>Главная</MobileNavLink>
-          <MobileNavLink onClick={() => goTo("/about")}>О нас</MobileNavLink>
           <MobileNavLink onClick={() => goTo("/catalog")}>Каталог</MobileNavLink>
           <MobileNavLink onClick={() => goTo("/news")}>Новости</MobileNavLink>
           <MobileNavLink onClick={() => goTo("/contacts")}>Контакты</MobileNavLink>

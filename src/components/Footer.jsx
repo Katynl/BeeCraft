@@ -51,7 +51,6 @@ const Footer = () => {
             <ul className="space-y-2">
               {[
                 ["Главная", "/"],
-                ["О нас", "/about"],
                 ["Каталог", "/catalog"],
                 ["Новости", "/news"],
                 ["Контакты", "/contacts"],

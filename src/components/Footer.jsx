@@ -74,7 +74,7 @@ const Footer = () => {
             </h3>
 
             <address className="not-italic flex flex-col justify-center items-center">
-              <ul className="space-y-3">
+              <ul className="space-y-3 flex flex-col justify-center items-center">
                 <li className="flex items-center gap-2">
                   <PhoneIcon
                     aria-hidden="true"

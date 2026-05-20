@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, lazy, Suspense } from "react";
 import "../input.css";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import useProducts from "../hooks/useProducts";
 import ProductsCard from "../components/ProductCard";
 import FeedbackForm from "../components/FeedbackForm";
 
+const ProductsCard = lazy(() => import("../components/ProductCard"));
 const focusClass =
   "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d4aa2a] focus-visible:ring-offset-2";
 
@@ -148,18 +149,20 @@ const Home = () => {
                     aria-hidden="true"
                   />
 
-                  <video
-                    src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778939599/compressed_0_bee_daisy_1920x1080_mgczvt.webm"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    poster="https://res.cloudinary.com/drkgovcn7/image/upload/v1778957864/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_558_vecrso.png"
-                    className="relative z-10 hidden h-[400px] w-full rounded-sm object-cover shadow-2xl md:block"
-                    aria-hidden="true"
-                    tabIndex={-1}
-                  />
+                  {window.innerWidth >= 768 && (
+                    <video
+                      src="https://res.cloudinary.com/drkgovcn7/video/upload/v1778939599/compressed_0_bee_daisy_1920x1080_mgczvt.webm"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="none"
+                      poster="https://res.cloudinary.com/drkgovcn7/image/upload/v1778957864/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA_%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0_558_vecrso.png"
+                      className="relative z-10 hidden h-[400px] w-full rounded-sm object-cover shadow-2xl md:block"
+                      aria-hidden="true"
+                      tabIndex={-1}
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -359,26 +362,11 @@ const Home = () => {
             ))}
           </div>
 
-          <div id="home-products-panel" role="tabpanel" aria-live="polite">
-            {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4">
-                {filteredProducts.map((product, index) => (
-                  <ProductsCard
-                    key={product.id}
-                    product={product}
-                    index={index}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div
-                className="border border-stone-200 bg-white py-20 text-center text-stone-500"
-                role="status"
-              >
-                Пока нет товаров
-              </div>
-            )}
-          </div>
+          <Suspense fallback={null}>
+            {filteredProducts.map((product, index) => (
+              <ProductsCard key={product.id} product={product} index={index} />
+            ))}
+          </Suspense>
         </div>
       </section>
 

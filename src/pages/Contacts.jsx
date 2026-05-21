@@ -94,7 +94,6 @@ const Contacts = () => {
           className="pointer-events-none absolute right-0 top-12 h-72 w-72 rounded-full bg-[#d4aa2a]/25 blur-3xl"
           aria-hidden="true"
         />
-
         <Honeycomb className="pointer-events-none absolute right-[-40px] top-24 w-56 text-[#d4aa2a]/20 md:w-80" />
 
         <div className="relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,11 +119,6 @@ const Contacts = () => {
             </p>
 
           </div>
-
-          <div
-            className="pointer-events-none absolute left-0 top-12 h-72 w-72 rounded-full bg-[#d4aa2a]/25 blur-3xl"
-            aria-hidden="true"
-          />
         </div>
       </section>
 

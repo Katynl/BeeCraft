@@ -100,7 +100,6 @@ const Contacts = () => {
         />
 
         <Honeycomb className="pointer-events-none absolute right-[-40px] top-24 w-56 text-[#d4aa2a]/20 md:w-80" />
-        <Honeycomb className="pointer-events-none absolute bottom-8 left-4 w-32 text-stone-800/[0.04] md:w-44" />
 
         <div className="relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-center gap-4" aria-hidden="true">
@@ -123,6 +122,7 @@ const Contacts = () => {
               и вдохновением. Мы поможем подобрать детали для вашей
               флористической идеи.
             </p>
+
           </div>
 
           <div

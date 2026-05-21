@@ -123,24 +123,6 @@ const Contacts = () => {
               и вдохновением. Мы поможем подобрать детали для вашей
               флористической идеи.
             </p>
-
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <a
-                href={CONTACTS.phoneHref}
-                aria-label={`Позвонить Bee Craft: ${CONTACTS.phone}`}
-                className={`inline-flex items-center justify-center bg-stone-800 px-8 py-4 text-xs uppercase tracking-[0.22em] text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 ${focusClass}`}
-              >
-                Позвонить
-              </a>
-
-              <a
-                href={CONTACTS.emailHref}
-                aria-label={`Написать письмо Bee Craft: ${CONTACTS.email}`}
-                className={`inline-flex items-center justify-center border border-stone-300 bg-white/80 px-8 py-4 text-xs uppercase tracking-[0.22em] text-stone-700 transition duration-300 hover:border-[#d4aa2a] hover:bg-[#d4aa2a]/10 ${focusClass}`}
-              >
-                Написать письмо
-              </a>
-            </div>
           </div>
 
           <div

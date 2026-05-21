@@ -358,7 +358,7 @@ const ProductPage = React.memo(() => {
                     >
                       Описание
                     </h2>
-                    <p className="whitespace-pre-line text-left text-[15px] leading-7 text-stone-600">
+                    <p className="whitespace-pre-line text-[15px] leading-7 text-stone-600">
                       {product.description ||
                         "Описание пока не добавлено, но этот товар отлично подойдёт для флористики, упаковки и декоративных композиций."}
                     </p>

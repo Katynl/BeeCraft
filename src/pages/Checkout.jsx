@@ -49,6 +49,13 @@ const Checkout = () => {
     pickup_location: "ул. Уткинская, д. 38",
   });
 
+  const [cardData, setCardData] = useState({
+    number: "",
+    expiry: "",
+    cvv: "",
+    holder: "",
+  });
+
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate("/cart");
@@ -124,6 +131,57 @@ const Checkout = () => {
     }, 0);
   }, [cartItems]);
 
+  const formatCardNumber = (value) => {
+    return value
+      .replace(/\D/g, "")
+      .slice(0, 16)
+      .replace(/(.{4})/g, "$1 ")
+      .trim();
+  };
+
+  const formatCardExpiry = (value) => {
+    const digits = value.replace(/\D/g, "").slice(0, 4);
+
+    if (digits.length <= 2) return digits;
+
+    return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  };
+
+  const handleCardChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormError("");
+    setFormStatus("");
+
+    setCardData((prev) => {
+      if (name === "number") {
+        return {
+          ...prev,
+          number: formatCardNumber(value),
+        };
+      }
+
+      if (name === "expiry") {
+        return {
+          ...prev,
+          expiry: formatCardExpiry(value),
+        };
+      }
+
+      if (name === "cvv") {
+        return {
+          ...prev,
+          cvv: value.replace(/\D/g, "").slice(0, 3),
+        };
+      }
+
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -145,17 +203,24 @@ const Checkout = () => {
       return "Введите корректный email";
     }
 
-    if (!cartItems.length) {
-      return "Корзина пуста";
-    }
+    if (formData.payment_method === "card") {
+      const cleanCardNumber = cardData.number.replace(/\D/g, "");
 
-    const hasInvalidItem = cartItems.some((item) => {
-      const quantity = Number(item.quantity);
-      return !item.id || Number.isNaN(quantity) || quantity <= 0;
-    });
+      if (cleanCardNumber.length !== 16) {
+        return "Введите корректный номер карты";
+      }
 
-    if (hasInvalidItem) {
-      return "В корзине есть товар с некорректным количеством";
+      if (!/^\d{2}\/\d{2}$/.test(cardData.expiry)) {
+        return "Введите срок действия карты в формате ММ/ГГ";
+      }
+
+      if (cardData.cvv.length !== 3) {
+        return "Введите CVV-код";
+      }
+
+      if (!cardData.holder.trim()) {
+        return "Введите имя владельца карты";
+      }
     }
 
     return "";
@@ -219,7 +284,7 @@ const Checkout = () => {
     setFormError("");
     setFormStatus(
       formData.payment_method === "card"
-        ? "Имитируем оплату картой и оформляем заказ..."
+        ? "Проверяем данные карты и оформляем заказ..."
         : "Оформляем заказ...",
     );
 
@@ -539,6 +604,105 @@ const Checkout = () => {
                     </label>
                   </div>
                 </fieldset>
+
+                {formData.payment_method === "card" && (
+                  <div className="mt-8 border border-stone-200 bg-stone-50 p-5 md:col-span-2">
+                    <div className="mb-5">
+                      <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                        Данные карты
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-stone-500">
+                        Это учебная имитация оплаты. Данные карты не сохраняются
+                        и не отправляются на сервер.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="md:col-span-2">
+                        <label
+                          htmlFor="card-number"
+                          className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                        >
+                          Номер карты
+                        </label>
+
+                        <input
+                          id="card-number"
+                          type="text"
+                          name="number"
+                          inputMode="numeric"
+                          autoComplete="cc-number"
+                          placeholder="0000 0000 0000 0000"
+                          value={cardData.number}
+                          onChange={handleCardChange}
+                          className="w-full border border-stone-200 bg-white px-4 py-4 text-stone-800 outline-none transition placeholder:text-stone-400 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="card-expiry"
+                          className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                        >
+                          Срок действия
+                        </label>
+
+                        <input
+                          id="card-expiry"
+                          type="text"
+                          name="expiry"
+                          inputMode="numeric"
+                          autoComplete="cc-exp"
+                          placeholder="ММ/ГГ"
+                          value={cardData.expiry}
+                          onChange={handleCardChange}
+                          className="w-full border border-stone-200 bg-white px-4 py-4 text-stone-800 outline-none transition placeholder:text-stone-400 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="card-cvv"
+                          className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                        >
+                          CVV
+                        </label>
+
+                        <input
+                          id="card-cvv"
+                          type="password"
+                          name="cvv"
+                          inputMode="numeric"
+                          autoComplete="cc-csc"
+                          placeholder="000"
+                          value={cardData.cvv}
+                          onChange={handleCardChange}
+                          className="w-full border border-stone-200 bg-white px-4 py-4 text-stone-800 outline-none transition placeholder:text-stone-400 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20"
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <label
+                          htmlFor="card-holder"
+                          className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                        >
+                          Имя владельца
+                        </label>
+
+                        <input
+                          id="card-holder"
+                          type="text"
+                          name="holder"
+                          autoComplete="cc-name"
+                          placeholder="IVAN IVANOV"
+                          value={cardData.holder}
+                          onChange={handleCardChange}
+                          className="w-full border border-stone-200 bg-white px-4 py-4 uppercase text-stone-800 outline-none transition placeholder:text-stone-400 focus:border-[#d4aa2a] focus:ring-2 focus:ring-[#d4aa2a]/20"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <label

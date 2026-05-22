@@ -24,6 +24,7 @@ const inputClass = `w-full border border-stone-200 bg-stone-50 px-4 py-4 pl-11 t
 
 const formatPrice = (price) => {
   const value = Number(price);
+
   return Number.isNaN(value)
     ? `${price} ₽`
     : `${value.toLocaleString("ru-RU")} ₽`;
@@ -34,6 +35,8 @@ const Checkout = () => {
   const { cartItems, totalPrice, clearCart } = useCart();
 
   const [loading, setLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
+
   const [formError, setFormError] = useState("");
   const [formStatus, setFormStatus] = useState("");
 
@@ -50,7 +53,69 @@ const Checkout = () => {
     if (cartItems.length === 0) {
       navigate("/cart");
     }
-  }, [cartItems, navigate]);
+  }, [cartItems.length, navigate]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchProfileForCheckout = async () => {
+      if (cartItems.length === 0) return;
+
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        localStorage.setItem("redirectAfterLogin", "/checkout");
+        navigate("/login");
+        return;
+      }
+
+      setProfileLoading(true);
+
+      try {
+        const response = await api.get("/profile/");
+
+        if (!isMounted) return;
+
+        const user = response.data;
+
+        const fullName = [user.first_name, user.last_name]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+
+        setFormData((prev) => ({
+          ...prev,
+          name: prev.name || fullName || user.username || "",
+          phone: prev.phone || user.phone || "",
+          email: prev.email || user.email || "",
+        }));
+      } catch (err) {
+        console.error(err);
+
+        if (!isMounted) return;
+
+        if (err.response?.status === 401) {
+          localStorage.setItem("redirectAfterLogin", "/checkout");
+          navigate("/login");
+          return;
+        }
+
+        setFormStatus(
+          "Не получилось автоматически подставить данные профиля. Можно заполнить вручную.",
+        );
+      } finally {
+        if (isMounted) {
+          setProfileLoading(false);
+        }
+      }
+    };
+
+    fetchProfileForCheckout();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [cartItems.length, navigate]);
 
   const itemsCount = useMemo(() => {
     return cartItems.reduce((sum, item) => {
@@ -75,11 +140,69 @@ const Checkout = () => {
     if (!formData.name.trim()) return "Введите имя получателя";
     if (!formData.phone.trim()) return "Введите телефон";
     if (!formData.email.trim()) return "Введите email";
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       return "Введите корректный email";
     }
 
+    if (!cartItems.length) {
+      return "Корзина пуста";
+    }
+
+    const hasInvalidItem = cartItems.some((item) => {
+      const quantity = Number(item.quantity);
+      return !item.id || Number.isNaN(quantity) || quantity <= 0;
+    });
+
+    if (hasInvalidItem) {
+      return "В корзине есть товар с некорректным количеством";
+    }
+
     return "";
+  };
+
+  const getErrorMessage = (err) => {
+    const data = err.response?.data;
+
+    if (!data) {
+      return "Ошибка при оформлении заказа. Попробуйте ещё раз.";
+    }
+
+    if (typeof data === "string") {
+      return data;
+    }
+
+    if (typeof data === "object") {
+      return Object.entries(data)
+        .map(([field, messages]) => {
+          const fieldNames = {
+            name: "Имя",
+            phone: "Телефон",
+            email: "Email",
+            comment: "Комментарий",
+            payment_method: "Способ оплаты",
+            pickup_location: "Пункт самовывоза",
+            items: "Товары",
+            detail: "Ошибка",
+            non_field_errors: "Ошибка",
+          };
+
+          const label = fieldNames[field] || field;
+
+          if (Array.isArray(messages)) {
+            return `${label}: ${messages.join(" ")}`;
+          }
+
+          if (typeof messages === "object") {
+            return `${label}: ${JSON.stringify(messages)}`;
+          }
+
+          return `${label}: ${messages}`;
+        })
+        .join("\n");
+    }
+
+    return "Ошибка при оформлении заказа. Попробуйте ещё раз.";
   };
 
   const handleSubmit = async (e) => {
@@ -109,7 +232,7 @@ const Checkout = () => {
       pickup_location: formData.pickup_location,
       items: cartItems.map((item) => ({
         product_id: item.id,
-        quantity: item.quantity,
+        quantity: Number(item.quantity),
       })),
     };
 
@@ -120,11 +243,14 @@ const Checkout = () => {
       navigate(`/profile/orders/${response.data.id}`);
     } catch (err) {
       console.error(err);
-      setFormError(
-        `Ошибка при оформлении заказа${
-          err.response?.data ? `: ${JSON.stringify(err.response.data)}` : ""
-        }`,
-      );
+
+      if (err.response?.status === 401) {
+        localStorage.setItem("redirectAfterLogin", "/checkout");
+        navigate("/login");
+        return;
+      }
+
+      setFormError(getErrorMessage(err));
     } finally {
       setLoading(false);
       setFormStatus("");
@@ -220,10 +346,20 @@ const Checkout = () => {
               </p>
             </div>
 
+            {profileLoading && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="mb-6 border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600"
+              >
+                Подставляем данные из профиля...
+              </div>
+            )}
+
             {formError && (
               <div
                 role="alert"
-                className="mb-6 border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+                className="mb-6 whitespace-pre-line border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
               >
                 {formError}
               </div>
@@ -244,10 +380,12 @@ const Checkout = () => {
                 <label htmlFor="checkout-name" className="sr-only">
                   Ваше имя
                 </label>
+
                 <UserIcon
                   aria-hidden="true"
                   className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
                 />
+
                 <input
                   id="checkout-name"
                   type="text"
@@ -267,10 +405,12 @@ const Checkout = () => {
                 <label htmlFor="checkout-phone" className="sr-only">
                   Телефон
                 </label>
+
                 <PhoneIcon
                   aria-hidden="true"
                   className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
                 />
+
                 <input
                   id="checkout-phone"
                   type="tel"
@@ -290,10 +430,12 @@ const Checkout = () => {
                 <label htmlFor="checkout-email" className="sr-only">
                   Email
                 </label>
+
                 <EnvelopeIcon
                   aria-hidden="true"
                   className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
                 />
+
                 <input
                   id="checkout-email"
                   type="email"
@@ -313,10 +455,12 @@ const Checkout = () => {
                 <label htmlFor="checkout-comment" className="sr-only">
                   Комментарий к заказу
                 </label>
+
                 <ChatBubbleLeftEllipsisIcon
                   aria-hidden="true"
                   className="absolute left-4 top-[20px] h-5 w-5 text-stone-400"
                 />
+
                 <textarea
                   id="checkout-comment"
                   name="comment"
@@ -420,6 +564,7 @@ const Checkout = () => {
                       <option value="ул. Уткинская, д. 38">
                         ул. Уткинская, д. 38
                       </option>
+
                       <option value="ул. Светланская, д. 15">
                         ул. Светланская, д. 15
                       </option>
@@ -526,8 +671,8 @@ const Checkout = () => {
                 <button
                   type="submit"
                   form="checkout-form"
-                  disabled={loading}
-                  aria-busy={loading}
+                  disabled={loading || profileLoading}
+                  aria-busy={loading || profileLoading}
                   className={`mt-8 flex w-full items-center justify-center gap-3 bg-stone-800 px-7 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition duration-300 hover:bg-[#d4aa2a] hover:text-stone-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 ${focusClass}`}
                 >
                   {loading ? (
@@ -546,6 +691,7 @@ const Checkout = () => {
                           strokeWidth="4"
                           fill="none"
                         />
+
                         <path
                           className="opacity-75"
                           fill="currentColor"
@@ -554,6 +700,8 @@ const Checkout = () => {
                       </svg>
                       Оформляем...
                     </>
+                  ) : profileLoading ? (
+                    "Загружаем данные..."
                   ) : (
                     <>
                       Оформить заказ

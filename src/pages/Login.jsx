@@ -31,6 +31,47 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const getApiErrorMessage = (error) => {
+    const data = error.response?.data;
+
+    if (!data) {
+      return "Ошибка соединения с сервером. Попробуйте позже.";
+    }
+
+    if (typeof data === "string") {
+      return data;
+    }
+
+    if (typeof data === "object") {
+      const fieldNames = {
+        username: "Имя пользователя",
+        email: "Email",
+        password: "Пароль",
+        password2: "Повтор пароля",
+        detail: "Ошибка",
+        non_field_errors: "Ошибка",
+      };
+
+      return Object.entries(data)
+        .map(([field, messages]) => {
+          const label = fieldNames[field] || field;
+
+          if (Array.isArray(messages)) {
+            return `${label}: ${messages.join(" ")}`;
+          }
+
+          if (typeof messages === "object") {
+            return `${label}: ${JSON.stringify(messages)}`;
+          }
+
+          return `${label}: ${messages}`;
+        })
+        .join("\n");
+    }
+
+    return "Ошибка. Попробуйте ещё раз.";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

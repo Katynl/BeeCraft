@@ -38,6 +38,47 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const getApiErrorMessage = (error) => {
+    const data = error.response?.data;
+
+    if (!data) {
+      return "Ошибка соединения с сервером. Попробуйте позже.";
+    }
+
+    if (typeof data === "string") {
+      return data;
+    }
+
+    if (typeof data === "object") {
+      const fieldNames = {
+        username: "Имя пользователя",
+        email: "Email",
+        password: "Пароль",
+        password2: "Повтор пароля",
+        detail: "Ошибка",
+        non_field_errors: "Ошибка",
+      };
+
+      return Object.entries(data)
+        .map(([field, messages]) => {
+          const label = fieldNames[field] || field;
+
+          if (Array.isArray(messages)) {
+            return `${label}: ${messages.join(" ")}`;
+          }
+
+          if (typeof messages === "object") {
+            return `${label}: ${JSON.stringify(messages)}`;
+          }
+
+          return `${label}: ${messages}`;
+        })
+        .join("\n");
+    }
+
+    return "Ошибка. Попробуйте ещё раз.";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -54,9 +95,7 @@ const Register = () => {
       navigate("/login");
     } catch (err) {
       console.error(err);
-      setError(
-        err.response?.data?.detail || "Ошибка регистрации. Попробуйте еще раз.",
-      );
+      setError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -85,11 +124,7 @@ const Register = () => {
         </div>
 
         {error && (
-          <div
-            role="alert"
-            aria-live="assertive"
-            className="mb-6 rounded-sm border border-rose-200 bg-rose-50 p-3 text-center text-sm text-rose-600 animate-shake"
-          >
+          <div className="mb-6 whitespace-pre-line border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
             {error}
           </div>
         )}

@@ -47,7 +47,7 @@ const Login = () => {
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
-      setError("Неверное имя пользователя или пароль");
+      setError(getApiErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -76,11 +76,7 @@ const Login = () => {
         </div>
 
         {error && (
-          <div
-            role="alert"
-            aria-live="assertive"
-            className="mb-6 rounded-sm border border-rose-200 bg-rose-50 p-3 text-center text-sm text-rose-600 animate-shake"
-          >
+          <div className="mb-6 whitespace-pre-line border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
             {error}
           </div>
         )}

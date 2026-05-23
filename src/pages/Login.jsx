@@ -20,7 +20,7 @@ const Login = () => {
   const savedRedirect = localStorage.getItem("redirectAfterLogin");
   const from = location.state?.from?.pathname || savedRedirect || "/";
 
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -74,11 +74,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.email.trim()) {
+      setError("Введите email");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      setError("Введите корректный email");
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      setError("Введите пароль");
+      return;
+    }
     setLoading(true);
     setError("");
 
     try {
-      const response = await api.post("/token/", formData);
+      const response = await api.post("/token/", {
+        email: formData.email.trim(),
+        password: formData.password,
+      });
       const { access, refresh } = response.data;
 
       localStorage.setItem("access_token", access);
@@ -124,8 +142,8 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           <div className="relative">
-            <label htmlFor="username" className="sr-only">
-              Имя пользователя
+            <label htmlFor="email" className="sr-only">
+              Email
             </label>
 
             <EnvelopeIcon
@@ -134,12 +152,12 @@ const Login = () => {
             />
 
             <input
-              id="username"
-              type="text"
-              name="username"
-              placeholder="Имя пользователя"
-              autoComplete="username"
-              value={formData.username}
+              id="email"
+              type="email"
+              name="email"
+              placeholder="Email"
+              autoComplete="email"
+              value={formData.email}
               onChange={handleChange}
               required
               aria-required="true"

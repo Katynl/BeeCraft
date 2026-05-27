@@ -332,7 +332,7 @@ const OrderDetail = () => {
                 </div>
 
                 <h2 className="text-3xl font-light tracking-tight text-stone-800 md:text-4xl">
-                  Товары
+                  Позиции
                 </h2>
               </div>
 
@@ -390,7 +390,7 @@ const OrderDetail = () => {
                   </p>
 
                   <p className="mt-2 text-stone-500">
-                    Сумма всех товаров в заказе
+                    Сумма всех позиций в заказе
                   </p>
                 </div>
 

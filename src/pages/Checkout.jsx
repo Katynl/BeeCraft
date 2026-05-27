@@ -365,7 +365,7 @@ const Checkout = () => {
             <div className="grid grid-cols-2 gap-3 sm:min-w-[320px]">
               <div className="border border-stone-200 bg-white px-5 py-4">
                 <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
-                  Товаров
+                  Позиций
                 </p>
                 <p className="mt-2 text-3xl font-light text-stone-800">
                   {itemsCount}
@@ -599,7 +599,7 @@ const Checkout = () => {
                       />
 
                       <span className="text-stone-700">
-                        Наличные при получении
+                        Наличными или картой при получении
                       </span>
                     </label>
                   </div>
@@ -610,10 +610,6 @@ const Checkout = () => {
                     <div className="mb-5">
                       <p className="text-xs uppercase tracking-[0.2em] text-stone-500">
                         Данные карты
-                      </p>
-                      <p className="mt-2 text-sm leading-relaxed text-stone-500">
-                        Это учебная имитация оплаты. Данные карты не сохраняются
-                        и не отправляются на сервер.
                       </p>
                     </div>
 

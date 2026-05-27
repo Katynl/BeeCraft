@@ -120,8 +120,7 @@ const Home = () => {
                 <div>
                   <p className="mt-8 max-w-lg text-left text-base italic leading-relaxed text-stone-600 sm:text-lg">
                     Пространство флористики, текстур и вдохновения. Материалы
-                    для букетов, декора и творчества в эстетике тёплого
-                    editorial-стиля.
+                    для букетов, декора и творчества в эстетике.
                   </p>
 
                   <div className="mt-10 flex flex-col gap-4 sm:flex-row">
@@ -181,7 +180,7 @@ const Home = () => {
           </div>
 
           <h2 id="why-title" className="sr-only">
-            Почему выбирают Bee Craft
+            Почему мы
           </h2>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -328,7 +327,7 @@ const Home = () => {
           </div>
 
           <h2 id="home-catalog-title" className="sr-only">
-            Товары каталога
+            Позиции каталога
           </h2>
 
           <div
@@ -375,7 +374,7 @@ const Home = () => {
                 className="border border-stone-200 bg-white py-20 text-center text-stone-500"
                 role="status"
               >
-                Пока нет товаров
+                Пока нет позиций
               </div>
             )}
           </div>

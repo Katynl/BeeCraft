@@ -206,7 +206,7 @@ const ProductPage = React.memo(() => {
         aria-busy="true"
       >
         <div className="mx-auto max-w-7xl" role="status" aria-live="polite">
-          <span className="sr-only">Загрузка товара</span>
+          <span className="sr-only">Загрузка позиции...</span>
           <div className="mb-8 h-4 w-56 animate-pulse bg-stone-200" />
           <div className="grid gap-10 lg:grid-cols-2">
             <div className="aspect-[4/5] animate-pulse bg-stone-200" />
@@ -238,10 +238,10 @@ const ProductPage = React.memo(() => {
             id="product-error-title"
             className="text-3xl font-light text-stone-800"
           >
-            Товар не найден
+            Позиция не найдена
           </h1>
           <p className="mt-4 text-stone-500">
-            Возможно, товар был удалён или ссылка устарела.
+            Возможно, позиция была удалёна или ссылка устарела.
           </p>
           <Link
             to="/catalog"

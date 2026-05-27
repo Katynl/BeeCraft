@@ -170,7 +170,7 @@ const Cart = () => {
             <div className="grid grid-cols-2 gap-3 sm:min-w-[320px]">
               <div className="border border-stone-200 bg-white px-5 py-4">
                 <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
-                  Товаров
+                  Позиций
                 </p>
                 <p className="mt-2 text-3xl font-light text-stone-800">
                   {itemsCount}
@@ -305,7 +305,7 @@ const Cart = () => {
 
               <div className="mt-7 space-y-4 border-y border-stone-100 py-6">
                 <div className="flex justify-between gap-4 text-stone-600">
-                  <span>Товары</span>
+                  <span>Позиции</span>
                   <span>{itemsCount} шт.</span>
                 </div>
 

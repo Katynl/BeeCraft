@@ -113,9 +113,7 @@ const Contacts = () => {
             </h1>
 
             <p className="mt-8 max-w-2xl text-center text-lg font-light italic leading-relaxed text-stone-600 md:text-xl">
-              Напишите, позвоните или загляните к нам за материалами, оттенками
-              и вдохновением. Мы поможем подобрать детали для вашей
-              флористической идеи.
+              Напишите, позвоните или загляните к нам.
             </p>
 
           </div>
@@ -124,7 +122,7 @@ const Contacts = () => {
 
       <section className="pb-20 md:pb-28" aria-labelledby="contact-cards-title">
         <h2 id="contact-cards-title" className="sr-only">
-          Способы связи с Bee Craft
+          Способы связи
         </h2>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -177,7 +175,7 @@ const Contacts = () => {
           </div>
 
           <h2 id="map-title" className="sr-only">
-            Карта с адресом Bee Craft
+            Карта с нашим адресом
           </h2>
 
           <div className="border border-stone-200 bg-white p-4 shadow-[0_20px_60px_rgba(41,37,36,0.06)] sm:p-5">

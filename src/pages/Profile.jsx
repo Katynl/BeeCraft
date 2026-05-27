@@ -7,6 +7,7 @@ import {
   XMarkIcon,
   ArrowRightOnRectangleIcon,
   ShoppingBagIcon,
+  PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 
 const focusClass =
@@ -42,6 +43,7 @@ const getStatusClasses = (status) => {
 
 const formatPrice = (price) => {
   const value = Number(price);
+
   return Number.isNaN(value)
     ? `${price} ₽`
     : `${value.toLocaleString("ru-RU")} ₽`;
@@ -58,6 +60,11 @@ const Profile = () => {
 
   const [saveMessage, setSaveMessage] = useState("");
   const [saveError, setSaveError] = useState("");
+
+  const [feedbackText, setFeedbackText] = useState("");
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedbackError, setFeedbackError] = useState("");
 
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -153,6 +160,7 @@ const Profile = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
+
     setSaveError("");
     setSaveMessage("");
 
@@ -172,6 +180,43 @@ const Profile = () => {
     }
   };
 
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+
+    const message = feedbackText.trim();
+
+    setFeedbackMessage("");
+    setFeedbackError("");
+
+    if (!message) {
+      setFeedbackError("Напишите сообщение");
+      return;
+    }
+
+    if (message.length < 5) {
+      setFeedbackError("Сообщение слишком короткое");
+      return;
+    }
+
+    setFeedbackLoading(true);
+
+    try {
+      await api.post("/feedback/", {
+        name: profile.username,
+        email: profile.email,
+        message,
+      });
+
+      setFeedbackText("");
+      setFeedbackMessage("Сообщение отправлено. Мы свяжемся с вами.");
+    } catch (err) {
+      console.error(err);
+      setFeedbackError("Не удалось отправить сообщение. Попробуйте позже.");
+    } finally {
+      setFeedbackLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <main
@@ -179,7 +224,7 @@ const Profile = () => {
         aria-busy="true"
       >
         <div className="mx-auto max-w-7xl" role="status" aria-live="polite">
-          <span className="sr-only">Загрузка профиля</span>
+          <span className="sr-only">Загрузка профиля...</span>
           <div className="mb-10 h-12 w-72 animate-pulse bg-stone-200" />
           <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="h-96 animate-pulse border border-stone-200 bg-white" />
@@ -252,8 +297,7 @@ const Profile = () => {
 
               <p className="mt-8 max-w-2xl text-base italic leading-relaxed text-stone-600 md:text-lg">
                 Добро пожаловать, {profile.username}. Здесь можно посмотреть
-                заказы, обновить контактные данные и вернуться к любимым
-                материалам Bee Craft.
+                заказы и обновить свои данные.
               </p>
             </div>
 
@@ -289,6 +333,7 @@ const Profile = () => {
               <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
                 {item.label}
               </p>
+
               <p className="mt-2 text-2xl font-light text-stone-800">
                 {item.value}
               </p>
@@ -353,6 +398,7 @@ const Profile = () => {
                     <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-500">
                       Имя пользователя
                     </p>
+
                     <p className="text-lg text-stone-800">{profile.username}</p>
                   </div>
 
@@ -360,6 +406,7 @@ const Profile = () => {
                     <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-500">
                       Email
                     </p>
+
                     <p className="break-all text-lg text-stone-800">
                       {profile.email}
                     </p>
@@ -369,6 +416,7 @@ const Profile = () => {
                     <p className="mb-2 text-xs uppercase tracking-[0.2em] text-stone-500">
                       Телефон
                     </p>
+
                     <p className="text-lg text-stone-800">
                       {profile.phone || "Не указан"}
                     </p>
@@ -473,13 +521,96 @@ const Profile = () => {
 
             <div className="mt-5 border border-stone-200 bg-white p-6">
               <div className="mb-4 h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+
               <h2 className="text-xl font-light text-stone-800">
                 Нужна помощь?
               </h2>
-              <p className="mt-3 text-sm text-stone-500">
-                Если нужно уточнить заказ, подобрать оттенки или материалы —
-                напишите нам через форму обратной связи.
+
+              <p className="mt-3 text-sm leading-relaxed text-stone-500">
+                Если нужно уточнить что-то по заказу — напишите нам через форму
+                обратной связи.
               </p>
+            </div>
+
+            <div className="mt-5 border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.04)]">
+              <div className="mb-4 flex items-center gap-4">
+                <div className="h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+
+                <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
+                  Обратная связь
+                </span>
+              </div>
+
+              <p className="text-sm leading-relaxed text-stone-500">
+                Ответ придёт на{" "}
+                <span className="break-all text-stone-800">
+                  {profile.email}
+                </span>
+              </p>
+
+              <form
+                onSubmit={handleFeedbackSubmit}
+                className="mt-5 space-y-4"
+                noValidate
+              >
+                <div>
+                  <label
+                    htmlFor="profile-feedback"
+                    className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500"
+                  >
+                    Сообщение
+                  </label>
+
+                  <textarea
+                    id="profile-feedback"
+                    value={feedbackText}
+                    onChange={(e) => {
+                      setFeedbackText(e.target.value);
+                      setFeedbackMessage("");
+                      setFeedbackError("");
+                    }}
+                    rows={4}
+                    placeholder="Напишите ваш вопрос..."
+                    className={`w-full resize-none border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none transition placeholder:text-stone-400 focus:border-[#d4aa2a] focus:bg-white focus:ring-2 focus:ring-[#d4aa2a]/20 ${focusClass}`}
+                  />
+                </div>
+
+                {feedbackMessage && (
+                  <p
+                    role="status"
+                    className="border border-[#d4aa2a]/40 bg-[#d4aa2a]/10 px-4 py-3 text-sm text-stone-800"
+                  >
+                    {feedbackMessage}
+                  </p>
+                )}
+
+                {feedbackError && (
+                  <p
+                    role="alert"
+                    className="border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+                  >
+                    {feedbackError}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={feedbackLoading}
+                  className={`inline-flex w-full items-center justify-center gap-2 bg-stone-800 px-5 py-4 text-sm uppercase tracking-[0.18em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 disabled:cursor-not-allowed disabled:opacity-50 ${focusClass}`}
+                >
+                  {feedbackLoading ? (
+                    "Отправляем..."
+                  ) : (
+                    <>
+                      Отправить
+                      <PaperAirplaneIcon
+                        aria-hidden="true"
+                        className="h-4 w-4"
+                      />
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
           </aside>
 
@@ -488,6 +619,7 @@ const Profile = () => {
               <div>
                 <div className="mb-4 flex items-center gap-4">
                   <div className="h-px w-10 bg-[#d4aa2a]" aria-hidden="true" />
+
                   <span className="text-xs uppercase tracking-[0.25em] text-stone-500">
                     История
                   </span>
@@ -518,8 +650,8 @@ const Profile = () => {
                 </h3>
 
                 <p className="mt-4 max-w-md text-stone-500">
-                  Посмотрите каталог Bee Craft — возможно, там уже ждут ваши
-                  будущие ленты, сухоцветы и детали для декора.
+                  Посмотрите наш каталог — возможно, там вам что-нибудь
+                  приглянется.
                 </p>
 
                 <Link

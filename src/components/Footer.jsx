@@ -138,6 +138,9 @@ const Footer = () => {
             </div>
 
             <div className="text-xs leading-relaxed text-stone-500">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-stone-400">
+                График работы
+              </h3>
               <p>Пн–Пт: 10:00 – 20:00</p>
               <p>Сб: 11:00 – 18:00</p>
             </div>

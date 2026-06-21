@@ -20,6 +20,7 @@ import News from "./pages/News";
 import NewsDetails from "./pages/NewsDetails";
 
 import NotFound from "./pages/NotFound";
+import CookieBanner from "./context/CookieBanner";
 
 const Home = lazy(() => import("./pages/Home"));
 const Catalog = lazy(() => import("./pages/Catalog"));
@@ -73,6 +74,7 @@ function App() {
             </Suspense>
           </main>
           <Footer />
+          <CookieBanner />
         </BrowserRouter>
       </CartProvider>
     </div>

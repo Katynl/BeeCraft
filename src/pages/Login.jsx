@@ -176,8 +176,6 @@ const Login = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const isAdmin = user?.is_staff === true || user?.is_superuser === true;
-
   const handleResetSubmit = async (e) => {
     e.preventDefault();
 

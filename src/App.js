@@ -8,6 +8,8 @@ import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { CartProvider } from "./context/CartContext";
 
+import AdminPanel from "./pages/AdminPanel";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
@@ -21,6 +23,7 @@ import NewsDetails from "./pages/NewsDetails";
 
 import NotFound from "./pages/NotFound";
 import CookieBanner from "./context/CookieBanner";
+import Privacy from "./pages/Privacy";
 
 const Home = lazy(() => import("./pages/Home"));
 const Catalog = lazy(() => import("./pages/Catalog"));
@@ -69,6 +72,8 @@ function App() {
                   }
                 />
                 <Route path="contacts" element={<Contacts></Contacts>} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/admin" element={<AdminPanel />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

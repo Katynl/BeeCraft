@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const [privacyAccepted, setPrivacyAccepted] = useState(false);
 import api from "../api";
 import {
   UserIcon,
@@ -86,6 +87,12 @@ const Register = () => {
 
     if (formData.password !== formData.password2) {
       setError("Пароли не совпадают!");
+      setLoading(false);
+      return;
+    }
+
+    if (!privacyAccepted) {
+      setError("Необходимо согласиться на обработку персональных данных.");
       setLoading(false);
       return;
     }
@@ -262,6 +269,24 @@ const Register = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
+          <div className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={privacyAccepted}
+              onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            />
+
+            <span>
+              Я согласен на обработку персональных данных и принимаю{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/privacy")}
+                className="underline"
+              >
+                Политику конфиденциальности
+              </button>
+            </span>
           </div>
 
           <button

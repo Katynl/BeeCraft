@@ -162,6 +162,7 @@ const Login = () => {
 
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
+      localStorage.setItem("user", JSON.stringify(user));
       localStorage.removeItem("redirectAfterLogin");
 
       navigate(from, { replace: true });
@@ -172,6 +173,10 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const isAdmin = user?.is_staff === true || user?.is_superuser === true;
 
   const handleResetSubmit = async (e) => {
     e.preventDefault();

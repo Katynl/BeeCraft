@@ -299,6 +299,15 @@ const Profile = () => {
                 Добро пожаловать, {profile.username}. Здесь можно посмотреть
                 заказы и обновить свои данные.
               </p>
+
+              {(profile.is_staff || profile.is_superuser) && (
+                <button
+                  onClick={() => navigate("/admin")}
+                  className="mt-6 bg-stone-800 px-6 py-3 text-[#d4aa2a]"
+                >
+                  Админ панель
+                </button>
+              )}
             </div>
 
             <button

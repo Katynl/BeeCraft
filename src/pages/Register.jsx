@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const [privacyAccepted, setPrivacyAccepted] = useState(false);
 import api from "../api";
 import {
   UserIcon,
@@ -19,6 +18,8 @@ const inputClass = `w-full rounded-sm border border-stone-200 py-3 pl-10 pr-4 te
 
 const Register = () => {
   const navigate = useNavigate();
+
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",

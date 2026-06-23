@@ -28,7 +28,7 @@ export default function AdminPanel() {
     }
 
     loadData();
-  }, []);
+  }, [navigate]);
 
   const loadData = async () => {
     try {
@@ -55,9 +55,7 @@ export default function AdminPanel() {
       });
 
       setOrders((prev) =>
-        prev.map((order) =>
-          order.id === id ? { ...order, status } : order
-        )
+        prev.map((order) => (order.id === id ? { ...order, status } : order)),
       );
     } catch (err) {
       console.error(err);
@@ -73,9 +71,7 @@ export default function AdminPanel() {
     try {
       await api.delete(`/admin/products/${id}/delete/`);
 
-      setProducts((prev) =>
-        prev.filter((product) => product.id !== id)
-      );
+      setProducts((prev) => prev.filter((product) => product.id !== id));
     } catch (err) {
       console.error(err);
       alert("Ошибка удаления");
@@ -83,39 +79,25 @@ export default function AdminPanel() {
   };
 
   if (loading) {
-    return (
-      <div className="pt-32 text-center">
-        Загрузка...
-      </div>
-    );
+    return <div className="pt-32 text-center">Загрузка...</div>;
   }
 
   return (
     <main className="min-h-screen bg-stone-50 px-6 pt-32 pb-20">
       <div className="mx-auto max-w-7xl">
-
-        <h1 className="mb-10 text-5xl font-light">
-          Админ панель
-        </h1>
+        <h1 className="mb-10 text-5xl font-light">Админ панель</h1>
 
         {/* ЗАКАЗЫ */}
 
         <section className="mb-16">
-          <h2 className="mb-6 text-3xl font-light">
-            Заказы
-          </h2>
+          <h2 className="mb-6 text-3xl font-light">Заказы</h2>
 
           <div className="space-y-4">
             {orders.map((order) => (
-              <div
-                key={order.id}
-                className="border bg-white p-5"
-              >
+              <div key={order.id} className="border bg-white p-5">
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <h3 className="text-xl">
-                      Заказ #{order.id}
-                    </h3>
+                    <h3 className="text-xl">Заказ #{order.id}</h3>
 
                     <p>{order.name}</p>
                     <p>{order.email}</p>
@@ -126,18 +108,12 @@ export default function AdminPanel() {
                   <select
                     value={order.status}
                     onChange={(e) =>
-                      updateOrderStatus(
-                        order.id,
-                        e.target.value
-                      )
+                      updateOrderStatus(order.id, e.target.value)
                     }
                     className="border p-2"
                   >
                     {statuses.map((status) => (
-                      <option
-                        key={status.value}
-                        value={status.value}
-                      >
+                      <option key={status.value} value={status.value}>
                         {status.label}
                       </option>
                     ))}
@@ -152,14 +128,10 @@ export default function AdminPanel() {
 
         <section className="mb-16">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-3xl font-light">
-              Товары
-            </h2>
+            <h2 className="text-3xl font-light">Товары</h2>
 
             <button
-              onClick={() =>
-                navigate("/admin/products/create")
-              }
+              onClick={() => navigate("/admin/products/create")}
               className="bg-stone-800 px-5 py-3 text-[#d4aa2a]"
             >
               Добавить товар
@@ -173,9 +145,7 @@ export default function AdminPanel() {
                 className="flex items-center justify-between border bg-white p-4"
               >
                 <div>
-                  <h3 className="font-medium">
-                    {product.name}
-                  </h3>
+                  <h3 className="font-medium">{product.name}</h3>
 
                   <p>{product.price} ₽</p>
                 </div>
@@ -183,9 +153,7 @@ export default function AdminPanel() {
                 <div className="flex gap-3">
                   <button
                     onClick={() =>
-                      navigate(
-                        `/admin/products/edit/${product.id}`
-                      )
+                      navigate(`/admin/products/edit/${product.id}`)
                     }
                     className="border px-4 py-2"
                   >
@@ -193,9 +161,7 @@ export default function AdminPanel() {
                   </button>
 
                   <button
-                    onClick={() =>
-                      deleteProduct(product.id)
-                    }
+                    onClick={() => deleteProduct(product.id)}
                     className="bg-red-500 px-4 py-2 text-white"
                   >
                     Удалить
@@ -209,30 +175,20 @@ export default function AdminPanel() {
         {/* ОБРАТНАЯ СВЯЗЬ */}
 
         <section>
-          <h2 className="mb-6 text-3xl font-light">
-            Обратная связь
-          </h2>
+          <h2 className="mb-6 text-3xl font-light">Обратная связь</h2>
 
           <div className="space-y-4">
             {feedbacks.map((item) => (
-              <div
-                key={item.id}
-                className="border bg-white p-5"
-              >
-                <h3 className="font-medium">
-                  {item.name}
-                </h3>
+              <div key={item.id} className="border bg-white p-5">
+                <h3 className="font-medium">{item.name}</h3>
 
-                <p className="mb-2 text-stone-500">
-                  {item.email}
-                </p>
+                <p className="mb-2 text-stone-500">{item.email}</p>
 
                 <p>{item.message}</p>
               </div>
             ))}
           </div>
         </section>
-
       </div>
     </main>
   );

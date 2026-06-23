@@ -174,8 +174,6 @@ const Login = () => {
     }
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
   const handleResetSubmit = async (e) => {
     e.preventDefault();
 

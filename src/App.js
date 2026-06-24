@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { CartProvider } from "./context/CartContext";
 
 import AdminPanel from "./pages/AdminPanel";
+import AdminOrderDetail from "./pages/AdminOrderDetail";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -73,7 +74,23 @@ function App() {
                 />
                 <Route path="contacts" element={<Contacts></Contacts>} />
                 <Route path="/privacy" element={<Privacy />} />
-                <Route path="/admin" element={<AdminPanel />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <AdminPanel />
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="/admin/orders/:id"
+                  element={
+                    <ProtectedRoute>
+                      <AdminOrderDetail />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

@@ -27,8 +27,6 @@ const FeedbackForm = () => {
     message: "",
   });
 
-  setPrivacyAccepted(false);
-
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const [status, setStatus] = useState({
@@ -95,6 +93,8 @@ const FeedbackForm = () => {
         email: "",
         message: "",
       });
+
+      setPrivacyAccepted(false);
     } catch (err) {
       console.error(err);
 

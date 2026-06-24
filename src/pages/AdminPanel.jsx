@@ -103,6 +103,29 @@ export default function AdminPanel() {
                     <p>{order.email}</p>
                     <p>{order.phone}</p>
                     <p>{order.total} ₽</p>
+                    <div className="mt-4 border-t border-stone-200 pt-4">
+                      <p className="mb-2 text-sm font-medium text-stone-700">
+                        Состав заказа:
+                      </p>
+
+                      {order.items?.length > 0 ? (
+                        <div className="space-y-2">
+                          {order.items.map((item) => (
+                            <div
+                              key={item.id}
+                              className="text-sm text-stone-600"
+                            >
+                              {item.product_name} — {item.quantity} шт. ×{" "}
+                              {item.price} ₽
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-stone-400">
+                          Состав заказа не найден
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <select

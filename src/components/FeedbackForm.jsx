@@ -27,6 +27,10 @@ const FeedbackForm = () => {
     message: "",
   });
 
+  setPrivacyAccepted(false);
+
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+
   const [status, setStatus] = useState({
     type: "",
     text: "",
@@ -55,6 +59,14 @@ const FeedbackForm = () => {
 
     if (!validateEmail(formData.email)) {
       setStatus({ type: "error", text: "Введите корректный email" });
+      return;
+    }
+
+    if (!privacyAccepted) {
+      setStatus({
+        type: "error",
+        text: "Необходимо согласиться на обработку персональных данных.",
+      });
       return;
     }
 
@@ -194,6 +206,26 @@ const FeedbackForm = () => {
                 {status.text}
               </div>
             )}
+
+            <label className="flex items-start gap-3 text-sm leading-relaxed text-stone-600">
+              <input
+                type="checkbox"
+                checked={privacyAccepted}
+                onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-[#d4aa2a]"
+              />
+
+              <span>
+                Я согласен на обработку персональных данных и принимаю{" "}
+                <a
+                  href="/privacy"
+                  className="text-stone-800 underline decoration-[#d4aa2a] underline-offset-4 hover:text-[#b89422]"
+                >
+                  политику конфиденциальности
+                </a>
+                .
+              </span>
+            </label>
 
             <button
               type="submit"

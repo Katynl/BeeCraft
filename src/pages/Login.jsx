@@ -166,6 +166,12 @@ const Login = () => {
 
       localStorage.removeItem("redirectAfterLogin");
 
+      if (user?.is_staff || user?.is_superuser) {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate(from, { replace: true });
+      }
+
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);

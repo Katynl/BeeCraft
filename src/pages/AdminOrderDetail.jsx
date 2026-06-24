@@ -128,6 +128,14 @@ export default function AdminOrderDetail() {
             </div>
 
             <div className="border bg-white p-6">
+              <h2 className="mb-4 text-xl">Комментарий к заказу</h2>
+
+              <p className="text-stone-700">
+                {order.comment ? order.comment : "Комментарий отсутствует"}
+              </p>
+            </div>
+
+            <div className="border bg-white p-6">
               <h2 className="mb-3 text-xl">Статус</h2>
 
               <select

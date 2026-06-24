@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../api";
 
@@ -15,7 +15,8 @@ const paymentLabels = {
   cash: "Наличными при получении",
 };
 
-const formatPrice = (value) => `${Number(value || 0).toLocaleString("ru-RU")} ₽`;
+const formatPrice = (value) =>
+  `${Number(value || 0).toLocaleString("ru-RU")} ₽`;
 
 export default function AdminOrderDetail() {
   const { id } = useParams();
@@ -26,23 +27,10 @@ export default function AdminOrderDetail() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  const totalItems = useMemo(() => {
-    if (!order?.items) return 0;
-    return order.items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
-  }, [order]);
+  // ✅ ВАЖНО: функция ДО useEffect
+  const loadOrder = useCallback(async () => {
+    setLoading(true);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    if (!user?.is_staff && !user?.is_superuser) {
-      navigate("/");
-      return;
-    }
-
-    loadOrder();
-  }, [id, navigate]);
-
-  const loadOrder = async () => {
     try {
       const response = await api.get(`/admin/orders/${id}/`);
       setOrder(response.data);
@@ -54,17 +42,30 @@ export default function AdminOrderDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  // ✅ useEffect теперь корректный
+  useEffect(() => {
+    loadOrder();
+  }, [loadOrder]);
+
+  const totalItems = useMemo(() => {
+    if (!order?.items) return 0;
+    return order.items.reduce(
+      (sum, item) => sum + Number(item.quantity || 0),
+      0,
+    );
+  }, [order]);
 
   const handleStatusSave = async () => {
     setSaving(true);
 
     try {
-      const response = await api.patch(`/admin/orders/${id}/`, { status });
+      await api.patch(`/admin/orders/${id}/`, { status });
 
       setOrder((prev) => ({
         ...prev,
-        status: response.data.status || status,
+        status,
       }));
 
       alert("Статус заказа обновлён");
@@ -77,7 +78,11 @@ export default function AdminOrderDetail() {
   };
 
   if (loading) {
-    return <main className="min-h-screen bg-stone-50 pt-32 text-center">Загрузка...</main>;
+    return (
+      <main className="min-h-screen bg-stone-50 pt-32 text-center">
+        Загрузка...
+      </main>
+    );
   }
 
   if (!order) return null;
@@ -92,142 +97,79 @@ export default function AdminOrderDetail() {
           ← Назад в админ-панель
         </Link>
 
-        <section className="mb-8 border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.05)] md:p-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="mb-4 h-px w-14 bg-[#d4aa2a]" />
-              <p className="text-xs uppercase tracking-[0.3em] text-stone-500">
-                Детали заказа
-              </p>
-              <h1 className="mt-3 text-5xl font-light tracking-tight md:text-7xl">
-                Заказ №{order.id}
-              </h1>
-              <p className="mt-4 text-stone-500">
-                {new Date(order.created_at).toLocaleString("ru-RU")}
-              </p>
-            </div>
+        <section className="mb-8 border border-stone-200 bg-white p-6 md:p-8">
+          <h1 className="text-5xl font-light">Заказ №{order.id}</h1>
+          <p className="mt-2 text-stone-500">
+            {new Date(order.created_at).toLocaleString("ru-RU")}
+          </p>
 
-            <div className="border border-[#d4aa2a]/40 bg-[#d4aa2a]/10 px-5 py-3 text-sm uppercase tracking-[0.18em]">
-              {statuses.find((s) => s.value === order.status)?.label || order.status}
-            </div>
+          <div className="mt-4 inline-block bg-[#d4aa2a]/10 px-4 py-2 text-sm">
+            {statuses.find((s) => s.value === order.status)?.label}
           </div>
         </section>
 
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="space-y-6">
-            <InfoBlock title="Покупатель">
-              <InfoRow label="Имя" value={order.name} />
-              <InfoRow label="Телефон" value={order.phone} />
-              <InfoRow label="Email" value={order.email} />
-            </InfoBlock>
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* ИНФО */}
+          <div className="space-y-6">
+            <div className="border bg-white p-6">
+              <h2 className="mb-4 text-xl">Покупатель</h2>
+              <p>{order.name}</p>
+              <p>{order.phone}</p>
+              <p>{order.email}</p>
+            </div>
 
-            <InfoBlock title="Оплата и получение">
-              <InfoRow
-                label="Тип оплаты"
-                value={paymentLabels[order.payment_method] || order.payment_method}
-              />
-              <InfoRow label="Пункт получения" value={order.pickup_location} />
-              <InfoRow label="Комментарий" value={order.comment || "Без комментария"} />
-            </InfoBlock>
+            <div className="border bg-white p-6">
+              <h2 className="mb-4 text-xl">Оплата</h2>
+              <p>{paymentLabels[order.payment_method]}</p>
+              <p>{order.pickup_location}</p>
+            </div>
 
-            <InfoBlock title="Изменение статуса">
-              <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-stone-500">
-                Статус заказа
-              </label>
+            <div className="border bg-white p-6">
+              <h2 className="mb-4 text-xl">Статус</h2>
 
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full border border-stone-200 bg-stone-50 px-4 py-4 text-stone-800 outline-none focus:border-[#d4aa2a] focus:bg-white"
+                className="w-full border p-3"
               >
-                {statuses.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
+                {statuses.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
                   </option>
                 ))}
               </select>
 
               <button
-                type="button"
                 onClick={handleStatusSave}
                 disabled={saving || status === order.status}
-                className="mt-4 w-full bg-stone-800 px-6 py-4 text-sm uppercase tracking-[0.2em] text-[#d4aa2a] transition hover:bg-[#d4aa2a] hover:text-stone-800 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-4 w-full bg-stone-800 py-3 text-[#d4aa2a]"
               >
-                {saving ? "Сохраняем..." : "Сохранить статус"}
+                {saving ? "Сохранение..." : "Сохранить"}
               </button>
-            </InfoBlock>
-          </section>
-
-          <section className="border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.05)] md:p-8">
-            <div className="mb-6 border-b border-stone-100 pb-5">
-              <p className="text-xs uppercase tracking-[0.25em] text-stone-500">
-                Состав
-              </p>
-              <h2 className="mt-2 text-3xl font-light">Товары в заказе</h2>
-              <p className="mt-3 text-stone-500">Всего позиций: {totalItems}</p>
             </div>
+          </div>
 
-            {order.items?.length > 0 ? (
-              <div className="space-y-4">
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex flex-col gap-3 border border-stone-200 bg-stone-50 p-4 md:flex-row md:items-center md:justify-between"
-                  >
-                    <div>
-                      <h3 className="text-lg font-light">
-                        {item.product_name || `Товар #${item.product}`}
-                      </h3>
-                      <p className="mt-1 text-sm text-stone-500">
-                        Количество: {item.quantity} шт.
-                      </p>
-                    </div>
+          {/* СОСТАВ */}
+          <div className="border bg-white p-6">
+            <h2 className="mb-4 text-xl">Состав заказа</h2>
 
-                    <div className="md:text-right">
-                      <p className="text-sm text-stone-500">Цена за шт.</p>
-                      <p className="text-xl font-light">{formatPrice(item.price)}</p>
-                      <p className="mt-1 text-sm text-stone-500">
-                        Итого: {formatPrice(Number(item.price) * Number(item.quantity))}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+            {order.items?.map((item) => (
+              <div key={item.id} className="mb-4 border-b pb-3">
+                <p className="font-medium">
+                  {item.product_name || `Товар #${item.product}`}
+                </p>
+                <p>Кол-во: {item.quantity}</p>
+                <p>Цена: {formatPrice(item.price)}</p>
+                <p>Итого: {formatPrice(item.price * item.quantity)}</p>
               </div>
-            ) : (
-              <p className="text-stone-500">Состав заказа не найден.</p>
-            )}
+            ))}
 
-            <div className="mt-8 border-t border-stone-200 pt-6">
-              <div className="flex items-center justify-between">
-                <span className="text-lg text-stone-500">Итоговая сумма</span>
-                <span className="text-4xl font-light text-stone-800">
-                  {formatPrice(order.total)}
-                </span>
-              </div>
+            <div className="mt-6 border-t pt-4 text-xl">
+              Итого: {formatPrice(order.total)}
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </main>
-  );
-}
-
-function InfoBlock({ title, children }) {
-  return (
-    <div className="border border-stone-200 bg-white p-6 shadow-[0_18px_60px_rgba(41,37,36,0.05)]">
-      <h2 className="mb-5 text-2xl font-light">{title}</h2>
-      <div className="space-y-4">{children}</div>
-    </div>
-  );
-}
-
-function InfoRow({ label, value }) {
-  return (
-    <div className="border-b border-stone-100 pb-3 last:border-b-0 last:pb-0">
-      <p className="mb-1 text-xs uppercase tracking-[0.2em] text-stone-500">
-        {label}
-      </p>
-      <p className="break-words text-stone-800">{value}</p>
-    </div>
   );
 }

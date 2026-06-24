@@ -27,7 +27,7 @@ export default function AdminOrderDetail() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // ✅ ВАЖНО: функция ДО useEffect
+  // ✅ загрузка заказа
   const loadOrder = useCallback(async () => {
     setLoading(true);
 
@@ -44,11 +44,12 @@ export default function AdminOrderDetail() {
     }
   }, [id, navigate]);
 
-  // ✅ useEffect теперь корректный
+  // ✅ вызываем загрузку
   useEffect(() => {
     loadOrder();
   }, [loadOrder]);
 
+  // ✅ считаем количество товаров
   const totalItems = useMemo(() => {
     if (!order?.items) return 0;
     return order.items.reduce(
@@ -57,6 +58,7 @@ export default function AdminOrderDetail() {
     );
   }, [order]);
 
+  // ✅ смена статуса
   const handleStatusSave = async () => {
     setSaving(true);
 
@@ -68,10 +70,10 @@ export default function AdminOrderDetail() {
         status,
       }));
 
-      alert("Статус заказа обновлён");
+      alert("Статус обновлён");
     } catch (err) {
       console.error(err);
-      alert("Не удалось изменить статус");
+      alert("Ошибка изменения статуса");
     } finally {
       setSaving(false);
     }
@@ -88,44 +90,45 @@ export default function AdminOrderDetail() {
   if (!order) return null;
 
   return (
-    <main className="min-h-screen bg-stone-50 px-4 pb-20 pt-32 text-stone-800 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-stone-50 px-4 pb-20 pt-32 text-stone-800">
       <div className="mx-auto max-w-6xl">
-        <Link
-          to="/admin"
-          className="mb-8 inline-flex text-sm uppercase tracking-[0.18em] text-[#b89422] hover:text-stone-800"
-        >
-          ← Назад в админ-панель
+        {/* BACK */}
+        <Link to="/admin" className="mb-8 inline-block text-sm text-stone-600">
+          ← Назад в админку
         </Link>
 
-        <section className="mb-8 border border-stone-200 bg-white p-6 md:p-8">
-          <h1 className="text-5xl font-light">Заказ №{order.id}</h1>
+        {/* HEADER */}
+        <div className="mb-8 border bg-white p-6">
+          <h1 className="text-4xl font-light">Заказ #{order.id}</h1>
           <p className="mt-2 text-stone-500">
             {new Date(order.created_at).toLocaleString("ru-RU")}
           </p>
 
-          <div className="mt-4 inline-block bg-[#d4aa2a]/10 px-4 py-2 text-sm">
+          <p className="mt-3 text-stone-600">Всего товаров: {totalItems}</p>
+
+          <div className="mt-3 inline-block bg-[#d4aa2a]/10 px-3 py-1 text-sm">
             {statuses.find((s) => s.value === order.status)?.label}
           </div>
-        </section>
+        </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          {/* ИНФО */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* LEFT */}
           <div className="space-y-6">
             <div className="border bg-white p-6">
-              <h2 className="mb-4 text-xl">Покупатель</h2>
+              <h2 className="mb-3 text-xl">Покупатель</h2>
               <p>{order.name}</p>
               <p>{order.phone}</p>
               <p>{order.email}</p>
             </div>
 
             <div className="border bg-white p-6">
-              <h2 className="mb-4 text-xl">Оплата</h2>
+              <h2 className="mb-3 text-xl">Оплата</h2>
               <p>{paymentLabels[order.payment_method]}</p>
               <p>{order.pickup_location}</p>
             </div>
 
             <div className="border bg-white p-6">
-              <h2 className="mb-4 text-xl">Статус</h2>
+              <h2 className="mb-3 text-xl">Статус</h2>
 
               <select
                 value={status}
@@ -144,25 +147,29 @@ export default function AdminOrderDetail() {
                 disabled={saving || status === order.status}
                 className="mt-4 w-full bg-stone-800 py-3 text-[#d4aa2a]"
               >
-                {saving ? "Сохранение..." : "Сохранить"}
+                {saving ? "Сохранение..." : "Сохранить статус"}
               </button>
             </div>
           </div>
 
-          {/* СОСТАВ */}
+          {/* RIGHT */}
           <div className="border bg-white p-6">
             <h2 className="mb-4 text-xl">Состав заказа</h2>
 
-            {order.items?.map((item) => (
-              <div key={item.id} className="mb-4 border-b pb-3">
-                <p className="font-medium">
-                  {item.product_name || `Товар #${item.product}`}
-                </p>
-                <p>Кол-во: {item.quantity}</p>
-                <p>Цена: {formatPrice(item.price)}</p>
-                <p>Итого: {formatPrice(item.price * item.quantity)}</p>
-              </div>
-            ))}
+            {order.items?.length ? (
+              order.items.map((item) => (
+                <div key={item.id} className="mb-4 border-b pb-3">
+                  <p className="font-medium">
+                    {item.product_name || `Товар #${item.product}`}
+                  </p>
+                  <p>Кол-во: {item.quantity}</p>
+                  <p>Цена: {formatPrice(item.price)}</p>
+                  <p>Итого: {formatPrice(item.price * item.quantity)}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-stone-500">Состав заказа пуст</p>
+            )}
 
             <div className="mt-6 border-t pt-4 text-xl">
               Итого: {formatPrice(order.total)}
